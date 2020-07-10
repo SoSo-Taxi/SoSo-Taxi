@@ -6,6 +6,10 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <!-- 获取网络状态，根据网络状态切换进行数据请求网络转换 -->
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <!-- 这个权限用于进行网络定位 -->
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <!-- 这个权限用于访问GPS定位 -->
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
 
     <application
         android:name=".application.MapApplication"
@@ -29,7 +33,10 @@
 
         <meta-data
             android:name="com.baidu.lbsapi.API_KEY"
-            android:value="VT6UQDS0urKB6O1LL1DdO2kRgBtnTA0o" />
+            android:value="RmmZVO6jFDooPymSqVdIeRUNpNgAMAza" />
+        <service android:name="com.baidu.location.f"
+            android:enabled="true"
+            android:process=":remote"/>
     </application>
 
 </manifest>
