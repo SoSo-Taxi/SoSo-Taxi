@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@color/colorBackground"
+    tools:context=".ui.login.EnterVerificationCodeFragment">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <TextView
+            android:id="@+id/textViewEnterVerificationCodeTitle"
+            style="@style/Login.Title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/login_horizontal_margin"
+            android:layout_marginTop="@dimen/login_vertical_margin"
+            android:text="@string/title_enter_verification_code"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/textViewEnterVerificationCodeHint"
+            style="@style/Login.Hint"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/login_horizontal_margin"
+            android:layout_marginTop="@dimen/login_title_spacing"
+            android:text="@string/hint_enter_verification_code"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/textViewEnterVerificationCodeTitle" />
+
+        <TextView
+            android:id="@+id/textViewVerificationCodeFeedback"
+            style="@style/Login.Feedback"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/login_horizontal_margin"
+            android:layout_marginTop="@dimen/login_edit_text_feedback_spacing"
+            android:text="@string/feedback_enter_verification_code"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/linearLayoutVerificationCode" />
+
+        <TextView
+            android:id="@+id/textViewEnterVerificationCodePhone"
+            style="@style/Login.Hint"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/login_horizontal_margin"
+            android:layout_marginTop="@dimen/login_hint_phone_spacing"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textViewEnterVerificationCodeHint" />
+
+        <TextView
+            android:id="@+id/textViewVerificationCodeResend"
+            style="@style/Login.Resend"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/login_edit_text_feedback_spacing"
+            android:layout_marginEnd="@dimen/login_horizontal_margin"
+            android:text="59 s"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/linearLayoutVerificationCode" />
+
+        <LinearLayout
+            android:id="@+id/linearLayoutVerificationCode"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/login_horizontal_margin"
+            android:layout_marginTop="@dimen/login_title_edit_text_spacing"
+            android:layout_marginEnd="@dimen/login_horizontal_margin"
+            android:orientation="horizontal"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/textViewEnterVerificationCodeHint">
+
+            <EditText
+                android:id="@+id/editTextVerificationCode0"
+                style="@style/Login.VerificationCode"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/login_title_edit_text_spacing"
+                android:layout_marginEnd="@dimen/login_horizontal_margin"
+                android:layout_weight="1" />
+
+            <EditText
+                android:id="@+id/editTextVerificationCode1"
+                style="@style/Login.VerificationCode"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/login_title_edit_text_spacing"
+                android:layout_marginEnd="@dimen/login_horizontal_margin"
+                android:layout_weight="1" />
+
+            <EditText
+                android:id="@+id/editTextVerificationCode2"
+                style="@style/Login.VerificationCode"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/login_title_edit_text_spacing"
+                android:layout_marginEnd="@dimen/login_horizontal_margin"
+                android:layout_weight="1" />
+
+            <EditText
+                android:id="@+id/editTextVerificationCode3"
+                style="@style/Login.VerificationCode"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/login_title_edit_text_spacing"
+                android:layout_marginEnd="@dimen/login_horizontal_margin"
+                android:layout_weight="1" />
+
+            <EditText
+                android:id="@+id/editTextVerificationCode4"
+                style="@style/Login.VerificationCode"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/login_title_edit_text_spacing"
+                android:layout_marginEnd="@dimen/login_horizontal_margin"
+                android:layout_weight="1" />
+
+            <EditText
+                android:id="@+id/editTextVerificationCode5"
+                style="@style/Login.VerificationCode"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/login_title_edit_text_spacing"
+                android:layout_marginEnd="@dimen/login_horizontal_margin"
+                android:layout_weight="1" />
+
+
+        </LinearLayout>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</FrameLayout>
