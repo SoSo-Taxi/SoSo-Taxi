@@ -4,4 +4,10 @@
     <color name="colorPrimaryDark">#FFFFFF</color>
     <color name="colorPrimaryDarkLowVersion">#000000</color>
     <color name="colorAccent">#E62A3E</color>
+    <color name="colorAreaCodeGrey">#EEEEEE</color>
+    <color name="colorAreaCode">#666666</color>
+    <color name="colorBackground">#FFFFFF</color>
+    <color name="colorDisabledButton">#CCCCCC</color>
+    <color name="colorLoginTitle">#4A4A4A</color>
+    <color name="colorLoginHint">#999999</color>
 </resources>
