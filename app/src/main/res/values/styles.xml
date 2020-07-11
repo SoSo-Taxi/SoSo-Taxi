@@ -1,19 +1,71 @@
 <resources>
     <!-- Base application theme. -->
-    <style name="AppTheme" parent="Theme.AppCompat.Light">
+    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
         <!-- Customize your theme here. -->
         <item name="colorPrimary">@color/colorPrimary</item>
-        <item name="colorPrimaryDark">@color/colorPrimaryDarkLowVersion</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
     <style name="AppTheme.NoActionBar">
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
+        <item name="actionMenuTextColor">@color/colorAreaCode</item>
     </style>
 
     <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.ActionBar" />
 
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+
+    <style name="Login">
+
+    </style>
+
+    <style name="Login.Title">
+        <item name="android:textSize">30sp</item>
+        <item name="android:textColor">@color/colorLoginTitle</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="Login.Hint">
+        <item name="android:textSize">14sp</item>
+        <item name="android:textColor">@color/colorLoginHint</item>
+        <item name="android:textStyle">normal</item>
+    </style>
+
+    <style name="Login.Feedback">
+        <item name="android:textSize">12sp</item>
+        <item name="android:textColor">@color/colorLoginHint</item>
+        <item name="android:textStyle">normal</item>
+    </style>
+
+    <style name="Login.Resend">
+        <item name="android:textSize">12sp</item>
+        <item name="android:textColor">@color/colorAccent</item>
+        <item name="android:textStyle">normal</item>
+    </style>
+
+    <style name="Login.AreaCode">
+        <item name="android:textSize">14sp</item>
+        <item name="android:padding">3dp</item>
+        <item name="android:textColor">@color/colorAreaCode</item>
+        <item name="android:background">@color/colorAreaCodeGrey</item>
+        <item name="android:textStyle">normal</item>
+    </style>
+
+    <style name="Login.VerificationCode">
+        <item name="android:textSize">30sp</item>
+        <item name="android:textColor">@color/colorLoginTitle</item>
+        <item name="android:cursorVisible">false</item>
+        <item name="android:maxLength">1</item>
+        <item name="android:gravity">center_horizontal</item>
+        <item name="android:inputType">number</item>
+    </style>
+
+    <style name="Login.Button">
+        <item name="android:textSize">14sp</item>
+        <item name="android:textColor">@android:color/primary_text_dark</item>
+        <item name="android:textStyle">bold</item>
+    </style>
 
 </resources>

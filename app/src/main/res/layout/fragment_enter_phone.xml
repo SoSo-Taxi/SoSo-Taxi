@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@color/colorBackground"
+    tools:context=".ui.login.EnterPhoneFragment">
+
+    <!-- TODO: Update blank fragment layout -->
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <TextView
+            android:id="@+id/textViewEnterPhoneTitle"
+            style="@style/Login.Title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/login_horizontal_margin"
+            android:layout_marginTop="@dimen/login_vertical_margin"
+            android:text="@string/title_enter_phone"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/textViewEnterPhoneHint"
+            style="@style/Login.Hint"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/login_horizontal_margin"
+            android:layout_marginTop="@dimen/login_title_spacing"
+            android:text="@string/hint_enter_phone"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/textViewEnterPhoneTitle" />
+
+        <TextView
+            android:id="@+id/textViewAreaCode"
+            style="@style/Login.AreaCode"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/login_horizontal_margin"
+            android:clickable="true"
+            android:text="@string/placeholder_area_code"
+            app:layout_constraintBaseline_toBaselineOf="@id/editTextEnterPhone"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <EditText
+            android:id="@+id/editTextEnterPhone"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/login_horizontal_margin"
+            android:layout_marginTop="@dimen/login_title_edit_text_spacing"
+            android:layout_marginEnd="@dimen/login_horizontal_margin"
+            android:ems="10"
+            android:hint="@string/placeholder_enter_phone"
+            android:inputType="phone"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/textViewAreaCode"
+            app:layout_constraintTop_toBottomOf="@id/textViewEnterPhoneHint" />
+
+        <Button
+            android:id="@+id/buttonContinue"
+            style="@style/Login.Button"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/login_button_height"
+            android:layout_marginStart="@dimen/login_horizontal_margin"
+            android:layout_marginTop="@dimen/login_edit_text_button_spacing"
+            android:layout_marginEnd="@dimen/login_horizontal_margin"
+            android:background="@color/colorDisabledButton"
+            android:text="@string/btn_continue"
+            android:enabled="false"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/editTextEnterPhone" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</FrameLayout>
