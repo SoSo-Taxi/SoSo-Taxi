@@ -1,3 +1,8 @@
+/**
+ * @Author 范承祥
+ * @CreateTime 2020/7/9
+ * @UpdateTime 2020/7/11
+ */
 package com.sosotaxi.adapter;
 
 import androidx.recyclerview.widget.RecyclerView;
@@ -15,6 +20,9 @@ import com.sosotaxi.common.OnRecyclerViewClickListener;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * 区号列表适配器
+ */
 public class AreaCodeRecyclerViewAdapter extends RecyclerView.Adapter<AreaCodeRecyclerViewAdapter.ViewHolder> implements Filterable {
 
     private final List<String> mValues;
@@ -67,6 +75,7 @@ public class AreaCodeRecyclerViewAdapter extends RecyclerView.Adapter<AreaCodeRe
                 }else{
                     List<String> filterList=new ArrayList<>();
 
+                    //寻找符合条件的区号
                     for(String string : mValues){
                         if(string.contains(filterString)){
                             filterList.add(string);

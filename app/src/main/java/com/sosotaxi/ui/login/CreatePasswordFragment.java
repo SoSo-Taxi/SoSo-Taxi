@@ -1,3 +1,8 @@
+/**
+ * @Author 范承祥
+ * @CreateTime 2020/7/9
+ * @UpdateTime 2020/7/11
+ */
 package com.sosotaxi.ui.login;
 
 import android.content.Intent;
@@ -29,7 +34,14 @@ public class CreatePasswordFragment extends Fragment {
     private EditText mEditTextPasswordConfirmed;
     private Button mButtonConfirm;
 
+    /**
+     * 密码长度标志位
+     */
     private boolean mFlag1;
+
+    /**
+     * 确认密码长度标志位
+     */
     private boolean mFlag2;
 
     public CreatePasswordFragment() {
@@ -52,12 +64,14 @@ public class CreatePasswordFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        // 获取控件
         mEditTextPassword=getActivity().findViewById(R.id.editTextCreatePassword);
         mEditTextPasswordConfirmed=getActivity().findViewById(R.id.editTextCreatePasswordConfirmed);
         mButtonConfirm=getActivity().findViewById(R.id.buttonCreatePasswordConfirm);
         mFlag1=false;
         mFlag2=false;
 
+        // 设置输入改变监听器
         mEditTextPassword.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -76,6 +90,7 @@ public class CreatePasswordFragment extends Fragment {
             }
         });
 
+        // 设置输入改变监听器
         mEditTextPasswordConfirmed.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -84,7 +99,7 @@ public class CreatePasswordFragment extends Fragment {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                //检查密码位数
+                // 检查密码位数
                 mFlag2=checkPassword(s);
             }
 
@@ -115,7 +130,7 @@ public class CreatePasswordFragment extends Fragment {
                         boolean isSuccessful=true;
 
                         if(isSuccessful){
-                            //注册成功跳转主界面
+                            // 注册成功跳转主界面
                             Intent intent = new Intent(getContext(), MainActivity.class);
                             intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
                             startActivity(intent);

@@ -1,3 +1,8 @@
+/**
+ * @Author 范承祥
+ * @CreateTime 2020/7/9
+ * @UpdateTime 2020/7/11
+ */
 package com.sosotaxi.ui.login;
 
 import android.content.Intent;
@@ -31,7 +36,6 @@ public class EnterPhoneFragment extends Fragment {
     private EditText mEditTextPhone;
     private Button mButtonContinue;
 
-
     public EnterPhoneFragment() {
         // 所需空构造器
     }
@@ -53,7 +57,7 @@ public class EnterPhoneFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        //绑定控件
+        //获取控件
         mEditTextPhone=getView().findViewById(R.id.editTextEnterPhone);
         mButtonContinue=getView().findViewById(R.id.buttonContinue);
         mTextViewAreaCode=getView().findViewById(R.id.textViewAreaCode);
@@ -68,7 +72,7 @@ public class EnterPhoneFragment extends Fragment {
                 String phone=mEditTextPhone.getText().toString();
 
                 //TODO: 查询手机号是否已注册
-                boolean isRegistered=phone.equals("1");
+                boolean isRegistered=phone.equals("13996996996");
 
                 FragmentManager fragmentManager=getActivity().getSupportFragmentManager();
                 Fragment currentFragment=fragmentManager.findFragmentById(R.id.fragmentLogin);
@@ -77,12 +81,13 @@ public class EnterPhoneFragment extends Fragment {
                     //已注册跳转到输入密码界面
                     EnterPasswordFragment enterPasswordFragment=new EnterPasswordFragment();
 
+                    // 填充数据
                     Bundle bundle=new Bundle();
                     bundle.putString(Constant.EXTRA_PHONE,areaCode+phone);
                     enterPasswordFragment.setArguments(bundle);
 
+                    // 设置转场
                     fragmentManager.beginTransaction()
-                            .hide(currentFragment)
                             .setCustomAnimations(
                                     R.animator.fragment_slide_left_enter,
                                     R.animator.fragment_slide_left_exit,
@@ -92,18 +97,20 @@ public class EnterPhoneFragment extends Fragment {
                             .addToBackStack(null)
                             .commit();
 
+                    // 设置返回按钮生效
                     LoginActivity loginActivity=(LoginActivity)getActivity();
                     loginActivity.setBackUpButtonOn();
                 }else{
-                    //未注册跳转到输入验证码界面
+                    // 未注册跳转到输入验证码界面
                     EnterVerificationCodeFragment enterVerificationCodeFragment=new EnterVerificationCodeFragment();
 
+                    // 填充数据
                     Bundle bundle=new Bundle();
                     bundle.putString(Constant.EXTRA_PHONE,areaCode+phone);
                     enterVerificationCodeFragment.setArguments(bundle);
 
+                    // 设置转场
                     fragmentManager.beginTransaction()
-                            .hide(currentFragment)
                             .setCustomAnimations(
                                     R.animator.fragment_slide_left_enter,
                                     R.animator.fragment_slide_left_exit,
@@ -113,6 +120,7 @@ public class EnterPhoneFragment extends Fragment {
                             .addToBackStack(null)
                             .commit();
 
+                    // 设置返回按钮生效
                     LoginActivity loginActivity=(LoginActivity)getActivity();
                     loginActivity.setBackUpButtonOn();
                 }
@@ -120,15 +128,17 @@ public class EnterPhoneFragment extends Fragment {
             }
         });
 
+        // 设置区号点击监听器
         mTextViewAreaCode.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                // 跳转区号选择界面
                 Intent intent = new Intent(getContext(), SelectAreaCodeActivity.class);
                 startActivityForResult(intent, Constant.SELECT_AREA_CODE_REQUEST);
             }
         });
 
-        //手机号输入框字数监听
+        // 设置手机号输入框字数监听
         mEditTextPhone.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -160,6 +170,7 @@ public class EnterPhoneFragment extends Fragment {
         super.onActivityResult(requestCode,resultCode,data);
         if (resultCode==RESULT_OK) {
             switch (requestCode){
+                // 解析返回区号
                 case Constant.SELECT_AREA_CODE_REQUEST:
                     int areaCode=data.getIntExtra(Constant.EXTRA_AREA_CODE,86);
                     String areaCodeString="+"+areaCode+" ▼";
