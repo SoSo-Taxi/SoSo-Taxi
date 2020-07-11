@@ -1,3 +1,8 @@
+/**
+ * @Author 范承祥
+ * @CreateTime 2020/7/9
+ * @UpdateTime 2020/7/11
+ */
 package com.sosotaxi.ui.login;
 
 import android.os.Bundle;
@@ -24,19 +29,21 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * A simple {@link Fragment} subclass.
+ * 输入验证码界面
  */
 public class EnterVerificationCodeFragment extends Fragment {
-
 
     private TextView mTextViewEnterVerificationCodePhone;
     private TextView mTextViewEnterVerificationCodeResend;
     private List<EditText> mEditTextEnterVerificationCodes;
 
+    /**
+     * 验证码计时器
+     */
     private CountDownTimer mTimer;
 
     public EnterVerificationCodeFragment() {
-        // Required empty public constructor
+        // 所需空构造器
     }
 
     @Override
@@ -47,7 +54,7 @@ public class EnterVerificationCodeFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
+        // 填充布局
         return inflater.inflate(R.layout.fragment_enter_verification_code, container, false);
     }
 
@@ -57,6 +64,7 @@ public class EnterVerificationCodeFragment extends Fragment {
 
         mEditTextEnterVerificationCodes=new ArrayList<>();
 
+        // 获取控件
         mTextViewEnterVerificationCodePhone=getActivity().findViewById(R.id.textViewEnterVerificationCodePhone);
         mTextViewEnterVerificationCodeResend=getActivity().findViewById(R.id.textViewVerificationCodeResend);
         mEditTextEnterVerificationCodes.add((EditText) getActivity().findViewById(R.id.editTextVerificationCode0));
@@ -66,6 +74,7 @@ public class EnterVerificationCodeFragment extends Fragment {
         mEditTextEnterVerificationCodes.add((EditText) getActivity().findViewById(R.id.editTextVerificationCode4));
         mEditTextEnterVerificationCodes.add((EditText) getActivity().findViewById(R.id.editTextVerificationCode5));
 
+        // 首位验证码输入框获取控制焦点
         final EditText firstEditText=mEditTextEnterVerificationCodes.get(0);
         final EditText secondEditText=mEditTextEnterVerificationCodes.get(1);
 
@@ -80,6 +89,7 @@ public class EnterVerificationCodeFragment extends Fragment {
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 if(s.length()==1){
+                    // 输入完毕后控制焦点移动到下一个输入框
                     firstEditText.clearFocus();
                     secondEditText.requestFocus();
                 }
@@ -104,10 +114,12 @@ public class EnterVerificationCodeFragment extends Fragment {
                 @Override
                 public void onTextChanged(CharSequence s, int start, int before, int count) {
                     if(s.length()==1){
+                        // 输入完毕后控制焦点移动到下一个输入框
                         currentEditText.clearFocus();
                         nextEditText.requestFocus();
                     }
                     if(count==0){
+                        // 删除时控制焦点移动到上一个输入框
                         currentEditText.clearFocus();
                         lastEditText.requestFocus();
                     }
@@ -143,10 +155,11 @@ public class EnterVerificationCodeFragment extends Fragment {
                             Fragment currentFragment=fragmentManager.findFragmentById(R.id.fragmentLogin);
 
                             if(isCorrect){
-                                //验证码正确跳转创建密码界面
+                                // 验证码正确跳转创建密码界面
                                 CreatePasswordFragment createPasswordFragment=new CreatePasswordFragment();
                                 createPasswordFragment.setArguments(getArguments());
 
+                                // 设置转场
                                 fragmentManager.beginTransaction()
                                         .hide(currentFragment)
                                         .setCustomAnimations(
@@ -169,6 +182,7 @@ public class EnterVerificationCodeFragment extends Fragment {
                                     mEditTextEnterVerificationCodes.get(i).clearFocus();
                                 }
 
+                                // 控制焦点移动到首位输入框
                                 mEditTextEnterVerificationCodes.get(0).requestFocus();
 
                                 // 提示验证码错误
@@ -178,6 +192,7 @@ public class EnterVerificationCodeFragment extends Fragment {
                         }
 
                         if(count==0){
+                            // 删除时控制焦点移动到上一个输入框
                             nextEditText.clearFocus();
                             currentEditText.requestFocus();
                         }
@@ -191,21 +206,24 @@ public class EnterVerificationCodeFragment extends Fragment {
             }
         }
 
+        // 显示当前手机号
         String phone=getArguments().getString(Constant.EXTRA_PHONE);
         mTextViewEnterVerificationCodePhone.setText(phone);
 
-
-        //设置重新发送点击事件
+        // 设置重新发送点击事件
         mTextViewEnterVerificationCodeResend.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //TODO:向服务器请求再次发送验证码
+                // TODO:向服务器请求再次发送验证码
+
+                // 重启验证码计时器
                 mTimer.start();
             }
         });
 
-        //TODO：向服务器请求发送验证码
+        // TODO：向服务器请求发送验证码
 
+        // 启动验证码计时器
         mTimer=getTimer();
         mTimer.start();
     }
@@ -218,12 +236,14 @@ public class EnterVerificationCodeFragment extends Fragment {
         CountDownTimer timer=new CountDownTimer(60000,1000) {
             @Override
             public void onTick(long millisUntilFinished) {
+                // 显示剩余时间
                 mTextViewEnterVerificationCodeResend.setText(millisUntilFinished/1000L+" s");
                 mTextViewEnterVerificationCodeResend.setClickable(false);
             }
 
             @Override
             public void onFinish() {
+                // 设置重新发送为可用
                 mTextViewEnterVerificationCodeResend.setText(R.string.btn_verification_code_resend);
                 mTextViewEnterVerificationCodeResend.setClickable(true);
             }

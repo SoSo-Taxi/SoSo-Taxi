@@ -1,3 +1,8 @@
+/**
+ * @Author 范承祥
+ * @CreateTime 2020/7/9
+ * @UpdateTime 2020/7/11
+ */
 package com.sosotaxi.ui.login;
 
 import androidx.annotation.Nullable;
@@ -47,7 +52,7 @@ public class LoginActivity extends AppCompatActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
+        // 填充菜单
         getMenuInflater().inflate(R.menu.activity_login, menu);
 
         return super.onCreateOptionsMenu(menu);
@@ -57,6 +62,7 @@ public class LoginActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()){
             case android.R.id.home:
+                // 返回上一级页面
                 FragmentManager fragmentManager=getSupportFragmentManager();
                 getSupportFragmentManager().popBackStack();
                 if(fragmentManager.getBackStackEntryCount()==1){
@@ -64,6 +70,7 @@ public class LoginActivity extends AppCompatActivity {
                 }
                 break;
             case R.id.menu_login_skip:
+                // 直接进入主页面
                 Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                 intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(intent);

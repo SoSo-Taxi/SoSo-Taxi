@@ -1,3 +1,8 @@
+/**
+ * @Author 范承祥
+ * @CreateTime 2020/7/9
+ * @UpdateTime 2020/7/11
+ */
 package com.sosotaxi.ui.login;
 
 import android.content.Context;
@@ -50,10 +55,11 @@ public class EnterPasswordFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        // 获取控件
         mEditTextEnterPassword=getActivity().findViewById(R.id.editTextEnterPassword);
         mButtonConfirm=getActivity().findViewById(R.id.buttonEnterPasswordConfirm);
 
-        //设置密码输入框监听
+        // 设置密码输入框监听
         mEditTextEnterPassword.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -99,7 +105,7 @@ public class EnterPasswordFragment extends Fragment {
                     intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
                     startActivity(intent);
                 }else{
-                    // 验证失败清空密码并提示用户
+                    // 验证失败清空密码并提示密码错误
                     mEditTextEnterPassword.setText("");
                     mEditTextEnterPassword.setError(getString(R.string.error_password_incorret));
                 }
