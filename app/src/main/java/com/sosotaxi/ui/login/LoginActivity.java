@@ -45,11 +45,6 @@ public class LoginActivity extends AppCompatActivity {
         fragmentTransaction.commit();
     }
 
-    public void onSelectAreaCode(View view) {
-        Intent intent = new Intent(LoginActivity.this, SelectAreaCodeActivity.class);
-        startActivityForResult(intent, Constant.SELECT_AREA_CODE_REQUEST);
-    }
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -61,6 +56,13 @@ public class LoginActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()){
+            case android.R.id.home:
+                FragmentManager fragmentManager=getSupportFragmentManager();
+                getSupportFragmentManager().popBackStack();
+                if(fragmentManager.getBackStackEntryCount()==1){
+                    setBackUpButtonOff();
+                }
+                break;
             case R.id.menu_login_skip:
                 Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                 intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
