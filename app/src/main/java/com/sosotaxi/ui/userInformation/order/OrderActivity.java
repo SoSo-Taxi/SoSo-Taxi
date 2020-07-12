@@ -36,6 +36,10 @@ public class OrderActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == android.R.id.home){
+            finish();
+            return true;
+        }
         if (item.getItemId() == R.id.order_toolbar_menu_check_time){
             return false;
         }

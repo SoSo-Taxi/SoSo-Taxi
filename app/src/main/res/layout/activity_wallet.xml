@@ -139,7 +139,7 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:srcCompat="@drawable/ic_coupon_icon_foreground" />
+                app:srcCompat="@drawable/ic_vip_coupon_icon_v2" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -165,7 +165,7 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:srcCompat="@drawable/ic_vip_ponit_icon_foreground" />
+                app:srcCompat="@drawable/ic_vip_points_icon_v2" />
 
             <TextView
                 android:id="@+id/textView2"

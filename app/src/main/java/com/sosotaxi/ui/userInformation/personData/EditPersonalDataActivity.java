@@ -119,6 +119,9 @@ public class EditPersonalDataActivity extends AppCompatActivity {
             if(!mIndustryTextView.getText().equals("添加您的行业")){
                 intent.putExtra("industry_changed",true);
                 intent.putExtra("industry",mIndustryTextView.getText());
+            }else {
+                intent.putExtra("industry_changed",false);
+                intent.putExtra("industry","行业");
             }
             if (mCorporationEditText.getText().length() != 0){
                 intent.putExtra("corporation_changed",true);
