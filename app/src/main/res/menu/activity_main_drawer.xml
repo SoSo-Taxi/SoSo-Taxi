@@ -3,5 +3,27 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:showIn="navigation_view">
 
-    <group android:checkableBehavior="single"/>
+    <group android:checkableBehavior="none">
+        <item
+            android:id="@+id/nav_order"
+
+            android:icon="@drawable/ic_menu_order_icon_foreground"
+            android:title="订单" />
+        <item
+            android:id="@+id/nav_safety"
+            android:icon="@drawable/ic_menu_safety_icon_foreground"
+            android:title="安全"/>
+        <item
+            android:id="@+id/nav_wallet"
+            android:icon="@drawable/ic_menu_wallet_icon_foreground"
+            android:title="钱包"/>
+        <item
+            android:id="@+id/nav_service"
+            android:icon="@drawable/ic_menu_service_icon_foreground"
+            android:title="客服"/>
+        <item
+            android:id="@+id/nav_setting"
+            android:icon="@drawable/ic_menu_setting_icon_foreground"
+            android:title="设置"/>
+    </group>
 </menu>

@@ -20,6 +20,39 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
 
+
+        <activity android:name=".ui.userInformation.personData.IndustrySelectActivity"
+            android:label="@string/industry_choice_label"
+            android:parentActivityName=".ui.userInformation.personData.EditPersonalDataActivity"
+            android:theme="@style/AppTheme.NoActionBar"/>
+        <activity
+            android:name=".ui.userInformation.personData.EditPersonalDataActivity"
+            android:label="@string/edit_personal_data_label"
+            android:parentActivityName=".ui.userInformation.personData.PersonalDataActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".ui.userInformation.personData.PersonalDataActivity"
+            android:parentActivityName=".ui.main.MainActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".ui.userInformation.wallet.ChargeMoneyActivity"
+            android:label="@string/charge_money_label"
+            android:parentActivityName=".ui.userInformation.wallet.WalletActivity" />
+        <activity
+            android:name=".ui.userInformation.wallet.PaymentSettingActivity"
+            android:label="@string/payment_setting_label"
+            android:parentActivityName=".ui.userInformation.wallet.WalletActivity" />
+        <activity
+            android:name=".ui.userInformation.wallet.WalletActivity"
+            android:label="@string/menu_wallet_label"
+            android:parentActivityName=".ui.main.MainActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".ui.userInformation.order.OrderActivity"
+            android:label="@string/menu_order_label"
+            android:parentActivityName=".ui.main.MainActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
+
         <activity
             android:name=".ui.main.MainActivity"
             android:label="@string/title_activity_main"
