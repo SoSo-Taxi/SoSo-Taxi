@@ -1,3 +1,8 @@
+/**
+ * @Author 岳兵
+ * @CreateTime 2020/7/09
+ * @UpdateTime 2020/7/10
+ */
 package com.sosotaxi.ui.home;
 
 import androidx.lifecycle.ViewModelProviders;
@@ -132,7 +137,9 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
         }
     }
 
-    //定位
+    /**
+     * 定位
+     */
     private class MyLocationListener extends BDAbstractLocationListener {
         @Override
         public void onReceiveLocation(BDLocation location) {
@@ -179,7 +186,9 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
             }
         }
     }
-    //初始化定位
+    /**
+     * 初始化定位
+     */
     private void initMyLocation() {
         //缩放地图
         MapStatusUpdate msu = MapStatusUpdateFactory.zoomTo(15.0f);
@@ -205,14 +214,22 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
         //开始定位
         mLocationClient.start();
     }
-    //回到定位中心
+
+    /**
+     * 回到定位中心
+     * @param latitude
+     * @param longtitude
+     */
     private void centerToMyLocation(double latitude, double longtitude) {
         mBaiduMap.clear();
         mLastLocationData = new LatLng(latitude, longtitude);
         MapStatusUpdate msu = MapStatusUpdateFactory.newLatLng(mLastLocationData);
         mBaiduMap.animateMapStatus(msu);
     }
-    //传感器
+
+    /**
+     * 初始化传感器
+     */
     private void initOrientation() {
         //传感器
         mMyOrientationListener = new MyOrientationListener(getContext());
@@ -223,8 +240,5 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
             }
         });
     }
-
-
-
 
 }
