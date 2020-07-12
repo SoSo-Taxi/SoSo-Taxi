@@ -2,12 +2,13 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/edit_person_data_cl"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#E6E6E6"
     tools:context=".ui.userInformation.personData.EditPersonalDataActivity">
 
-<!--    "@android:drawable/screen_background_light_transparent"-->
+    <!--    "@android:drawable/screen_background_light_transparent"-->
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/edit_person_data_toolbar"
@@ -50,8 +51,8 @@
             android:layout_marginTop="19dp"
             android:layout_marginBottom="20dp"
             android:background="@color/colorPrimary"
-            android:inputType="text"
             android:hint="起个独特的名字吧~"
+            android:inputType="text"
             android:text="22222222"
             android:textCursorDrawable="@drawable/cursor"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -205,8 +206,8 @@
             android:layout_marginTop="19dp"
             android:layout_marginBottom="20dp"
             android:background="@color/colorPrimary"
-            android:inputType="text"
             android:hint="添加所在公司"
+            android:inputType="text"
             android:textCursorDrawable="@drawable/cursor"
             android:textSize="14sp"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -245,8 +246,8 @@
             android:layout_marginBottom="20dp"
             android:background="@color/colorPrimary"
             android:ems="10"
-            android:inputType="textMultiLine"
             android:hint="添加您的职业"
+            android:inputType="textMultiLine"
             android:textCursorDrawable="@drawable/cursor"
             android:textSize="14sp"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -284,8 +285,8 @@
             android:layout_marginBottom="8dp"
             android:background="@color/colorPrimary"
             android:ems="10"
-            android:inputType="textMultiLine"
             android:hint="还未填写个性签名，简单介绍一下自己吧"
+            android:inputType="textMultiLine"
             android:textCursorDrawable="@drawable/cursor"
             android:textSize="14sp"
             app:layout_constraintBottom_toBottomOf="parent"

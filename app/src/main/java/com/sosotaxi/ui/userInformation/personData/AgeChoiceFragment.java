@@ -1,7 +1,7 @@
 /**
  * @Author 屠天宇
  * @CreateTime 2020/7/8
- * @UpdateTime 2020/7/11
+ * @UpdateTime 2020/7/12
  */
 
 
@@ -48,16 +48,17 @@ public class AgeChoiceFragment extends Fragment {
     private TextView tv6;
 
 
-    private FragmentManager fragmentManager;
+    private FragmentManager mFragmentManager;
+
     public AgeChoiceFragment() {
         // Required empty public constructor
     }
 
     public AgeChoiceFragment(FragmentManager fragmentManager){
-        this.fragmentManager = fragmentManager;
+        this.mFragmentManager = fragmentManager;
     }
     public AgeChoiceFragment(FragmentManager fragmentManager,TextView ageTextView){
-        this.fragmentManager = fragmentManager;
+        this.mFragmentManager = fragmentManager;
         this.mAgeTextView = ageTextView;
     }
     /**
@@ -95,8 +96,7 @@ public class AgeChoiceFragment extends Fragment {
         mCancelTextView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                BlankFragment blankFragment = new BlankFragment();
-                fragmentManager.beginTransaction().replace(R.id.fr,blankFragment).commitAllowingStateLoss();
+                mFragmentManager.beginTransaction().hide(mFragmentManager.findFragmentById(R.id.fr)).commit();
             }
         });
 
@@ -112,48 +112,42 @@ public class AgeChoiceFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 mAgeTextView.setText(tv1.getText());
-                BlankFragment blankFragment = new BlankFragment();
-                fragmentManager.beginTransaction().replace(R.id.fr,blankFragment).commitAllowingStateLoss();
+                mFragmentManager.beginTransaction().hide(mFragmentManager.findFragmentById(R.id.fr)).commit();
             }
         });
         tv2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 mAgeTextView.setText(tv2.getText());
-                BlankFragment blankFragment = new BlankFragment();
-                fragmentManager.beginTransaction().replace(R.id.fr,blankFragment).commitAllowingStateLoss();
+                mFragmentManager.beginTransaction().hide(mFragmentManager.findFragmentById(R.id.fr)).commit();
             }
         });
         tv3.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 mAgeTextView.setText(tv3.getText());
-                BlankFragment blankFragment = new BlankFragment();
-                fragmentManager.beginTransaction().replace(R.id.fr,blankFragment).commitAllowingStateLoss();
+                mFragmentManager.beginTransaction().hide(mFragmentManager.findFragmentById(R.id.fr)).commit();
             }
         });
         tv4.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 mAgeTextView.setText(tv4.getText());
-                BlankFragment blankFragment = new BlankFragment();
-                fragmentManager.beginTransaction().replace(R.id.fr,blankFragment).commitAllowingStateLoss();
+                mFragmentManager.beginTransaction().hide(mFragmentManager.findFragmentById(R.id.fr)).commit();
             }
         });
         tv5.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 mAgeTextView.setText(tv5.getText());
-                BlankFragment blankFragment = new BlankFragment();
-                fragmentManager.beginTransaction().replace(R.id.fr,blankFragment).commitAllowingStateLoss();
+                mFragmentManager.beginTransaction().hide(mFragmentManager.findFragmentById(R.id.fr)).commit();
             }
         });
         tv6.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 mAgeTextView.setText(tv6.getText());
-                BlankFragment blankFragment = new BlankFragment();
-                fragmentManager.beginTransaction().replace(R.id.fr,blankFragment).commitAllowingStateLoss();
+                mFragmentManager.beginTransaction().hide(mFragmentManager.findFragmentById(R.id.fr)).commit();
             }
         });
 

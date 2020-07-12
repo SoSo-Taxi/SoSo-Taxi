@@ -116,7 +116,7 @@ public class PersonalDataActivity extends AppCompatActivity {
             }else {
                 intent.putExtra("job","");
             }
-            if(mHasJobTextView){
+            if(mHasIntroTextView){
                 intent.putExtra("intro",mIntroTextView.getText());
             }
             else {
