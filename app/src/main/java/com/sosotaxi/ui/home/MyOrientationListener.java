@@ -1,3 +1,8 @@
+/**
+ * @Author 岳兵
+ * @CreateTime 2020/7/09
+ * @UpdateTime 2020/7/10
+ */
 package com.sosotaxi.ui.home;
 
 import android.content.Context;
@@ -11,14 +16,13 @@ public class MyOrientationListener implements SensorEventListener
     private SensorManager mSensorManager;
     private Context mContext;
     private Sensor mSensor;
-    private float lastX;
+    private float mlastX;
 
     public MyOrientationListener(Context context)
     {
         this.mContext = context;
     }
 
-    @SuppressWarnings("deprecation")
     public void start()
     {
         mSensorManager = (SensorManager) mContext
@@ -48,8 +52,6 @@ public class MyOrientationListener implements SensorEventListener
 
     }
 
-    @SuppressWarnings(
-            { "deprecation" })
     @Override
     public void onSensorChanged(SensorEvent event)
     {
@@ -57,7 +59,7 @@ public class MyOrientationListener implements SensorEventListener
         {
             float x = event.values[SensorManager.DATA_X];
 
-            if (Math.abs(x - lastX) > 1.0)
+            if (Math.abs(x - mlastX) > 1.0)
             {
                 if (mOnOrientationListener != null)
                 {
@@ -65,7 +67,7 @@ public class MyOrientationListener implements SensorEventListener
                 }
             }
 
-            lastX = x;
+            mlastX = x;
 
         }
     }
