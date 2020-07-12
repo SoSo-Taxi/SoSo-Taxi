@@ -39,4 +39,21 @@
     <string name="error_password_incorret">密码错误</string>
     <string name="error_verification_code">验证码错误</string>
     <string name="error_register_failed">注册失败</string>
+
+
+    <string name="menu_order_label">我的订单</string>
+    <string name="menu_wallet_label">我的钱包</string>
+
+    <string name="check_time_by_order">按时间查看订单</string>
+    <string name="check_right_now">查看当前状况</string>
+    <string name="wallet_payment_setting">"支付设置     "</string>
+    <string name="payment_setting_label">支付方式</string>
+    <string name="payment_btn_label">充值</string>
+    <string name="assert_textView_label">余额（元）</string>
+    <string name="charge_money_label">我的充值</string>
+    <string name="coupon_label">优惠券</string>
+    <string name="edit_personal_data_label">"编辑资料      "</string>
+    <string name="edit_done_label">"完成       "</string>
+
+    <string name="industry_choice_label">行业</string>
 </resources>

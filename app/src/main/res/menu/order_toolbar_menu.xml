@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item android:title="@string/check_time_by_order"
+        android:id="@+id/order_toolbar_menu_check_time"
+        app:showAsAction="never"
+        android:orderInCategory="100"
+        android:icon="@drawable/ic_menu_setting_icon_foreground"/>
+    <item android:title="@string/check_right_now"
+        android:id="@+id/order_toolbar_menu_right_now"
+        app:showAsAction="never"
+        android:orderInCategory="100"
+        android:icon="@drawable/ic_menu_setting_icon_foreground"/>
+</menu>
