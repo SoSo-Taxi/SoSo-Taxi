@@ -20,11 +20,12 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
 
-
-        <activity android:name=".ui.userInformation.personData.IndustrySelectActivity"
+        <activity android:name=".ui.userInformation.personData.IndustryChosenActivity"
             android:label="@string/industry_choice_label"
             android:parentActivityName=".ui.userInformation.personData.EditPersonalDataActivity"
             android:theme="@style/AppTheme.NoActionBar"/>
+
+
         <activity
             android:name=".ui.userInformation.personData.EditPersonalDataActivity"
             android:label="@string/edit_personal_data_label"

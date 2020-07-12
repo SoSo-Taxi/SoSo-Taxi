@@ -12,11 +12,13 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -59,6 +61,11 @@ public class EditPersonalDataActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
+                //隐藏键盘
+                InputMethodManager imm = (InputMethodManager)
+                        getSystemService(Context.INPUT_METHOD_SERVICE);
+                imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
+
                 AgeChoiceFragment fragment = new AgeChoiceFragment(getSupportFragmentManager(),mAgeTextView);
                 getSupportFragmentManager().beginTransaction().add(R.id.fr,fragment).commitAllowingStateLoss();
             }
@@ -80,11 +87,24 @@ public class EditPersonalDataActivity extends AppCompatActivity {
         industry_constraintLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(getApplicationContext(),IndustrySelectActivity.class);
+                Intent intent = new Intent(getApplicationContext(),IndustryChosenActivity.class);
                 startActivityForResult(intent,200);
             }
         });
 
+        ConstraintLayout constraintLayout = findViewById(R.id.edit_person_data_cl);
+        constraintLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                switch (v.getId()) {
+                    case R.id.edit_person_data_cl:
+                        InputMethodManager imm = (InputMethodManager)
+                                getSystemService(Context.INPUT_METHOD_SERVICE);
+                        imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
+                        break;
+                }
+            }
+        });
 
     }
 
