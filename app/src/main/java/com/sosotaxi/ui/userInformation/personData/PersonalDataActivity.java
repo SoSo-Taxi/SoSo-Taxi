@@ -102,6 +102,8 @@ public class PersonalDataActivity extends AppCompatActivity {
             intent.putExtra("phone",mUserNameTextView.getText());
             if(mHasIndustryTextView){
                 intent.putExtra("industry",mIndustryTextView.getText());
+            }else {
+                intent.putExtra("industry","添加您的行业");
             }
             if(mHasCorporationTextView){
                 intent.putExtra("corporation",mCorporationTextView.getText());
@@ -114,7 +116,7 @@ public class PersonalDataActivity extends AppCompatActivity {
             }else {
                 intent.putExtra("job","");
             }
-            if(mHasJobTextView){
+            if(mHasIntroTextView){
                 intent.putExtra("intro",mIntroTextView.getText());
             }
             else {

@@ -24,7 +24,7 @@
             android:contentDescription="@string/nav_header_desc"
             android:paddingTop="@dimen/nav_header_vertical_spacing"
             android:scaleType="center"
-            app:srcCompat="@mipmap/ic_default_head_icon"
+            app:srcCompat="@drawable/ic_default_head_photo_v2"
             tools:layout_editor_absoluteX="26dp"
             tools:layout_editor_absoluteY="25dp" />
 

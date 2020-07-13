@@ -6,10 +6,10 @@
         android:id="@+id/order_toolbar_menu_check_time"
         app:showAsAction="never"
         android:orderInCategory="100"
-        android:icon="@drawable/ic_menu_setting_icon_foreground"/>
+        android:icon="@drawable/ic_menu_setting_icon_v2"/>
     <item android:title="@string/check_right_now"
         android:id="@+id/order_toolbar_menu_right_now"
         app:showAsAction="never"
         android:orderInCategory="100"
-        android:icon="@drawable/ic_menu_setting_icon_foreground"/>
+        android:icon="@drawable/ic_menu_setting_icon_v2"/>
 </menu>
