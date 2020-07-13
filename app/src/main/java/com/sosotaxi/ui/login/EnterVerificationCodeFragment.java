@@ -218,6 +218,9 @@ public class EnterVerificationCodeFragment extends Fragment {
 
                 // 重启验证码计时器
                 mTimer.start();
+
+                // 提示验证码已发送
+                Toast.makeText(getContext(), R.string.hint_verification_code_sent, Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -226,6 +229,9 @@ public class EnterVerificationCodeFragment extends Fragment {
         // 启动验证码计时器
         mTimer=getTimer();
         mTimer.start();
+
+        // 提示验证码已发送
+        Toast.makeText(getContext(), R.string.hint_verification_code_sent, Toast.LENGTH_SHORT).show();
     }
 
     /**

@@ -13,6 +13,8 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 
+import android.os.Handler;
+import android.os.Message;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
@@ -21,9 +23,16 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.sosotaxi.R;
 import com.sosotaxi.common.Constant;
+import com.sosotaxi.service.net.IsRegisteredTask;
+import com.sosotaxi.service.net.LoginNetService;
+
+import org.json.JSONException;
+
+import java.io.IOException;
 
 import static android.app.Activity.RESULT_OK;
 
@@ -66,65 +75,14 @@ public class EnterPhoneFragment extends Fragment {
         mButtonContinue.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                // 获取手机号
                 String areaCodeString=mTextViewAreaCode.getText().toString();
                 String areaCode=areaCodeString.substring(0,areaCodeString.length()-1);
                 String phone=mEditTextPhone.getText().toString();
+                String fullPhone=areaCode+phone;
 
-                //TODO: 查询手机号是否已注册
-                boolean isRegistered=phone.equals("13996996996");
-
-                FragmentManager fragmentManager=getActivity().getSupportFragmentManager();
-                Fragment currentFragment=fragmentManager.findFragmentById(R.id.fragmentLogin);
-
-                if(isRegistered){
-                    //已注册跳转到输入密码界面
-                    EnterPasswordFragment enterPasswordFragment=new EnterPasswordFragment();
-
-                    // 填充数据
-                    Bundle bundle=new Bundle();
-                    bundle.putString(Constant.EXTRA_PHONE,areaCode+phone);
-                    enterPasswordFragment.setArguments(bundle);
-
-                    // 设置转场
-                    fragmentManager.beginTransaction()
-                            .setCustomAnimations(
-                                    R.animator.fragment_slide_left_enter,
-                                    R.animator.fragment_slide_left_exit,
-                                    R.animator.fragment_slide_right_enter,
-                                    R.animator.fragment_slide_right_exit)
-                            .add(R.id.fragmentLogin,enterPasswordFragment,null)
-                            .addToBackStack(null)
-                            .commit();
-
-                    // 设置返回按钮生效
-                    LoginActivity loginActivity=(LoginActivity)getActivity();
-                    loginActivity.setBackUpButtonOn();
-                }else{
-                    // 未注册跳转到输入验证码界面
-                    EnterVerificationCodeFragment enterVerificationCodeFragment=new EnterVerificationCodeFragment();
-
-                    // 填充数据
-                    Bundle bundle=new Bundle();
-                    bundle.putString(Constant.EXTRA_PHONE,areaCode+phone);
-                    enterVerificationCodeFragment.setArguments(bundle);
-
-                    // 设置转场
-                    fragmentManager.beginTransaction()
-                            .setCustomAnimations(
-                                    R.animator.fragment_slide_left_enter,
-                                    R.animator.fragment_slide_left_exit,
-                                    R.animator.fragment_slide_right_enter,
-                                    R.animator.fragment_slide_right_exit)
-                            .add(R.id.fragmentLogin,enterVerificationCodeFragment,null)
-                            .addToBackStack(null)
-                            .commit();
-
-                    // 设置返回按钮生效
-                    LoginActivity loginActivity=(LoginActivity)getActivity();
-                    loginActivity.setBackUpButtonOn();
-                }
-
+                //查询手机号是否已注册
+                new Thread(new IsRegisteredTask(fullPhone,handler)).start();
             }
         });
 
@@ -179,4 +137,69 @@ public class EnterPhoneFragment extends Fragment {
             }
         }
     }
+
+    /**
+     * UI线程更新处理器
+     */
+    private Handler handler=new Handler(new Handler.Callback() {
+        @Override
+        public boolean handleMessage(Message msg) {
+            Bundle bundle = msg.getData();
+
+            // 提示异常信息
+            if(bundle.getString(Constant.EXTRA_ERROR)!=null){
+                Toast.makeText(getContext(), bundle.getString(Constant.EXTRA_ERROR), Toast.LENGTH_SHORT).show();
+                return false;
+            }
+
+            boolean isRegistered = bundle.getBoolean(Constant.EXTRA_IS_REGISTERED);
+
+            FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+
+            if (isRegistered) {
+                //已注册跳转到输入密码界面
+                EnterPasswordFragment enterPasswordFragment = new EnterPasswordFragment();
+
+                // 填充数据
+                enterPasswordFragment.setArguments(bundle);
+
+                // 设置转场
+                fragmentManager.beginTransaction()
+                        .setCustomAnimations(
+                                R.animator.fragment_slide_left_enter,
+                                R.animator.fragment_slide_left_exit,
+                                R.animator.fragment_slide_right_enter,
+                                R.animator.fragment_slide_right_exit)
+                        .add(R.id.fragmentLogin, enterPasswordFragment, null)
+                        .addToBackStack(null)
+                        .commit();
+
+                // 设置返回按钮生效
+                LoginActivity loginActivity = (LoginActivity) getActivity();
+                loginActivity.setBackUpButtonOn();
+            } else {
+                // 未注册跳转到输入验证码界面
+                EnterVerificationCodeFragment enterVerificationCodeFragment = new EnterVerificationCodeFragment();
+
+                // 填充数据
+                enterVerificationCodeFragment.setArguments(bundle);
+
+                // 设置转场
+                fragmentManager.beginTransaction()
+                        .setCustomAnimations(
+                                R.animator.fragment_slide_left_enter,
+                                R.animator.fragment_slide_left_exit,
+                                R.animator.fragment_slide_right_enter,
+                                R.animator.fragment_slide_right_exit)
+                        .add(R.id.fragmentLogin, enterVerificationCodeFragment, null)
+                        .addToBackStack(null)
+                        .commit();
+
+                // 设置返回按钮生效
+                LoginActivity loginActivity = (LoginActivity) getActivity();
+                loginActivity.setBackUpButtonOn();
+            }
+            return true;
+        }
+    });
 }
