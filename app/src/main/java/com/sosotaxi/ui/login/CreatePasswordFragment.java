@@ -5,19 +5,16 @@
  */
 package com.sosotaxi.ui.login;
 
-import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
-import android.os.Handler;
-import android.os.Message;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -26,12 +23,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.sosotaxi.R;
-import com.sosotaxi.common.Constant;
-import com.sosotaxi.model.User;
-import com.sosotaxi.service.net.LoginTask;
-import com.sosotaxi.service.net.RegisterTask;
 import com.sosotaxi.ui.main.MainActivity;
-import com.sosotaxi.service.net.LoginNetService;
 
 /**
  * 创建密码界面
@@ -131,18 +123,21 @@ public class CreatePasswordFragment extends Fragment {
                     // 验证密码是否符合要求
                     boolean result=password.matches(getString(R.string.regex_password));
 
+
                     if(result==true){
-                        // 获取手机号与密码
-                        String phone=getArguments().getString(Constant.EXTRA_PHONE);
+                        //TODO:向服务器发送密码
 
-                        // 创建用户对象
-                        User user=new User();
-                        user.setUserName(phone);
-                        user.setPassword(password);
-                        user.setRole("passenger");
+                        boolean isSuccessful=true;
 
-                        // 注册用户
-                        new Thread(new RegisterTask(user,handler)).start();
+                        if(isSuccessful){
+                            // 注册成功跳转主界面
+                            Intent intent = new Intent(getContext(), MainActivity.class);
+                            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+                            startActivity(intent);
+                        }else{
+                            // 提示注册失败
+                            Toast.makeText(getContext(), R.string.error_register_failed,Toast.LENGTH_SHORT).show();
+                        }
                     }else{
                         // 清空密码输入框并提示密码不符合要求
                         mEditTextPassword.setText("");
@@ -178,55 +173,4 @@ public class CreatePasswordFragment extends Fragment {
             return true;
         }
     }
-
-    /**
-     * UI线程更新处理器
-     */
-    private Handler handler=new Handler(new Handler.Callback() {
-        @Override
-        public boolean handleMessage(Message msg) {
-            Bundle bundle = msg.getData();
-            String password=mEditTextPassword.getText().toString();
-
-            // 提示异常信息
-            if(bundle.getString(Constant.EXTRA_ERROR)!=null){
-                Toast.makeText(getContext(), bundle.getString(Constant.EXTRA_ERROR), Toast.LENGTH_SHORT).show();
-                return false;
-            }
-
-            boolean isSuccessful = bundle.getBoolean(Constant.EXTRA_IS_SUCCESSFUL);
-            boolean isAuthorized=bundle.getBoolean(Constant.EXTRA_IS_AUTHORIZED);
-
-            if(isSuccessful){
-                // 注册成功保存用户信息
-                SharedPreferences sharedPreferences=getActivity().getSharedPreferences(Constant.SHARE_PREFERENCE_LOGIN, Context.MODE_PRIVATE);
-                SharedPreferences.Editor editor=sharedPreferences.edit();
-                editor.putString(Constant.USERNAME,bundle.getString(Constant.EXTRA_PHONE));
-                editor.putString(Constant.PASSWORD,bundle.getString(Constant.EXTRA_PASSWORD));
-                editor.commit();
-
-                // 获取手机号与密码
-                String phone=getArguments().getString(Constant.EXTRA_PHONE);
-
-                // 创建用户对象
-                User user=new User();
-                user.setUserName(phone);
-                user.setPassword(password);
-                user.setRememberMe(true);
-
-                // 登陆
-                new Thread(new LoginTask(user,handler)).start();
-
-                // 跳转主界面
-                Intent intent = new Intent(getContext(), MainActivity.class);
-                intent.putExtras(bundle);
-                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
-                startActivity(intent);
-            }else if(isAuthorized==false){
-                // 提示注册失败
-                Toast.makeText(getContext(), R.string.error_register_failed,Toast.LENGTH_SHORT).show();
-            }
-            return true;
-        }
-    });
 }

@@ -7,15 +7,12 @@ package com.sosotaxi.ui.login;
 
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
-import android.os.Handler;
-import android.os.Message;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
@@ -23,14 +20,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.Toast;
 
 import com.sosotaxi.R;
 import com.sosotaxi.common.Constant;
-import com.sosotaxi.model.User;
-import com.sosotaxi.service.net.LoginTask;
 import com.sosotaxi.ui.main.MainActivity;
-import com.sosotaxi.service.net.LoginNetService;
 
 /**
  * 输入密码界面
@@ -96,57 +89,28 @@ public class EnterPasswordFragment extends Fragment {
         mButtonConfirm.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // 获取手机号与密码
+
                 String phone=getArguments().getString(Constant.EXTRA_PHONE);
                 String password=mEditTextEnterPassword.getText().toString();
 
-                // 创建用户对象
-                User user=new User();
-                user.setUserName(phone);
-                user.setPassword(password);
+                //TODO： 与服务器对接进行用户鉴权
+                Boolean isPassed=password.equals("12345678");
 
-                // 用户登陆
-                new Thread(new LoginTask(user,handler)).start();
+                if(isPassed){
+                    // 验证通过跳转主界面
+                    Intent intent = new Intent(getContext(), MainActivity.class);
+                    Bundle bundle=new Bundle();
+                    bundle.putString(Constant.EXTRA_PHONE,phone);
+                    intent.putExtras(bundle);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+                    startActivity(intent);
+                }else{
+                    // 验证失败清空密码并提示密码错误
+                    mEditTextEnterPassword.setText("");
+                    mEditTextEnterPassword.setError(getString(R.string.error_password_incorret));
+                }
+
             }
         });
     }
-
-    /**
-     * UI线程更新处理器
-     */
-    private Handler handler=new Handler(new Handler.Callback() {
-        @Override
-        public boolean handleMessage(Message msg) {
-            Bundle bundle = msg.getData();
-            String password=mEditTextEnterPassword.getText().toString();
-
-            // 提示异常信息
-            if(bundle.getString(Constant.EXTRA_ERROR)!=null){
-                Toast.makeText(getContext(), bundle.getString(Constant.EXTRA_ERROR), Toast.LENGTH_SHORT).show();
-                return false;
-            }
-
-            boolean isAuthorized = bundle.getBoolean(Constant.EXTRA_IS_AUTHORIZED);
-
-            if(isAuthorized){
-                // 验证通过保存用户信息
-                SharedPreferences sharedPreferences=getActivity().getSharedPreferences(Constant.SHARE_PREFERENCE_LOGIN, Context.MODE_PRIVATE);
-                SharedPreferences.Editor editor=sharedPreferences.edit();
-                editor.putString(Constant.USERNAME,bundle.getString(Constant.EXTRA_PHONE));
-                editor.putString(Constant.PASSWORD,bundle.getString(Constant.EXTRA_PASSWORD));
-                editor.commit();
-
-                // 跳转主界面
-                Intent intent = new Intent(getContext(), MainActivity.class);
-                intent.putExtras(bundle);
-                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
-                startActivity(intent);
-            }else{
-                // 验证失败清空密码并提示密码错误
-                mEditTextEnterPassword.setText("");
-                mEditTextEnterPassword.setError(getString(R.string.error_password_incorret));
-            }
-            return true;
-        }
-    });
 }
