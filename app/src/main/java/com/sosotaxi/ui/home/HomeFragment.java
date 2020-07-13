@@ -1,7 +1,7 @@
 /**
  * @Author 岳兵
  * @CreateTime 2020/7/09
- * @UpdateTime 2020/7/10
+ * @UpdateTime 2020/7/13
  */
 package com.sosotaxi.ui.home;
 
@@ -16,7 +16,8 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
+import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.Toast;
 
 import com.baidu.location.BDAbstractLocationListener;
@@ -34,11 +35,18 @@ import com.baidu.mapapi.map.MapView;
 import com.baidu.mapapi.map.MyLocationConfiguration;
 import com.baidu.mapapi.map.MyLocationData;
 import com.baidu.mapapi.model.LatLng;
+import com.baidu.mapapi.search.geocode.GeoCoder;
 import com.sosotaxi.R;
 
 public class HomeFragment extends Fragment implements View.OnClickListener{
 
     private HomeViewModel mViewModel;
+
+    protected static final int SELECTCITY = 0;
+    protected static final int SEARCH_POI = 1;
+    GeoCoder mSearch = null;
+    private EditText location_edit;
+    private String city;
 
     private MapView mMapView = null;
     private BaiduMap mBaiduMap = null;
@@ -68,6 +76,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
         //获取地图控件引用
         mMapView = (MapView)root.findViewById(R.id.baiduMapView);
         mBaiduMap = mMapView.getMap();
+
         return root;
     }
 
@@ -79,7 +88,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
         this.context = this;
         initMyLocation();
         //按钮
-        Button locationButton = (Button) getActivity().findViewById(R.id.but_Loc);
+        ImageButton locationButton = (ImageButton) getActivity().findViewById(R.id.but_Loc);
         //按钮处理
         locationButton.setOnClickListener(this);
 
