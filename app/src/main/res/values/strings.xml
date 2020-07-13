@@ -56,4 +56,5 @@
     <string name="edit_done_label">"完成       "</string>
 
     <string name="industry_choice_label">行业</string>
+    <string name="hint_verification_code_sent">验证码已发送</string>
 </resources>
