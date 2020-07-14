@@ -32,6 +32,9 @@ public class LoginActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        // 设置启动屏
+        //setContentView(R.layout.splash_layout);
+
         // 获取已登录用户信息
         SharedPreferences sharedPreferences=getSharedPreferences(Constant.SHARE_PREFERENCE_LOGIN, MODE_PRIVATE);
         String username=sharedPreferences.getString(Constant.USERNAME,"");
