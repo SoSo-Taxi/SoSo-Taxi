@@ -86,3 +86,4 @@ lint/tmp/
 local.properties
 .idea/misc.xml
 .idea/misc.xml
+/.idea/
