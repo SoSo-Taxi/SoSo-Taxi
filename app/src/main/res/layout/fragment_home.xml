@@ -11,15 +11,19 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:clickable="true" />
-    <Button
+
+    <ImageButton
         android:id="@+id/but_Loc"
+        style="?android:attr/borderlessButtonStyle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="定位"
-        android:layout_marginLeft="0dp"
+        android:layout_marginLeft="350dp"
+        android:layout_marginTop="500dp"
+        android:src="@drawable/ic_home_loc"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:layout_marginTop="127dp"/>
+        app:layout_constraintTop_toTopOf="parent" />
+   
+
 
 
 
