@@ -10,4 +10,6 @@
     <color name="colorDisabledButton">#CCCCCC</color>
     <color name="colorLoginTitle">#4A4A4A</color>
     <color name="colorLoginHint">#999999</color>
+    <color name="colorDarkRed">#8E0303</color>
+    <color name="black">#000000</color>
 </resources>

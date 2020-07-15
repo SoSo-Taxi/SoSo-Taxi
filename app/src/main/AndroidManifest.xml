@@ -75,6 +75,8 @@
             android:parentActivityName=".ui.login.LoginActivity"
             android:label="@string/title_select_area_code"
             android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name=".ui.home.ScheduleSearchCityPoiActivity" />
+        <activity android:name=".ui.home.ScheduleSelectCityActivity"/>
 
         <meta-data
             android:name="com.baidu.lbsapi.API_KEY"
