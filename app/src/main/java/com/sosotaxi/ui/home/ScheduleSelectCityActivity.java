@@ -214,16 +214,17 @@ public class ScheduleSelectCityActivity extends Activity {
 //            }
 
 
-//            currentCityList = cityList;
-//            adapter = new ScheduleCitySelectAdapter(this, cityList);
-//            sortListView.setAdapter(adapter);
+
+
         } catch (IOException | JSONException e) {
             e.printStackTrace();
         }
         characterParser = CharacterParser.getInstance();
         pinyinComparator = new PinyinComparator();
         filledData(cityList);
-
+        currentCityList = cityList;
+//        adapter = new ScheduleCitySelectAdapter(this, cityList);
+//         sortListView.setAdapter(adapter);
     }
 
     private void filterData(String filterStr) {
@@ -231,17 +232,16 @@ public class ScheduleSelectCityActivity extends Activity {
         if (TextUtils.isEmpty(filterStr)) {
             filterDateList = cityList;
         } else {
-            filterDateList.clear();
             for (int i = 0; i < cityList.size(); i++) {
                 if (cityList.get(i).getStrCityName().contains(filterStr)) {
                     filterDateList.add(cityList.get(i));
                 }
             }
 
-            currentCityList = filterDateList;
         }
         Collections.sort(filterDateList, pinyinComparator);
         adapter.updateListView(filterDateList);
+
     }
 
     @Override
