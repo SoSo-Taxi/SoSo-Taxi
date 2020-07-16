@@ -1,8 +1,7 @@
 /**
- * @file XFooterView.java
- * @create Mar 31, 2012 9:33:43 PM
- * @author Maxwin
- * @description XListView's footer
+ * @Author 岳兵
+ * @CreateTime 2020/7/10
+ * @UpdateTime 2020/7/16
  */
 package com.sosotaxi.ui.home;
 

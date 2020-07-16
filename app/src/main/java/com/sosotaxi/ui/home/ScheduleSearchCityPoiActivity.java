@@ -1,3 +1,8 @@
+/**
+ * @Author 岳兵
+ * @CreateTime 2020/7/10
+ * @UpdateTime 2020/7/16
+ */
 package com.sosotaxi.ui.home;
 
 
@@ -18,7 +23,7 @@ import com.baidu.mapapi.search.poi.PoiResult;
 import com.baidu.mapapi.search.poi.PoiSearch;
 
 
-//import com.haoqi.robin.ui.ProgressView;
+
 
 
 import com.sosotaxi.R;

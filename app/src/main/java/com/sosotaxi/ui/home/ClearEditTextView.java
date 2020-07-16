@@ -1,3 +1,8 @@
+/**
+ * @Author 岳兵
+ * @CreateTime 2020/7/10
+ * @UpdateTime 2020/7/16
+ */
 package com.sosotaxi.ui.home;
 
 import android.content.Context;
@@ -10,7 +15,7 @@ import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.CycleInterpolator;
 import android.view.animation.TranslateAnimation;
-import android.widget.EditText;
+
 
 import com.sosotaxi.R;
 

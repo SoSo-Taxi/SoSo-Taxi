@@ -1,8 +1,7 @@
 /**
- * @file XListViewHeader.java
- * @create Apr 18, 2012 5:22:27 PM
- * @author Maxwin
- * @description XListView's header
+ * @Author 岳兵
+ * @CreateTime 2020/7/10
+ * @UpdateTime 2020/7/16
  */
 package com.sosotaxi.ui.home;
 
