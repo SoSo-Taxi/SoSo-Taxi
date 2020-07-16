@@ -5,13 +5,12 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.content.res.AssetManager;
 import android.os.Bundle;
@@ -21,6 +20,7 @@ import android.text.TextWatcher;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -36,9 +36,14 @@ import org.json.JSONObject;
 public class ScheduleSelectCityActivity extends Activity {
 
     private ListView sortListView;
+    private TextView tvCurrent;
     private SideBar sideBar;
+    private CharacterParser characterParser;
+    private String cityName="";
+    private PinyinComparator pinyinComparator;
     private TextView dialog;
     private ClearEditTextView mClearEditText;
+    private String myCityName = "";
 
     private List<ScheduleCityGpsStruct> cityList, currentCityList;
     private ScheduleCitySelectAdapter adapter;
@@ -47,11 +52,13 @@ public class ScheduleSelectCityActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_select_city);
-
+        initTitle();
+        initData();
         initView();
 
-        loadData();
-        initTitle();
+
+
+
     }
 
     private void initTitle() {
@@ -73,15 +80,17 @@ public class ScheduleSelectCityActivity extends Activity {
     }
 
     private void initView() {
+        View view = View.inflate(this, R.layout.schedule_select_city_item, null);
+
         sideBar = (SideBar) findViewById(R.id.city_sidebar);
         dialog = (TextView) findViewById(R.id.dialog);
         sideBar.setTextView(dialog);
-
+        //right_listener
         sideBar.setOnTouchingLetterChangedListener(new SideBar.OnTouchingLetterChangedListener() {
 
             @Override
             public void onTouchingLetterChanged(String s) {
-                int position = adapter.getPositionForSection(s);
+                int position = adapter.getPositionForSection(s.charAt(0));
                 if (position != -1) {
                     sortListView.setSelection(position);
                 }
@@ -94,15 +103,29 @@ public class ScheduleSelectCityActivity extends Activity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view,
                                     int position, long id) {
-                ScheduleCityGpsStruct struct = currentCityList.get(position);
-                Intent i = new Intent();
-                Bundle bundle = new Bundle();
-                bundle.putSerializable("cityItemData", (Serializable) struct);
-                i.putExtras(bundle);
-                setResult(RESULT_OK, i);
-                finish();
+                if (position == 0) {
+                    Intent data = new Intent();
+                    data.putExtra("cityName",cityName);
+                    setResult(RESULT_OK, data);
+                    finish();
+                } else {
+//                    Toast.makeText(getApplication(), ((CityListBean) adapter.getItem(position - 1)).getCityName(),
+//                            Toast.LENGTH_SHORT).show();
+                    Intent data = new Intent();
+                    data.putExtra("lat", ((ScheduleCityGpsStruct) adapter.getItem(position )).getStrLatitude());
+                    data.putExtra("cityName", ((ScheduleCityGpsStruct) adapter.getItem(position )).getStrCityName());
+                    data.putExtra("log", ((ScheduleCityGpsStruct) adapter.getItem(position )).getStrLongitude());
+                    setResult(RESULT_OK, data);
+                    finish();
+                }
+
             }
         });
+        Collections.sort(cityList, pinyinComparator);
+        adapter = new ScheduleCitySelectAdapter(this, cityList);
+        sortListView.setAdapter(adapter);
+
+
 
         mClearEditText = (ClearEditTextView) findViewById(R.id.city_filter_edit);
         mClearEditText.addTextChangedListener(new TextWatcher() {
@@ -147,7 +170,9 @@ public class ScheduleSelectCityActivity extends Activity {
         }
     }
 
-    private void loadData() {
+    private void initData() {
+
+        cityName = getIntent().getStringExtra("myCityName");
         cityList = new ArrayList<ScheduleCityGpsStruct>();
         try {
               AssetManager assetManager = this.getAssets();
@@ -160,7 +185,7 @@ public class ScheduleSelectCityActivity extends Activity {
             for (int i = 0; i < length; i++) {
                 ScheduleCityGpsStruct sGpsStruct = new ScheduleCityGpsStruct();
                 JSONObject jsonObject = jsonArray.getJSONObject(i);
-                sGpsStruct.setSortLetters(jsonObject.getString("sortLetter"));
+
                 sGpsStruct.setStrCityName(jsonObject.getString("cityName"));
                 sGpsStruct.setStrLatitude(jsonObject.getString("lat"));
                 sGpsStruct.setStrLongitude(jsonObject.getString("log"));
@@ -188,12 +213,17 @@ public class ScheduleSelectCityActivity extends Activity {
 //                cityList.add(sGpsStruct);
 //            }
 
-            currentCityList = cityList;
-            adapter = new ScheduleCitySelectAdapter(this, cityList);
-            sortListView.setAdapter(adapter);
+
+//            currentCityList = cityList;
+//            adapter = new ScheduleCitySelectAdapter(this, cityList);
+//            sortListView.setAdapter(adapter);
         } catch (IOException | JSONException e) {
             e.printStackTrace();
         }
+        characterParser = CharacterParser.getInstance();
+        pinyinComparator = new PinyinComparator();
+        filledData(cityList);
+
     }
 
     private void filterData(String filterStr) {
@@ -202,14 +232,15 @@ public class ScheduleSelectCityActivity extends Activity {
             filterDateList = cityList;
         } else {
             filterDateList.clear();
-            for (ScheduleCityGpsStruct struct : cityList) {
-                String strCityName = struct.getStrCityName();
-                if (strCityName.contains(filterStr.toString())) {
-                    filterDateList.add(struct);
+            for (int i = 0; i < cityList.size(); i++) {
+                if (cityList.get(i).getStrCityName().contains(filterStr)) {
+                    filterDateList.add(cityList.get(i));
                 }
             }
+
             currentCityList = filterDateList;
         }
+        Collections.sort(filterDateList, pinyinComparator);
         adapter.updateListView(filterDateList);
     }
 
@@ -221,4 +252,23 @@ public class ScheduleSelectCityActivity extends Activity {
         }
         return super.onKeyDown(keyCode, event);
     }
+    private void filledData(List<ScheduleCityGpsStruct> date) {
+
+        for (int i = 0; i < date.size(); i++) {
+            ScheduleCityGpsStruct sortModel = date.get(i);
+            // 汉字转换成拼音
+            String pinyin = characterParser.getSelling(date.get(i).getStrCityName());
+            String sortString = pinyin.substring(0, 1).toUpperCase();
+
+            // 正则表达式，判断首字母是否是英文字母
+            if (sortString.matches("[A-Z]")) {
+                sortModel.setSortLetters(sortString.toUpperCase());
+            } else {
+                sortModel.setSortLetters("#");
+            }
+            cityList.set(i,sortModel);
+        }
+    }
+
+
 }

@@ -46,25 +46,25 @@ public class ScheduleCitySelectAdapter extends BaseAdapter implements
         return position;
     }
 
-    public View getView(final int position, View view, ViewGroup arg2) {
+    public View getView(final int position, View convertView, ViewGroup arg2) {
+
         ViewHolder viewHolder = null;
-        if (view == null) {
+        final ScheduleCityGpsStruct mContent = list.get(position);
+
             viewHolder = new ViewHolder();
-            view = LayoutInflater.from(mContext).inflate(
+            convertView = LayoutInflater.from(mContext).inflate(
                     R.layout.schedule_select_city_item, null);
-            viewHolder.tvTitle = (TextView) view
+            viewHolder.tvTitle = (TextView) convertView
                     .findViewById(R.id.city_list_item_name);
-            viewHolder.tvLetter = (TextView) view
+            viewHolder.tvLetter = (TextView) convertView
                     .findViewById(R.id.city_list_item_catalog);
-            view.setTag(viewHolder);
-        } else {
-            viewHolder = (ViewHolder) view.getTag();
-        }
+            convertView.setTag(viewHolder);
+
         ScheduleCityGpsStruct struct = list.get(position);
         // 首字母
         String sortLetters = struct.getSortLetters();
         if (sortLetters != null && sortLetters.length() > 0) {
-            if (position == getPositionForSection(position, sortLetters)) {
+            if (position == getPositionForSection(sortLetters)) {
                 viewHolder.tvLetter.setVisibility(View.VISIBLE);
                 viewHolder.tvLetter.setText(sortLetters);
             }
@@ -74,7 +74,7 @@ public class ScheduleCitySelectAdapter extends BaseAdapter implements
 
         viewHolder.tvTitle.setText(struct.getStrCityName());
 
-        return view;
+        return convertView;
 
     }
 
@@ -82,7 +82,6 @@ public class ScheduleCitySelectAdapter extends BaseAdapter implements
         TextView tvLetter;
         TextView tvTitle;
     }
-
     public int getPositionForSection(String section) {
         for (int i = 0; i < getCount(); i++) {
             String sortStr = list.get(i).getSortLetters();
@@ -93,6 +92,36 @@ public class ScheduleCitySelectAdapter extends BaseAdapter implements
 
         return -1;
     }
+
+    public int getPositionForSection(int section) {
+        for (int i = 0; i < getCount(); i++) {
+            String sortStr = list.get(i).getSortLetters();
+            char firstChar = sortStr.toUpperCase().charAt(0);
+            if (firstChar == section) {
+                return i;
+            }
+        }
+
+        return -1;
+    }
+
+    /**
+     * 提取英文的首字母，非英文字母用#代替。
+     *
+     * @param str
+     * @return
+     */
+    private String getAlpha(String str) {
+        String  sortStr = str.trim().substring(0, 1).toUpperCase();
+        // 正则表达式，判断首字母是否是英文字母
+        if (sortStr.matches("[A-Z]")) {
+            return sortStr;
+        } else {
+            return "#";
+        }
+    }
+
+
 
     public int getPositionForSection(int iPosition, String section) {
         for (int i = 0; i < getCount(); i++) {
@@ -109,14 +138,10 @@ public class ScheduleCitySelectAdapter extends BaseAdapter implements
         return null;
     }
 
-    @Override
-    public int getPositionForSection(int sectionIndex) {
-        return 0;
-    }
 
     @Override
     public int getSectionForPosition(int position) {
-        return 0;
+        return list.get(position).getSortLetters().charAt(0);
     }
 
 }

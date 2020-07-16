@@ -64,6 +64,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
     GeoCoder mSearch = null;
     private EditText location_edit;
     private String city;
+    private String cityName = "";
     private String strAddress;
 
     private MapView mMapView = null;
@@ -433,10 +434,10 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == SELECTCITY && resultCode == RESULT_OK) {
             //选择城市
-            ScheduleCityGpsStruct struct = (ScheduleCityGpsStruct) data.getSerializableExtra("cityItemData");
-            String strCityName = struct.getStrCityName();
+            cityName = data.getStringExtra("cityName");
+            tvTitle.setText(cityName);
             rl_location_detail.setVisibility(View.GONE);
-            LatLng selectedCity = new LatLng(Double.parseDouble(struct.getStrLatitude()), Double.parseDouble(struct.getStrLongitude()));
+            LatLng selectedCity = new LatLng(Double.valueOf(data.getStringExtra("lat")),Double.valueOf(data.getStringExtra("log")));
             MapStatus mMapStatus = new MapStatus.Builder()
                     .target(selectedCity)
                     .zoom(12)
