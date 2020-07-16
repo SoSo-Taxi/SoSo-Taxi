@@ -11,7 +11,9 @@ import java.util.List;
 
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
+import android.content.res.AssetManager;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextUtils;
@@ -26,6 +28,10 @@ import android.widget.TextView;
 import android.widget.AdapterView.OnItemClickListener;
 
 import com.sosotaxi.R;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 public class ScheduleSelectCityActivity extends Activity {
 
@@ -119,40 +125,73 @@ public class ScheduleSelectCityActivity extends Activity {
         });
     }
 
-
+    public String readInPutStream(InputStream inputStream) {
+        BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
+        String line = "";
+        StringBuilder stringBuilder = new StringBuilder();
+        try {
+            while ((line = reader.readLine()) != null) {
+                stringBuilder.append(line);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            if (reader != null) {
+                try {
+                    reader.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+            return stringBuilder.toString();
+        }
+    }
 
     private void loadData() {
         cityList = new ArrayList<ScheduleCityGpsStruct>();
         try {
-            InputStream is = getAssets().open("cityjson.json");
-            InputStreamReader isr = new InputStreamReader(is);
-            BufferedReader br = new BufferedReader(isr);
-            String line = "";
-            String[] arrs = null;
-            while ((line = br.readLine()) != null) {
+              AssetManager assetManager = this.getAssets();
+              InputStream inputStream = null;
+              inputStream = assetManager.open("cityjson.json");
+              String jsonStr = readInPutStream(inputStream);
+
+              JSONArray jsonArray =  new JSONArray(jsonStr);
+              int length = jsonArray.length();
+            for (int i = 0; i < length; i++) {
                 ScheduleCityGpsStruct sGpsStruct = new ScheduleCityGpsStruct();
-                arrs = line.split(",");
-                if (arrs.length == 4) {
-                    sGpsStruct.setSortLetters(arrs[0]);
-                    sGpsStruct.setStrCityName(arrs[1]);
-                    sGpsStruct.setStrLongitude(arrs[2]);
-                    sGpsStruct.setStrLatitude(arrs[3]);
-                }else if (arrs.length == 3) {
-                    sGpsStruct.setSortLetters("");
-                    sGpsStruct.setStrCityName(arrs[0]);
-                    sGpsStruct.setStrLongitude(arrs[1]);
-                    sGpsStruct.setStrLatitude(arrs[2]);
-                }
+                JSONObject jsonObject = jsonArray.getJSONObject(i);
+                sGpsStruct.setSortLetters(jsonObject.getString("sortLetter"));
+                sGpsStruct.setStrCityName(jsonObject.getString("cityName"));
+                sGpsStruct.setStrLatitude(jsonObject.getString("lat"));
+                sGpsStruct.setStrLongitude(jsonObject.getString("log"));
                 cityList.add(sGpsStruct);
             }
+//            InputStream is = getAssets().open("cityjson.json");
+//            InputStreamReader isr = new InputStreamReader(is);
+//            BufferedReader br = new BufferedReader(isr);
+//            String line = "";
+//            String[] arrs = null;
+//            while ((line = br.readLine()) != null) {
+//                ScheduleCityGpsStruct sGpsStruct = new ScheduleCityGpsStruct();
+//                arrs = line.split(",");
+//                if (arrs.length == 4) {
+//                    sGpsStruct.setSortLetters(arrs[0]);
+//                    sGpsStruct.setStrCityName(arrs[1]);
+//                    sGpsStruct.setStrLongitude(arrs[2]);
+//                    sGpsStruct.setStrLatitude(arrs[3]);
+//                }else if (arrs.length == 3) {
+//                    sGpsStruct.setSortLetters("");
+//                    sGpsStruct.setStrCityName(arrs[0]);
+//                    sGpsStruct.setStrLongitude(arrs[1]);
+//                    sGpsStruct.setStrLatitude(arrs[2]);
+//                }
+//                cityList.add(sGpsStruct);
+//            }
 
-            br.close();
-            isr.close();
-            is.close();
             currentCityList = cityList;
             adapter = new ScheduleCitySelectAdapter(this, cityList);
             sortListView.setAdapter(adapter);
-        } catch (IOException e) {
+        } catch (IOException | JSONException e) {
             e.printStackTrace();
         }
     }
