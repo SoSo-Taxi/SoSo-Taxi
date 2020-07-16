@@ -98,7 +98,7 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public boolean onSupportNavigateUp() {
-        NavController navController = Navigation.findNavController(this, R.id.baiduMapView);
+        NavController navController = Navigation.findNavController(this, R.id.bmapView);
         return NavigationUI.navigateUp(navController, mAppBarConfiguration)
                 || super.onSupportNavigateUp();
     }

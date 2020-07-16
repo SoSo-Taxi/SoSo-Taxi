@@ -1,30 +1,154 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+android:layout_width="fill_parent"
+android:layout_height="fill_parent"
+android:background="#FFFFFFFF"
+android:orientation="vertical"
     tools:context=".ui.home.HomeFragment">
 
-    <com.baidu.mapapi.map.MapView
-        android:id="@+id/baiduMapView"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:clickable="true" />
+<RelativeLayout
+    android:layout_width="fill_parent"
+    android:layout_height="50dp"
+    android:background="@color/colorDarkRed" >
 
-    <ImageButton
-        android:id="@+id/but_Loc"
-        style="?android:attr/borderlessButtonStyle"
+    <ImageView
+        android:id="@+id/robin_title_left"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="350dp"
-        android:layout_marginTop="500dp"
-        android:src="@drawable/ic_home_loc"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-   
+        android:layout_centerVertical="true"
+        android:padding="10dp"
+        android:src="@drawable/ic_back" />
+    <LinearLayout
+        android:id="@+id/ll_select_city"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:gravity="center"
+        android:orientation="horizontal" >
 
 
+        <TextView
+            android:id="@+id/robin_title_center"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="3dp"
+            android:text="测试"
+            android:textColor="@color/colorBackground"
+            android:textSize="15dp" />
 
+        <ImageView
+            android:layout_width="18dp"
+            android:layout_height="18dp"
+            android:paddingTop="3dp"
+            android:src="@drawable/schedule_city_select" />
+    </LinearLayout>
 
-</FrameLayout>
+    <TextView
+        android:id="@+id/robin_title_right"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:padding="10dp"
+        android:text="测试"
+        android:textColor="@color/colorBackground"
+        android:textSize="15dp" />
+</RelativeLayout>
+
+<RelativeLayout
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent" >
+
+    <com.baidu.mapapi.map.MapView
+        android:id="@+id/bmapView"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:clickable="true" />
+
+    <EditText
+        android:id="@+id/location_edit"
+        android:layout_width="fill_parent"
+        android:layout_height="40dp"
+        android:layout_alignParentTop="true"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:layout_marginTop="8dip"
+        android:background="@color/colorBackground"
+        android:drawableLeft="@drawable/ic_search_bar_icon"
+        android:hint="输入搜索关键字"
+        android:paddingBottom="5dp"
+        android:paddingLeft="10dp"
+        android:paddingTop="5dp"
+        android:singleLine="true"
+        android:textSize="13.0dip" />
+
+    <RelativeLayout
+        android:id="@+id/rl_location_detail"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="10dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:visibility="gone"
+        >
+
+        <TextView
+            android:id="@+id/tv_location_name"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:paddingTop="12dp"
+            android:text="A"
+            android:singleLine="true"
+            android:textColor="@color/black"
+            android:textSize="15dp" />
+
+        <TextView
+            android:id="@+id/tv_location_address"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="6dp"
+            android:paddingBottom="12dp"
+
+            android:singleLine="true"
+            android:text="hhhh"
+            android:textColor="@color/black"
+            android:textSize="@dimen/login_edit_text_spacing" />
+
+        <Button
+            android:id="@+id/bt_finish"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:layout_marginTop="8dp"
+            android:padding="10dp"
+            android:layout_below="@id/tv_location_address"
+            android:layout_centerHorizontal="true"
+            android:gravity="center"
+            android:text="确定"
+            android:textColor="@color/colorBackground"
+            android:textSize="15dp" />
+    </RelativeLayout>
+
+    <FrameLayout
+
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <ImageButton
+            android:id="@+id/but_Loc"
+            style="?android:attr/borderlessButtonStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="350dp"
+            android:layout_marginTop="500dp"
+            android:src="@drawable/ic_home_loc" />
+    </FrameLayout>
+
+</RelativeLayout>
+
+</LinearLayout>
