@@ -64,15 +64,15 @@ public class ScheduleSearchCityPoiActivity extends Activity implements
     }
 
     private void initTitle() {
-//        ImageView imgBack = (ImageView) findViewById(R.id.robin_title_left);
-//        imgBack.setOnClickListener(new OnClickListener() {
-//
-//            @Override
-//            public void onClick(View v) {
-//                finish();
-//            }
-//
-//        });
+        ImageView imgBack = (ImageView) findViewById(R.id.robin_title_left);
+        imgBack.setOnClickListener(new OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+
+        });
 
         TextView tvTitle = (TextView) findViewById(R.id.robin_title_center);
         tvTitle.setText("查找位置");

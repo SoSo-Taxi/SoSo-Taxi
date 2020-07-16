@@ -464,7 +464,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
                         .build();
                 mBaiduMap.setMapStatus(MapStatusUpdateFactory.newMapStatus(mMapStatus));
                 BitmapDescriptor bitmap = BitmapDescriptorFactory
-                        .fromResource(R.drawable.ic_home_loc);
+                        .fromResource(R.drawable.locate);
                 //构建MarkerOption，用于在地图上添加Marker
                 OverlayOptions option = new MarkerOptions()
                         .position(poiLocation)

@@ -2,15 +2,65 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:orientation="vertical">
+    android:orientation="vertical" >
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/colorDarkRed" >
+        <ImageView
+            android:id="@+id/robin_title_left"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:padding="10dp"
+            android:src="@drawable/ic_back" />
+        <LinearLayout
+            android:id="@+id/ll_select_city"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:gravity="center"
+            android:orientation="horizontal">
+            <TextView
+                android:id="@+id/robin_title_center"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="3dp"
+                android:gravity="center_horizontal"
+                android:text="测试"
+                android:textColor="@color/colorBackground"
+                android:textSize="15dp" />
+
+            <ImageView
+                android:layout_width="18dp"
+                android:layout_height="18dp"
+                android:paddingTop="3dp"
+                android:src="@drawable/schedule_city_select" />
+        </LinearLayout>
+        <TextView
+            android:id="@+id/robin_title_right"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:padding="10dp"
+            android:text="测试"
+            android:textColor="@color/colorBackground"
+            android:textSize="15dp" />
+
+
+    </RelativeLayout>
 
     <com.sosotaxi.ui.home.ClearEditTextView
         android:id="@+id/pio_filter_edit"
         android:layout_width="412dp"
-        android:layout_height="79dp"
-        tools:layout_editor_absoluteX="0dp"
-        tools:layout_editor_absoluteY="2dp" />
+        android:layout_height="65dp"
+        android:hint="请输入地点名称"
+        android:singleLine="true"
+        android:textSize="15dp" />
+
+
     <com.sosotaxi.ui.home.XListView
         android:id="@+id/schedule_search_pio"
         android:layout_width="match_parent"
@@ -18,5 +68,3 @@
 
 
 </LinearLayout>
-
-
