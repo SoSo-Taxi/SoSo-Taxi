@@ -108,6 +108,8 @@ public class ScheduleSelectCityActivity extends Activity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view,
                                     int position, long id) {
+
+
                 if (position == 0) {
                     Intent data = new Intent();
                     data.putExtra("cityName",cityName);

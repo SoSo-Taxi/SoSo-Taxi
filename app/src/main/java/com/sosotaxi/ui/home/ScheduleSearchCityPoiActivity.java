@@ -56,16 +56,21 @@ public class ScheduleSearchCityPoiActivity extends Activity implements
     private Boolean bLoading = false;
     private String keyWord;
     private String city;
+    private String destination;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.schedule_search_city_poi_activity);
         city = getIntent().getStringExtra("city");
+        destination = getIntent().getStringExtra("destination");
         mPoiSearch = PoiSearch.newInstance();
         mPoiSearch.setOnGetPoiSearchResultListener(this);
+
         initTitle();
         initView();
+
+
     }
 
     private void initTitle() {
@@ -80,9 +85,9 @@ public class ScheduleSearchCityPoiActivity extends Activity implements
         });
 
         TextView tvTitle = (TextView) findViewById(R.id.robin_title_center);
-        tvTitle.setText("查找位置");
-
+        tvTitle.setText(city);
         TextView tvRight = (TextView) findViewById(R.id.robin_title_right);
+
         tvRight.setVisibility(View.VISIBLE);
         tvRight.setText("搜索");
         tvRight.setOnClickListener(new OnClickListener() {
@@ -108,6 +113,10 @@ public class ScheduleSearchCityPoiActivity extends Activity implements
         mSearchEditText = (ClearEditTextView) findViewById(R.id.pio_filter_edit);
         poiListView = (XListView) findViewById(R.id.schedule_search_pio);
         poiList = new ArrayList<PoiInfo>();
+        mSearchEditText.setText(destination);
+        TextView tvRight = (TextView) findViewById(R.id.robin_title_right);
+        tvRight.performClick();
+
 
     }
 

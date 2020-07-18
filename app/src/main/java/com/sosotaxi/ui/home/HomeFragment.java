@@ -73,6 +73,8 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
     //LOCATION
     private double mLatitude;
     private double mLongtitude;
+    private double dLatitude;
+    private double dLongtitude;
     //SENSOR
     private MyOrientationListener mMyOrientationListener;
     private float mCurrentX;
@@ -89,6 +91,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
     private TextView tv_location_name;
     private TextView tv_location_address;
     private RelativeLayout rl_location_detail;
+    private Button tvCall;
     private String poiAddress;
     private String poiName="";
     public static HomeFragment newInstance() {
@@ -115,6 +118,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
         super.onActivityCreated(savedInstanceState);
         SDKInitializer.initialize(getContext());
         SDKInitializer.setCoordType(CoordType.BD09LL);
+
         this.context = this;
         initMyLocation();
         //按钮
@@ -123,6 +127,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
         locationButton.setOnClickListener(this);
         initTitle();
         initView();
+
         // 初始化搜索模块，注册搜索事件监听
         mSearch = GeoCoder.newInstance();
         mSearch.setOnGetGeoCodeResultListener(new OnGetGeoCoderResultListener() {
@@ -210,7 +215,9 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
 
             @Override
             public void onClick(View v) {
+                String destination = location_edit.getText().toString();
                 Intent i = new Intent(getContext(), ScheduleSearchCityPoiActivity.class);
+                i.putExtra("destination",destination);
                 i.putExtra("city", city);
                 startActivityForResult(i, SEARCH_POI);
             }
@@ -273,7 +280,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
         }
     }
     private void initTitle() {
-        ImageView imgBack = (ImageView) getActivity().findViewById(R.id.robin_title_left);
+//        ImageView imgBack = (ImageView) getActivity().findViewById(R.id.robin_title_left);
 //        imgBack.setOnClickListener(new View.OnClickListener() {
 //            @Override
 //            public void onClick(View v) {
@@ -291,11 +298,11 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
                 startActivityForResult(i, SELECTCITY);
             }
         });
+        Button tvCall = (Button) getView().findViewById(R.id.bt_finish);
+        tvCall.setVisibility(View.INVISIBLE);
 
-        TextView tvRight = (TextView) getActivity().findViewById(R.id.robin_title_right);
 
-        tvRight.setText("完成");
-        tvRight.setVisibility(View.GONE);
+
     }
 
     private void initView() {
@@ -304,12 +311,12 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
         tv_location_name = (TextView) getView().findViewById(R.id.tv_location_name);
         tv_location_address = (TextView) getView().findViewById(R.id.tv_location_address);
         rl_location_detail = (RelativeLayout) getView().findViewById(R.id.rl_location_detail);
-        Button bt_finish = (Button) getView().findViewById(R.id.bt_finish);
-        bt_finish.setOnClickListener(new View.OnClickListener() {
+        tvCall = (Button)getView().findViewById(R.id.bt_finish) ;
+        tvCall.setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick(View v) {
-                Intent i = new Intent();
+                Intent i = new Intent(getActivity(),CallCar.class);
                 String address = tv_location_address.getText().toString().trim();
                 String name;
                 if (tv_location_name.isShown()) {
@@ -317,9 +324,13 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
                 }else {
                     name = "";
                 }
-                i.putExtra("location", address+name);
-                getActivity().setResult(RESULT_OK, i);
-                getActivity().finish();
+                i.putExtra("dlocation", address+name);
+                i.putExtra("mlocation",strAddress);
+                i.putExtra("dLatitude",dLatitude);
+                i.putExtra("dLongitude",dLongtitude);
+                i.putExtra("mLatitude",mLatitude);
+                i.putExtra("mLongitude",mLongtitude);
+                startActivity(i);
             }
         });
     }
@@ -348,6 +359,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
             //更新经纬度
             mLatitude = location.getLatitude();
             mLongtitude = location.getLongitude();
+            strAddress=location.getAddrStr();
             //设置起点
             mLastLocationData = new LatLng(mLatitude, mLongtitude);
             if (isFirstin) {
@@ -435,7 +447,10 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
         if (requestCode == SELECTCITY && resultCode == RESULT_OK) {
             //选择城市
             cityName = data.getStringExtra("cityName");
+
+
             tvTitle.setText(cityName);
+
             rl_location_detail.setVisibility(View.GONE);
             LatLng selectedCity = new LatLng(Double.valueOf(data.getStringExtra("lat")),Double.valueOf(data.getStringExtra("log")));
             MapStatus mMapStatus = new MapStatus.Builder()
@@ -451,11 +466,14 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
                 poiName = data.getStringExtra("name");
                 double latitude = data.getExtras().getDouble("latitude");
                 double longitude = data.getExtras().getDouble("longitude");
+                dLatitude = latitude;
+                dLongtitude = longitude;
                 LatLng poiLocation = new LatLng(latitude, longitude);
                 rl_location_detail.setVisibility(View.VISIBLE);
                 tv_location_name.setVisibility(View.VISIBLE);
                 tv_location_name.setText(poiName);
                 tv_location_address.setText(searchPoiAddress);
+                tvCall.setVisibility(View.VISIBLE);
 
                 mBaiduMap.clear();
                 MapStatus mMapStatus = new MapStatus.Builder()
