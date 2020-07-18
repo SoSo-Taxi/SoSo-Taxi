@@ -20,7 +20,6 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
-import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -316,7 +315,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
 
             @Override
             public void onClick(View v) {
-                Intent i = new Intent(getActivity(),CallCar.class);
+                Intent i = new Intent(getActivity(), CallCarActivity.class);
                 String address = tv_location_address.getText().toString().trim();
                 String name;
                 if (tv_location_name.isShown()) {

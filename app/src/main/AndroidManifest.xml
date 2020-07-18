@@ -77,7 +77,7 @@
             android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".ui.home.ScheduleSearchCityPoiActivity" />
         <activity android:name=".ui.home.ScheduleSelectCityActivity"/>
-        <activity android:name=".ui.home.CallCar"/>
+        <activity android:name=".ui.home.CallCarActivity"/>
 
         <meta-data
             android:name="com.baidu.lbsapi.API_KEY"

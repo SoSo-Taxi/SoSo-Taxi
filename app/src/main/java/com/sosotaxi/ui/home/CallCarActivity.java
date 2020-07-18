@@ -27,7 +27,7 @@ import com.sosotaxi.ui.overlay.DrivingRouteOverlay;
 
 import java.util.List;
 
-public class CallCar extends Activity {
+public class CallCarActivity extends Activity {
 
     private RoutePlanSearch mSearch;
 
@@ -53,20 +53,20 @@ public class CallCar extends Activity {
         initRoutePlan();
     }
     private void initTitle() {
-        ImageView imgBack = (ImageView) findViewById(R.id.robin_title_left);
-        imgBack.setOnClickListener(new View.OnClickListener() {
-
-            @Override
-            public void onClick(View v) {
-                finish();
-            }
-
-        });
+//        ImageView imgBack = (ImageView) findViewById(R.id.robin_title_left);
+//        imgBack.setOnClickListener(new View.OnClickListener() {
+//
+//            @Override
+//            public void onClick(View v) {
+//                finish();
+//            }
+//
+//        });
         myLocation=getIntent().getStringExtra("mlocation");
         destination=getIntent().getStringExtra("dlocation");
-        tv_start = (ClearEditTextView) findViewById(R.id.start);
+        tv_start = (TextView) findViewById(R.id.start);
         tv_start.setText(myLocation);
-        tv_dest = (ClearEditTextView)findViewById(R.id.dest);
+        tv_dest = (TextView)findViewById(R.id.dest);
         tv_dest.setText(destination);
     }
     private void initView(){

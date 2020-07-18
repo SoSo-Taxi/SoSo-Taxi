@@ -67,5 +67,12 @@
         <item name="android:textColor">@android:color/primary_text_dark</item>
         <item name="android:textStyle">bold</item>
     </style>
+    <style name="PreviewAddress">
+        <item name="android:textSize">18sp</item>
+        <item name="android:textColor">@color/colorPreviewAddress</item>
+        <item name="android:textStyle">normal</item>
+        <item name="android:drawablePadding">4dp</item>
+        <item name="android:padding">2dp</item>
+    </style>
 
 </resources>
