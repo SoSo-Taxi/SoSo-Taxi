@@ -6,11 +6,33 @@ import android.view.View;
 
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.baidu.mapapi.map.BaiduMap;
 import com.baidu.mapapi.map.MapView;
+import com.baidu.mapapi.model.LatLng;
+import com.baidu.mapapi.search.route.BikingRouteResult;
+import com.baidu.mapapi.search.route.DrivingRouteLine;
+import com.baidu.mapapi.search.route.DrivingRoutePlanOption;
+import com.baidu.mapapi.search.route.DrivingRouteResult;
+import com.baidu.mapapi.search.route.IndoorRouteResult;
+import com.baidu.mapapi.search.route.MassTransitRouteResult;
+import com.baidu.mapapi.search.route.OnGetRoutePlanResultListener;
+import com.baidu.mapapi.search.route.PlanNode;
+import com.baidu.mapapi.search.route.RoutePlanSearch;
+import com.baidu.mapapi.search.route.TransitRouteResult;
+import com.baidu.mapapi.search.route.WalkingRouteResult;
 import com.sosotaxi.R;
+import com.sosotaxi.ui.overlay.DrivingRouteOverlay;
+
+import java.util.List;
 
 public class CallCar extends Activity {
+
+    private RoutePlanSearch mSearch;
+
+    private BaiduMap mBaiduMap;
+
     private TextView tv_start=null;
     private TextView tv_dest=null;
     private MapView mMapView =null;
@@ -28,6 +50,7 @@ public class CallCar extends Activity {
         initTitle();
         initView();
         initData();
+        initRoutePlan();
     }
     private void initTitle() {
         ImageView imgBack = (ImageView) findViewById(R.id.robin_title_left);
@@ -50,6 +73,15 @@ public class CallCar extends Activity {
 
         mMapView = (MapView)findViewById(R.id.bmapView);
 
+        // 获取百度地图对象
+        mBaiduMap = mMapView.getMap();
+
+        // 获取路径规划对象
+        mSearch = RoutePlanSearch.newInstance();
+
+        // 设置路径规划结果监听器
+        mSearch.setOnGetRoutePlanResultListener(onGetRoutePlanResultListener);
+
     }
     private void initData(){
         myLongitude=getIntent().getDoubleExtra("mLongitude",1.0);
@@ -57,6 +89,19 @@ public class CallCar extends Activity {
         destLongitude=getIntent().getDoubleExtra("dLongitude",1.0);
         destLatitude=getIntent().getDoubleExtra("dLatitude",1.0);
     }
+
+    /**
+     * 初始化路径规划
+     */
+    private void initRoutePlan() {
+        Toast.makeText(getApplicationContext(), "开始路径规划", Toast.LENGTH_SHORT).show();
+        PlanNode startNode = PlanNode.withLocation(new LatLng(myLatitude,myLongitude));
+        PlanNode endNode = PlanNode.withLocation(new LatLng(destLatitude,destLongitude));
+        mSearch.drivingSearch((new DrivingRoutePlanOption())
+                .from(startNode)
+                .to(endNode));
+    }
+
     @Override
     protected void onResume() {
         super.onResume();
@@ -75,4 +120,51 @@ public class CallCar extends Activity {
         //在activity执行onDestroy时执行mMapView.onDestroy()，实现地图生命周期管理
         mMapView.onDestroy();
     }
+
+    /**
+     * 路线规划结果返回监听类
+     */
+    OnGetRoutePlanResultListener onGetRoutePlanResultListener = new OnGetRoutePlanResultListener() {
+        @Override
+        public void onGetWalkingRouteResult(WalkingRouteResult walkingRouteResult) {
+
+        }
+
+        @Override
+        public void onGetTransitRouteResult(TransitRouteResult transitRouteResult) {
+
+        }
+
+        @Override
+        public void onGetMassTransitRouteResult(MassTransitRouteResult massTransitRouteResult) {
+
+        }
+
+        @Override
+        public void onGetDrivingRouteResult(DrivingRouteResult drivingRouteResult) {
+            //创建DrivingRouteOverlay实例
+            DrivingRouteOverlay overlay = new DrivingRouteOverlay(mBaiduMap);
+            // 清除原有路线
+            overlay.removeFromMap();
+            List<DrivingRouteLine> routes = drivingRouteResult.getRouteLines();
+            if (routes != null && routes.size() > 0) {
+                //获取路径规划数据
+                //为DrivingRouteOverlay实例设置数据
+                overlay.setData(drivingRouteResult.getRouteLines().get(0));
+                //在地图上绘制路线
+                overlay.addToMap(false);
+                overlay.zoomToSpanPaddingBounds(200, 200, 200, 200);
+            }
+        }
+
+        @Override
+        public void onGetIndoorRouteResult(IndoorRouteResult indoorRouteResult) {
+
+        }
+
+        @Override
+        public void onGetBikingRouteResult(BikingRouteResult bikingRouteResult) {
+
+        }
+    };
 }
