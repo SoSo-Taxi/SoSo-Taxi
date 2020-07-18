@@ -87,3 +87,11 @@ local.properties
 .idea/misc.xml
 .idea/misc.xml
 /.idea/
+app/.idea/libraries/Gradle__org_jetbrains_kotlin_kotlin_stdlib_common_1_3_71_jar.xml
+*.properties
+*.xml
+app/gradlew
+*.bat
+*.jar
+*.ser
+app/.idea/.name
