@@ -27,6 +27,7 @@ public class CallCar extends Activity {
 
         initTitle();
         initView();
+        initData();
     }
     private void initTitle() {
         ImageView imgBack = (ImageView) findViewById(R.id.robin_title_left);
@@ -49,6 +50,12 @@ public class CallCar extends Activity {
 
         mMapView = (MapView)findViewById(R.id.bmapView);
 
+    }
+    private void initData(){
+        myLongitude=getIntent().getDoubleExtra("mLongitude",1.0);
+        myLatitude=getIntent().getDoubleExtra("mLatitude",1.0);
+        destLongitude=getIntent().getDoubleExtra("dLongitude",1.0);
+        destLatitude=getIntent().getDoubleExtra("dLatitude",1.0);
     }
     @Override
     protected void onResume() {
