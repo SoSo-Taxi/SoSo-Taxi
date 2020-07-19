@@ -89,7 +89,7 @@ public class ScheduleSearchCityPoiActivity extends Activity implements
         TextView tvRight = (TextView) findViewById(R.id.robin_title_right);
 
         tvRight.setVisibility(View.VISIBLE);
-        tvRight.setText("搜索");
+        tvRight.setText("搜索目的地");
         tvRight.setOnClickListener(new OnClickListener() {
 
             @Override

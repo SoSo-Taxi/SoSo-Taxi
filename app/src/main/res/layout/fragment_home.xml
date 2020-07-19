@@ -8,58 +8,7 @@ android:background="#FFFFFFFF"
 android:orientation="vertical"
     tools:context=".ui.home.HomeFragment">
 
-<RelativeLayout
-    android:layout_width="fill_parent"
-    android:layout_height="40dp"
-    android:background="@color/colorDarkRed" >
-
-<!--    <ImageView-->
-<!--        android:id="@+id/robin_title_left"-->
-<!--        android:layout_width="wrap_content"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:layout_centerVertical="true"-->
-<!--        android:padding="10dp"-->
-<!--        android:src="@drawable/ic_back" />-->
-    <LinearLayout
-        android:id="@+id/ll_select_city"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:gravity="center"
-        android:orientation="horizontal">
-
-
-        <TextView
-            android:id="@+id/robin_title_center"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:padding="3dp"
-            android:text="测试"
-            android:layout_marginTop="5dp"
-            android:textColor="@color/colorBackground"
-            android:textSize="15dp" />
-
-        <ImageView
-            android:layout_width="18dp"
-            android:layout_height="18dp"
-            android:layout_marginTop="5dp"
-            android:paddingTop="3dp"
-            android:src="@drawable/schedule_city_select" />
-    </LinearLayout>
-
-    <TextView
-        android:id="@+id/robin_title_right"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentRight="true"
-        android:layout_centerVertical="true"
-        android:padding="10dp"
-        android:text="测试"
-        android:textColor="@color/colorBackground"
-        android:textSize="15dp" />
-</RelativeLayout>
-
-<RelativeLayout
+    <RelativeLayout
     android:layout_width="fill_parent"
     android:layout_height="fill_parent" >
 
@@ -69,73 +18,56 @@ android:orientation="vertical"
         android:layout_height="fill_parent"
         android:clickable="true" />
 
-    <EditText
-        android:id="@+id/location_edit"
-        android:layout_width="fill_parent"
-        android:layout_height="70dp"
-        android:layout_alignParentTop="true"
-        android:layout_marginLeft="20dp"
-        android:layout_marginRight="20dp"
-        android:layout_marginTop="10dp"
-        android:background="@color/colorAreaCodeGrey"
-        android:drawableLeft="@drawable/ic_search_bar_icon"
-        android:hint="您想要去哪？"
-        android:paddingBottom="5dp"
-        android:paddingLeft="10dp"
-        android:paddingTop="5dp"
-        android:singleLine="true"
-        android:textSize="30.0dip" />
-
-    <RelativeLayout
-        android:id="@+id/rl_location_detail"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_marginBottom="10dp"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp"
-        android:visibility="gone"
-        >
-
-
-
-        <Button
-            android:id="@+id/bt_finish"
-            android:visibility="visible"
+        <RelativeLayout
+            android:id="@+id/rl_location_detail"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="8dp"
-            android:layout_marginTop="8dp"
-            android:padding="10dp"
-            android:layout_centerHorizontal="true"
-            android:gravity="center"
-            android:background="@color/colorDarkRed"
-            android:text="确定目的地"
-            android:textColor="@color/colorBackground"
-            android:textSize="15dp" />
-    </RelativeLayout>
+            android:layout_alignParentBottom="true"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:layout_marginBottom="10dp"
+            android:visibility="gone">
+
+
+            <Button
+                android:id="@+id/bt_finish"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="8dp"
+                android:background="@color/black"
+                android:gravity="center"
+                android:padding="10dp"
+                android:text="确定目的地"
+                android:textColor="@color/colorBackground"
+                android:textSize="15dp"
+                android:visibility="visible" />
+        </RelativeLayout>
 
     <FrameLayout
 
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-        <TextView
-            android:id="@+id/tv_location_name"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
 
-            android:layout_marginTop="110dp"
-            android:text=" "
-            android:singleLine="true"
+        <TextView
+            android:id="@+id/city_selected"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="15dp"
+            android:layout_marginTop="15dp"
+            android:background="@drawable/shape_textview"
+            android:padding="10dp"
+            android:drawableLeft="@drawable/ic_home_city"
+            android:text="选择城市"
             android:textColor="@color/black"
-            android:textSize="15dp" />
+            android:textSize="15sp" />
 
         <TextView
             android:id="@+id/tv_location_address"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-
+            android:visibility="invisible"
             android:layout_marginLeft="10dp"
             android:layout_marginTop="90dp"
 
@@ -151,10 +83,52 @@ android:orientation="vertical"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="350dp"
-            android:layout_marginTop="500dp"
+            android:layout_marginTop="480dp"
             app:srcCompat="@drawable/ic_home_loc" />
     </FrameLayout>
 
-</RelativeLayout>
+        <androidx.cardview.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="160dp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginTop="550dp"
+            android:layout_marginRight="20dp">
+
+            <TextView
+                android:id="@+id/tv_location_name"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="35dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginRight="20dp"
+                android:drawableLeft="@drawable/dot_green"
+                android:singleLine="false"
+                android:text=" "
+                android:textColor="@color/black"
+                android:textSize="14sp" />
+
+            <EditText
+                android:id="@+id/location_edit"
+                android:layout_width="fill_parent"
+                android:layout_height="70dp"
+                android:layout_marginLeft="20dp"
+                android:layout_marginTop="70dp"
+                android:layout_marginRight="20dp"
+
+                android:drawableLeft="@drawable/ic_orange_dot"
+                android:hint="输入你的目的地"
+                android:paddingLeft="10dp"
+                android:paddingTop="5dp"
+                android:background="@drawable/edittv_home_search"
+                android:paddingBottom="5dp"
+                android:singleLine="true"
+                android:textSize="30.0dp"
+                android:textColor="@color/black"
+
+                />
+
+        </androidx.cardview.widget.CardView>
+
+    </RelativeLayout>
 
 </LinearLayout>

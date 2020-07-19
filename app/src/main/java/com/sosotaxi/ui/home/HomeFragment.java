@@ -8,12 +8,16 @@ package com.sosotaxi.ui.home;
 import androidx.lifecycle.ViewModelProviders;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import android.text.Spannable;
+import android.text.SpannableStringBuilder;
+import android.text.style.ForegroundColorSpan;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -146,7 +150,9 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
                 poiAddress = reverseGeoCodeResult.getAddress();
                 city = reverseGeoCodeResult.getAddressDetail().city;
                 strAddress = reverseGeoCodeResult.getAddress()+poiName;
-                tvTitle.setText(city);
+                String cityDisplay = new String();
+                cityDisplay ="当前定位："+city;
+                tvTitle.setText(cityDisplay);
             }
         });
         location = new LatLng(mLatitude, mLongtitude);
@@ -188,7 +194,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
                 mSearch.reverseGeoCode(new ReverseGeoCodeOption().location(arg0.getPosition()));
                 rl_location_detail.setVisibility(View.VISIBLE);
                 tv_location_name.setVisibility(View.VISIBLE);
-                tv_location_name.setText(poiName);
+//                tv_location_name.setText(poiName);
                 tv_location_address.setText(poiAddress);
             }
 
@@ -205,7 +211,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
                 mBaiduMap.addOverlay(option);
                 mSearch.reverseGeoCode(new ReverseGeoCodeOption().location(arg0));
                 rl_location_detail.setVisibility(View.VISIBLE);
-                tv_location_name.setVisibility(View.GONE);
+//                tv_location_name.setVisibility(View.GONE);
                 tv_location_address.setText(poiAddress);
             }
         });
@@ -287,7 +293,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
 //            }
 //        });
 
-        tvTitle = (TextView) getActivity().findViewById(R.id.robin_title_center);
+        tvTitle = (TextView) getActivity().findViewById(R.id.city_selected);
         tvTitle.setText("位置");
         tvTitle.setOnClickListener(new View.OnClickListener() {
 
@@ -316,14 +322,15 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
             @Override
             public void onClick(View v) {
                 Intent i = new Intent(getActivity(), CallCarActivity.class);
-                String address = tv_location_address.getText().toString().trim();
-                String name;
-                if (tv_location_name.isShown()) {
-                    name = tv_location_name.getText().toString().trim();
-                }else {
-                    name = "";
-                }
-                i.putExtra("dlocation", address+name);
+//                String address = tv_location_address.getText().toString().trim();
+//                String name;
+//
+//                if (tv_location_name.isShown()) {
+//                    name = tv_location_name.getText().toString().trim();
+//                }else {
+//                    name = "";
+//                }
+                i.putExtra("dlocation", poiName);
                 i.putExtra("mlocation",strAddress);
                 i.putExtra("dLatitude",dLatitude);
                 i.putExtra("dLongitude",dLongtitude);
@@ -359,6 +366,8 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
             mLatitude = location.getLatitude();
             mLongtitude = location.getLongitude();
             strAddress=location.getAddrStr();
+            String startingPoint = "您将从"+strAddress+"上车";
+            tv_location_name.setText(startingPoint);
             //设置起点
             mLastLocationData = new LatLng(mLatitude, mLongtitude);
             if (isFirstin) {
@@ -411,6 +420,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
         initOrientation();
         //开始定位
         mLocationClient.start();
+
     }
 
     /**
@@ -446,9 +456,10 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
         if (requestCode == SELECTCITY && resultCode == RESULT_OK) {
             //选择城市
             cityName = data.getStringExtra("cityName");
+            String cityDisplay = new String();
+            cityDisplay = "当前定位："+cityName;
 
-
-            tvTitle.setText(cityName);
+            tvTitle.setText(cityDisplay);
 
             rl_location_detail.setVisibility(View.GONE);
             LatLng selectedCity = new LatLng(Double.valueOf(data.getStringExtra("lat")),Double.valueOf(data.getStringExtra("log")));
@@ -465,12 +476,23 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
                 poiName = data.getStringExtra("name");
                 double latitude = data.getExtras().getDouble("latitude");
                 double longitude = data.getExtras().getDouble("longitude");
+                location_edit.setText(poiName);
                 dLatitude = latitude;
                 dLongtitude = longitude;
                 LatLng poiLocation = new LatLng(latitude, longitude);
+
+                String startingPoint = "您将从"+strAddress+"上车";
+                tv_location_name.setText(startingPoint);
+//                SpannableStringBuilder spannable = new SpannableStringBuilder(startingPoint);
+//
+//                int index=startingPoint.length();
+//                spannable.setSpan(new ForegroundColorSpan(Color.parseColor("#FF4500")),3,3+index
+//                        , Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+
+
                 rl_location_detail.setVisibility(View.VISIBLE);
                 tv_location_name.setVisibility(View.VISIBLE);
-                tv_location_name.setText(poiName);
+
                 tv_location_address.setText(searchPoiAddress);
                 tvCall.setVisibility(View.VISIBLE);
 
