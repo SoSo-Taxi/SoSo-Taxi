@@ -1,3 +1,10 @@
+/**
+ * @Author 岳兵
+ * @CreateTime 2020/7/17
+ * @UpdateTime 2020/7/19
+ */
+
+
 package com.sosotaxi.ui.home;
 
 import android.app.Activity;
@@ -6,7 +13,6 @@ import android.os.Bundle;
 import android.view.View;
 
 import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
