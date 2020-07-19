@@ -1,9 +1,11 @@
 package com.sosotaxi.ui.home;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -32,6 +34,8 @@ public class CallCarActivity extends Activity {
     private RoutePlanSearch mSearch;
 
     private BaiduMap mBaiduMap;
+
+    private Button mcall = null;
 
     private TextView tv_start=null;
     private TextView tv_dest=null;
@@ -81,6 +85,15 @@ public class CallCarActivity extends Activity {
 
         // 设置路径规划结果监听器
         mSearch.setOnGetRoutePlanResultListener(onGetRoutePlanResultListener);
+
+        mcall = (Button)findViewById(R.id.call);
+        mcall.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent=new Intent(CallCarActivity.this,WaitingActivity.class);
+                startActivity(intent);
+            }
+        });
 
     }
     private void initData(){
