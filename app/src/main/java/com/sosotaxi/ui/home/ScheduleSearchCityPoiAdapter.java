@@ -32,9 +32,7 @@ public class ScheduleSearchCityPoiAdapter extends BaseAdapter implements
         this.list = list;
     }
 
-    /**
-     * @param list
-     */
+
     public void updateListView(List<PoiInfo> list) {
         this.list = list;
         notifyDataSetChanged();
