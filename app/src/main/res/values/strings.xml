@@ -65,4 +65,18 @@
 
     <string name="industry_choice_label">行业</string>
     <string name="hint_verification_code_sent">验证码已发送</string>
+
+    <!--route_activity-->
+    <string name="going_to_destination">正在前往目的地</string>
+    <string name="fasten_safebelt">请您系好安全带。疫情期间，还请您戴好口罩，安全出行。</string>
+    <string name="license_example">桂A·681UM</string>
+    <string name="car_info">日产轩逸·白色</string>
+    <string name="destination">目的地：</string>
+    <string name="destination_example">地王大厦</string>
+    <string name="driver">骆师傅</string>
+    <string name="score_example">4.8</string>
+    <string name="warning">报警</string>
+    <string name="fail_get_on_car">我没上车</string>
+    <string name="change_destination">修改终点</string>
+    <string name="share">分享行程</string>
 </resources>

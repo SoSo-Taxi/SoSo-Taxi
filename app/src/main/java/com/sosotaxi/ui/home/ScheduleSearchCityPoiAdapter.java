@@ -55,7 +55,7 @@ public class ScheduleSearchCityPoiAdapter extends BaseAdapter implements
         if (view == null) {
             viewHolder = new ViewHolder();
             view = LayoutInflater.from(mContext).inflate(
-                    R.layout.schedule_search_item, null);
+                    R.layout.item_search_poi, null);
             viewHolder.tvTitle = (TextView) view
                     .findViewById(R.id.city_list_name);
             viewHolder.tvLetter = (TextView) view

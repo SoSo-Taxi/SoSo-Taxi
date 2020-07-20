@@ -61,7 +61,7 @@ public class ScheduleSearchCityPoiActivity extends Activity implements
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.schedule_search_city_poi_activity);
+        setContentView(R.layout.activity_search_poi);
         city = getIntent().getStringExtra("city");
         destination = getIntent().getStringExtra("destination");
         mPoiSearch = PoiSearch.newInstance();
