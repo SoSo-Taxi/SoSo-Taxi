@@ -18,6 +18,7 @@ import androidx.fragment.app.Fragment;
 import android.text.Spannable;
 import android.text.SpannableStringBuilder;
 import android.text.style.ForegroundColorSpan;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -34,6 +35,7 @@ import com.baidu.location.LocationClient;
 import com.baidu.location.LocationClientOption;
 import com.baidu.mapapi.CoordType;
 import com.baidu.mapapi.SDKInitializer;
+import com.baidu.mapapi.http.HttpClient;
 import com.baidu.mapapi.map.BaiduMap;
 import com.baidu.mapapi.map.BitmapDescriptor;
 import com.baidu.mapapi.map.BitmapDescriptorFactory;
@@ -54,6 +56,18 @@ import com.baidu.mapapi.search.geocode.OnGetGeoCoderResultListener;
 import com.baidu.mapapi.search.geocode.ReverseGeoCodeOption;
 import com.baidu.mapapi.search.geocode.ReverseGeoCodeResult;
 import com.sosotaxi.R;
+
+
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.UnsupportedEncodingException;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.security.NoSuchAlgorithmException;
 
 import static android.app.Activity.RESULT_OK;
 
@@ -98,6 +112,14 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
     private String poiAddress;
     private String myPoiPlace;
     private String poiName="";
+    String myLocation= new String();
+
+    //url
+    private static final String RECOMMEND_LOCAL_URL="http://api.map.baidu.com/parking/search?location=";
+    private static final String RECOMMEND_AK_URL="&coordtype=bd09ll&ak=";
+    private static final String AK="RmmZVO6jFDooPymSqVdIeRUNpNgAMAza";
+    private String SN = "";
+
     public static HomeFragment newInstance() {
         return new HomeFragment();
     }
@@ -110,10 +132,6 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
         //获取地图控件引用
         mMapView = (MapView)root.findViewById(R.id.bmapView);
         mBaiduMap = mMapView.getMap();
-
-
-
-
         return root;
     }
 
@@ -230,6 +248,17 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
             }
         });
 
+        Log.i("before:","hhhhhhhhhhhhhh");
+        try {
+            getRecommend();
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        }
+        Log.i("after:","hhhhhhhhhhhh");
+
+
         mViewModel = ViewModelProviders.of(this).get(HomeViewModel.class);
         // TODO: Use the ViewModel
     }
@@ -344,6 +373,56 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
     }
 
     /**
+     * 推荐上车点
+     */
+    private void getRecommend() throws UnsupportedEncodingException, NoSuchAlgorithmException {
+
+//        String coord=new String();
+//        coord="bd09ll";
+          myLocation= mLongtitude+","+mLatitude;
+//        SNCal snCal = new SNCal();
+        SN = "33:62:4C:54:CA:F7:5F:C2:15:5D:C7:EC:E5:CD:9A:9D:78:08:0A:9D;com.sosotaxi";
+
+
+
+        Log.e("qqqqq","qqqqq");
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                String urlTest = RECOMMEND_LOCAL_URL+myLocation+RECOMMEND_AK_URL+AK+"&mcode="+SN;
+                Log.i("urltest",urlTest);
+                Log.i("hhhhhhhhhhhh","hhhhhhh");
+                try{
+                    URL url = new URL(urlTest);
+                    HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+                    conn.setRequestMethod("GET");
+                    int responsecode = conn.getResponseCode();
+                    String code = ""+responsecode;
+                    Log.e("请求响应编号",code);
+                    InputStream inputStream = conn.getInputStream();
+                    InputStreamReader reader = new InputStreamReader(inputStream, "UTF-8");
+                    BufferedReader bufferedReader = new BufferedReader(reader);
+                    StringBuffer buffer = new StringBuffer();
+                    String temp = null;
+                    while((temp=bufferedReader.readLine()) != null){
+                        buffer.append(temp);
+                        Log.i("成功：",temp);
+                    }
+                    bufferedReader.close();
+                    reader.close();
+                    inputStream.close();
+                    Log.e("MAIN", buffer.toString());
+                }catch(MalformedURLException e){
+                    e.printStackTrace();
+                }catch (IOException e){
+                    e.printStackTrace();
+                }
+
+            }
+        }).start();
+    }
+
+    /**
      * 定位
      */
     private class MyLocationListener extends BDAbstractLocationListener {
@@ -422,6 +501,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
         initOrientation();
         //开始定位
         mLocationClient.start();
+
 
     }
 
