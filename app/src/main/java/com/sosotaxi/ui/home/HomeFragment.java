@@ -96,6 +96,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
     private RelativeLayout rl_location_detail;
     private Button tvCall;
     private String poiAddress;
+    private String myPoiPlace;
     private String poiName="";
     public static HomeFragment newInstance() {
         return new HomeFragment();
@@ -149,7 +150,8 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
                 }
                 poiAddress = reverseGeoCodeResult.getAddress();
                 city = reverseGeoCodeResult.getAddressDetail().city;
-                strAddress = reverseGeoCodeResult.getAddress()+poiName;
+
+                strAddress = reverseGeoCodeResult.getAddress();
                 String cityDisplay = new String();
                 cityDisplay ="当前定位："+city;
                 tvTitle.setText(cityDisplay);
@@ -303,8 +305,8 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
                 startActivityForResult(i, SELECTCITY);
             }
         });
-        Button tvCall = (Button) getView().findViewById(R.id.bt_finish);
-        tvCall.setVisibility(View.INVISIBLE);
+
+
 
 
 
@@ -365,8 +367,8 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
             //更新经纬度
             mLatitude = location.getLatitude();
             mLongtitude = location.getLongitude();
-            strAddress=location.getAddrStr();
-            String startingPoint = "您将从"+strAddress+"上车";
+            myPoiPlace=location.getAddrStr();
+            String startingPoint = "您将从"+myPoiPlace +"上车";
             tv_location_name.setText(startingPoint);
             //设置起点
             mLastLocationData = new LatLng(mLatitude, mLongtitude);
