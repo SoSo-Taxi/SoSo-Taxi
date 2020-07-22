@@ -75,4 +75,9 @@
         <item name="android:padding">2dp</item>
     </style>
 
+    <style name="recommend">
+        <item name="android:textSize">14sp</item>
+        <item name="android:textColor">@color/colorAccent</item>
+    </style>
+
 </resources>

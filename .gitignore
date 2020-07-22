@@ -95,3 +95,4 @@ app/gradlew
 *.jar
 *.ser
 app/.idea/.name
+.DS_Store

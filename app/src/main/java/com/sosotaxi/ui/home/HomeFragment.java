@@ -9,15 +9,15 @@ import androidx.lifecycle.ViewModelProviders;
 
 import android.content.Intent;
 import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
-import android.text.Spannable;
-import android.text.SpannableStringBuilder;
-import android.text.style.ForegroundColorSpan;
+import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -37,6 +37,7 @@ import com.baidu.mapapi.SDKInitializer;
 import com.baidu.mapapi.map.BaiduMap;
 import com.baidu.mapapi.map.BitmapDescriptor;
 import com.baidu.mapapi.map.BitmapDescriptorFactory;
+import com.baidu.mapapi.map.InfoWindow;
 import com.baidu.mapapi.map.MapPoi;
 import com.baidu.mapapi.map.MapStatus;
 import com.baidu.mapapi.map.MapStatusUpdate;
@@ -55,6 +56,21 @@ import com.baidu.mapapi.search.geocode.ReverseGeoCodeOption;
 import com.baidu.mapapi.search.geocode.ReverseGeoCodeResult;
 import com.sosotaxi.R;
 
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.UnsupportedEncodingException;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.security.NoSuchAlgorithmException;
+
 import static android.app.Activity.RESULT_OK;
 
 
@@ -66,18 +82,30 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
     protected static final int SEARCH_POI = 1;
     GeoCoder mSearch = null;
     private EditText location_edit;
+
+    //String
     private String city;
     private String cityName = "";
     private String strAddress;
+    private String poiAddress;
+    private String myPoiPlace;
+    private String poiName="";
+    private String rName="";
+
 
     private MapView mMapView = null;
     private BaiduMap mBaiduMap = null;
     private HomeFragment context;
     //LOCATION
     private double mLatitude;
-    private double mLongtitude;
+    private double mLongitude;
     private double dLatitude;
     private double dLongtitude;
+    private double rLatitude;
+    private double rLongitude;
+    String myLocation= new String();
+    private LatLng location;
+    private LatLng mLastLocationData;
     //SENSOR
     private MyOrientationListener mMyOrientationListener;
     private float mCurrentX;
@@ -87,16 +115,29 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
     private LocationClient mLocationClient;
     public BDAbstractLocationListener myListener;
     private OnGetGeoCoderResultListener myGGListener;
-    private LatLng mLastLocationData;
+
+    //DISTANCE
+    private double rDistance;
+
+    //SIMBOL
+    private int rSimbol=0;
+
     private boolean isFirstin = true;
-    private LatLng location;
+
     private TextView tvTitle;
-    private TextView tv_location_name;
+    private TextView tv_home_start;
     private TextView tv_location_address;
     private RelativeLayout rl_location_detail;
     private Button tvCall;
-    private String poiAddress;
-    private String poiName="";
+
+
+
+    //url
+    private static final String RECOMMEND_LOCAL_URL="http://api.map.baidu.com/parking/search?location=";
+    private static final String RECOMMEND_AK_URL="&coordtype=bd09ll&ak=";
+    private static final String AK="RmmZVO6jFDooPymSqVdIeRUNpNgAMAza";
+    private String SN = "";
+
     public static HomeFragment newInstance() {
         return new HomeFragment();
     }
@@ -109,10 +150,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
         //获取地图控件引用
         mMapView = (MapView)root.findViewById(R.id.bmapView);
         mBaiduMap = mMapView.getMap();
-
-
-
-
+        initMyLocation();
         return root;
     }
 
@@ -123,7 +161,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
         SDKInitializer.setCoordType(CoordType.BD09LL);
 
         this.context = this;
-        initMyLocation();
+
         //按钮
         ImageButton locationButton = (ImageButton) getActivity().findViewById(R.id.but_Loc);
         //按钮处理
@@ -149,13 +187,14 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
                 }
                 poiAddress = reverseGeoCodeResult.getAddress();
                 city = reverseGeoCodeResult.getAddressDetail().city;
-                strAddress = reverseGeoCodeResult.getAddress()+poiName;
+
+                strAddress = reverseGeoCodeResult.getAddress();
                 String cityDisplay = new String();
                 cityDisplay ="当前定位："+city;
                 tvTitle.setText(cityDisplay);
             }
         });
-        location = new LatLng(mLatitude, mLongtitude);
+        location = new LatLng(mLatitude, mLongitude);
         mSearch.reverseGeoCode(new ReverseGeoCodeOption().location(location));
 
         mMapView.showZoomControls(false);
@@ -193,8 +232,8 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
                 poiName = arg0.getName();
                 mSearch.reverseGeoCode(new ReverseGeoCodeOption().location(arg0.getPosition()));
                 rl_location_detail.setVisibility(View.VISIBLE);
-                tv_location_name.setVisibility(View.VISIBLE);
-//                tv_location_name.setText(poiName);
+
+
                 tv_location_address.setText(poiAddress);
             }
 
@@ -211,7 +250,6 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
                 mBaiduMap.addOverlay(option);
                 mSearch.reverseGeoCode(new ReverseGeoCodeOption().location(arg0));
                 rl_location_detail.setVisibility(View.VISIBLE);
-//                tv_location_name.setVisibility(View.GONE);
                 tv_location_address.setText(poiAddress);
             }
         });
@@ -227,6 +265,19 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
                 startActivityForResult(i, SEARCH_POI);
             }
         });
+
+
+        try {
+            getRecommend();
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        }
+        finally {
+
+        }
+
 
         mViewModel = ViewModelProviders.of(this).get(HomeViewModel.class);
         // TODO: Use the ViewModel
@@ -279,7 +330,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
         SDKInitializer.initialize(getContext());
         switch (v.getId()) {
             case R.id.but_Loc: {
-                centerToMyLocation(mLatitude, mLongtitude);
+                centerToMyLocation(mLatitude, mLongitude);
                 break;
             }
         }
@@ -303,8 +354,8 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
                 startActivityForResult(i, SELECTCITY);
             }
         });
-        Button tvCall = (Button) getView().findViewById(R.id.bt_finish);
-        tvCall.setVisibility(View.INVISIBLE);
+
+
 
 
 
@@ -313,7 +364,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
     private void initView() {
         location_edit = (EditText) getView().findViewById(R.id.location_edit);
         mMapView = (MapView) getView().findViewById(R.id.bmapView);
-        tv_location_name = (TextView) getView().findViewById(R.id.tv_location_name);
+        tv_home_start = (TextView) getView().findViewById(R.id.tv_home_start);
         tv_location_address = (TextView) getView().findViewById(R.id.tv_location_address);
         rl_location_detail = (RelativeLayout) getView().findViewById(R.id.rl_location_detail);
         tvCall = (Button)getView().findViewById(R.id.bt_finish) ;
@@ -325,20 +376,87 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
 //                String address = tv_location_address.getText().toString().trim();
 //                String name;
 //
-//                if (tv_location_name.isShown()) {
-//                    name = tv_location_name.getText().toString().trim();
+//                if (tv_home_start.isShown()) {
+//                    name = tv_home_start.getText().toString().trim();
 //                }else {
 //                    name = "";
 //                }
                 i.putExtra("dlocation", poiName);
-                i.putExtra("mlocation",strAddress);
+                i.putExtra("mlocation",rName);
                 i.putExtra("dLatitude",dLatitude);
                 i.putExtra("dLongitude",dLongtitude);
-                i.putExtra("mLatitude",mLatitude);
-                i.putExtra("mLongitude",mLongtitude);
+                i.putExtra("mLatitude",rLatitude);
+                i.putExtra("mLongitude", rLongitude);
                 startActivity(i);
             }
         });
+    }
+
+    /**
+     * 推荐上车点
+     */
+    private void getRecommend() throws UnsupportedEncodingException, NoSuchAlgorithmException {
+
+
+        SN = "33:62:4C:54:CA:F7:5F:C2:15:5D:C7:EC:E5:CD:9A:9D:78:08:0A:9D;com.sosotaxi";
+
+        myLocation= ""+mLongitude +","+mLatitude;
+
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    Thread.currentThread().sleep(1000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                myLocation= ""+mLongitude +","+mLatitude;
+                String urlTest = RECOMMEND_LOCAL_URL+myLocation+RECOMMEND_AK_URL+AK+"&radius=450"+"&mcode="+SN;
+                Log.i("urltest",urlTest);
+                try{
+                    URL url = new URL(urlTest);
+                    HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+                    conn.setRequestMethod("GET");
+                    int responsecode = conn.getResponseCode();
+                    String code = ""+responsecode;
+                    Log.e("请求响应编号",code);
+                    InputStream inputStream = conn.getInputStream();
+                    InputStreamReader reader = new InputStreamReader(inputStream, "UTF-8");
+                    BufferedReader bufferedReader = new BufferedReader(reader);
+                    StringBuffer buffer = new StringBuffer();
+                    String temp = null;
+                    while((temp=bufferedReader.readLine()) != null){
+                        buffer.append(temp);
+                    }
+                    bufferedReader.close();
+                    reader.close();
+                    inputStream.close();
+                    Log.e("MAIN", buffer.toString());
+                    String recommendStops=buffer.toString();
+                    JSONObject jsonObject = new JSONObject(recommendStops);
+                    JSONArray rStops = new JSONArray();
+                    rStops= jsonObject.getJSONArray("recommendStops");
+                    JSONObject bestStops = rStops.getJSONObject(0);
+                    rName=bestStops.getString("name");
+                    rDistance=bestStops.getDouble("distance");
+                    rLatitude=bestStops.getDouble("bd09ll_y");
+                    rLongitude=bestStops.getDouble("bd09ll_x");
+
+
+
+
+                }catch(MalformedURLException e){
+                    e.printStackTrace();
+                }catch (IOException e){
+                    e.printStackTrace();
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+            }
+        }).start();
+
+
     }
 
     /**
@@ -364,12 +482,58 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
             mBaiduMap.setMyLocationConfiguration(config);
             //更新经纬度
             mLatitude = location.getLatitude();
-            mLongtitude = location.getLongitude();
-            strAddress=location.getAddrStr();
-            String startingPoint = "您将从"+strAddress+"上车";
-            tv_location_name.setText(startingPoint);
+            mLongitude = location.getLongitude();
+            String rSimbolString=""+rSimbol;
+            Log.e("zahuishi",rSimbolString);
+            if(rSimbol==0){
+                tv_home_start.setText("您将在"+rName+"上车");
+                Log.e("???",rName);
+
+                //添加marker
+                LatLng rLocation = new LatLng(rLatitude,rLongitude);
+
+                //构建Marker图标
+                BitmapDescriptor bitmap = BitmapDescriptorFactory
+                        .fromResource(R.drawable.ic_re_pin);
+                //构建MarkerOption，用于在地图上添加Marker
+                OverlayOptions option = new MarkerOptions()
+                        .position(rLocation)
+                        .icon(bitmap);
+                //在地图上添加Marker，并显示
+                mBaiduMap.addOverlay(option);
+
+
+
+                TextView tv_info = new TextView(getContext());
+                tv_info.setBackgroundResource(R.drawable.marker5);
+
+                tv_info.setGravity(Gravity.CENTER);
+
+                tv_info.setPadding(10,10,10,10);
+                Drawable drawable = getResources().getDrawable(R.drawable.ic_locate2);
+                drawable.setBounds(0, 0, drawable.getMinimumWidth(), drawable.getMinimumHeight());
+
+                tv_info.setCompoundDrawables(drawable,null,null,null);
+
+
+                tv_info.setText("  "+rDistance+"m  "+rName+"  ");
+
+                //构造InfoWindow
+                //point 描述的位置点
+                //-100 InfoWindow相对于point在y轴的偏移量
+                InfoWindow mInfoWindow = new InfoWindow(tv_info,rLocation, -100);
+
+                //使InfoWindow生效
+                mBaiduMap.showInfoWindow(mInfoWindow);
+                if(rName!=""){
+                rSimbol=1;
+                }
+            }
+            myPoiPlace=location.getAddrStr();
+
+
             //设置起点
-            mLastLocationData = new LatLng(mLatitude, mLongtitude);
+            mLastLocationData = new LatLng(mLatitude, mLongitude);
             if (isFirstin) {
                 centerToMyLocation(location.getLatitude(), location.getLongitude());
 
@@ -420,6 +584,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
         initOrientation();
         //开始定位
         mLocationClient.start();
+
 
     }
 
@@ -481,8 +646,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
                 dLongtitude = longitude;
                 LatLng poiLocation = new LatLng(latitude, longitude);
 
-                String startingPoint = "您将从"+strAddress+"上车";
-                tv_location_name.setText(startingPoint);
+
 //                SpannableStringBuilder spannable = new SpannableStringBuilder(startingPoint);
 //
 //                int index=startingPoint.length();
@@ -491,7 +655,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
 
 
                 rl_location_detail.setVisibility(View.VISIBLE);
-                tv_location_name.setVisibility(View.VISIBLE);
+
 
                 tv_location_address.setText(searchPoiAddress);
                 tvCall.setVisibility(View.VISIBLE);

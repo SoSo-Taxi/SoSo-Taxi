@@ -9,36 +9,10 @@
     tools:context=".ui.home.CallCarActivity">
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/preview_card"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.666"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/preview_map"
-        app:layout_constraintVertical_bias="1.0">
-
-        <Button
-            android:id="@+id/call"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:background="@color/middleGreyBlue"
-            android:text="确定呼叫"
-            android:textColor="@color/colorBackground"
-            android:textStyle="bold"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.6"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-    </androidx.constraintlayout.widget.ConstraintLayout>
-
-    <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/preview_map"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:layout_marginBottom="60dp"
+        android:layout_marginBottom="40dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -47,61 +21,106 @@
         <androidx.cardview.widget.CardView
             android:id="@+id/service_select"
             android:layout_width="match_parent"
-            android:layout_height="160dp"
-            android:layout_marginStart="8dp"
-            android:layout_marginEnd="8dp"
-            android:layout_marginBottom="8dp"
+            android:layout_height="200dp"
+            app:cardCornerRadius="20dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent" >
+            app:layout_constraintStart_toStartOf="parent">
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
 
-                <CheckBox
-                    android:id="@+id/checkBox2"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="50dp"
-                    android:layout_marginBottom="16dp"
-                    android:text="经济型"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintStart_toStartOf="parent" />
-
-                <CheckBox
-                    android:id="@+id/checkBox3"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginEnd="50dp"
-                    android:layout_marginBottom="16dp"
-                    android:text="舒适型"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent" />
-
                 <ImageView
                     android:id="@+id/imageView7"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="60dp"
-                    android:layout_marginTop="32dp"
-                    android:layout_marginBottom="16dp"
-                    app:layout_constraintBottom_toTopOf="@+id/checkBox2"
+                    android:layout_marginStart="40dp"
+                    android:layout_marginTop="36dp"
+                    android:src="@mipmap/ic_economic_foreground"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    android:src="@drawable/ic_eco_car" />
+                    app:layout_constraintTop_toTopOf="parent" />
 
                 <ImageView
                     android:id="@+id/imageView8"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="32dp"
-                    android:layout_marginEnd="60dp"
-                    android:layout_marginBottom="16dp"
-                    app:layout_constraintBottom_toTopOf="@+id/checkBox3"
+                    android:layout_marginTop="36dp"
+                    android:layout_marginEnd="50dp"
+                    android:src="@mipmap/ic_comfort_foreground"
                     app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <CheckBox
+                    android:id="@+id/checkBox"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="57dp"
+                    android:text="经济型"
+                    android:textStyle="bold"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/imageView7" />
+
+                <CheckBox
+                    android:id="@+id/checkBox2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="64dp"
+                    android:text="舒适型"
+                    android:textStyle="bold"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/imageView8" />
+
+                <TextView
+                    android:id="@+id/eco_price"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="56dp"
+                    android:text="预计：¥10.9"
+                    android:textColor="@color/colorDarkRed"
+                    android:textSize="15sp"
+                    android:textStyle="bold"
+                    app:layout_constraintBottom_toTopOf="@+id/checkBox"
+                    app:layout_constraintStart_toStartOf="parent" />
+
+                <TextView
+                    android:id="@+id/comfort_price"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="57dp"
+                    android:text="预计：¥15.8"
+                    android:textColor="@color/colorDarkRed"
+                    android:textSize="15sp"
+                    android:textStyle="bold"
+                    app:layout_constraintBottom_toTopOf="@+id/checkBox2"
+                    app:layout_constraintEnd_toEndOf="parent" />
+
+                <View
+                    android:id="@+id/divider4"
+                    android:layout_width="0dp"
+                    android:layout_height="3dp"
+                    android:layout_marginTop="40dp"
+                    android:background="@color/colorAreaCodeGrey"
                     app:layout_constraintTop_toTopOf="parent"
-                    android:src="@drawable/ic_com_car" />
+                    tools:layout_editor_absoluteX="1dp" />
+
+                <TextView
+                    android:id="@+id/textView30"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="140dp"
+                    android:layout_marginTop="9dp"
+                    android:layout_marginEnd="140dp"
+                    android:gravity="center"
+                    android:text="车型选择"
+                    android:textColor="@color/black"
+                    android:textSize="20sp"
+                    android:textStyle="bold"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+
             </androidx.constraintlayout.widget.ConstraintLayout>
 
         </androidx.cardview.widget.CardView>
@@ -128,9 +147,9 @@
             android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
             android:layout_marginEnd="8dp"
+            android:background="@color/colorBackground"
             android:drawableStart="@drawable/dot_green"
             android:ellipsize="end"
-            android:background="@color/colorBackground"
             android:maxWidth="@dimen/driver_order_detail_card_address_width"
             android:singleLine="true"
             android:text="起点"
@@ -143,9 +162,9 @@
             style="@style/PreviewAddress"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/colorBackground"
             android:layout_marginStart="8dp"
             android:layout_marginEnd="8dp"
+            android:background="@color/colorBackground"
             android:drawableStart="@drawable/dot_red"
             android:ellipsize="end"
             android:maxWidth="@dimen/driver_order_detail_card_address_width"
@@ -156,4 +175,32 @@
             app:layout_constraintTop_toBottomOf="@+id/start" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/preview_card"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.666"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/preview_map"
+        app:layout_constraintVertical_bias="1.0">
+
+        <Button
+            android:id="@+id/call"
+            android:layout_width="0dp"
+            android:layout_height="60dp"
+            android:background="@color/colorDarkRed"
+            android:text="确定呼叫"
+            android:textColor="@color/colorBackground"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.6"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
 </androidx.constraintlayout.widget.ConstraintLayout>
