@@ -7,7 +7,6 @@
 
 package com.sosotaxi.ui.home;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -15,6 +14,13 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.viewpager2.adapter.FragmentStateAdapter;
+import androidx.viewpager2.widget.ViewPager2;
 
 import com.baidu.mapapi.map.BaiduMap;
 import com.baidu.mapapi.map.MapView;
@@ -30,12 +36,15 @@ import com.baidu.mapapi.search.route.PlanNode;
 import com.baidu.mapapi.search.route.RoutePlanSearch;
 import com.baidu.mapapi.search.route.TransitRouteResult;
 import com.baidu.mapapi.search.route.WalkingRouteResult;
+import com.google.android.material.tabs.TabLayout;
+import com.google.android.material.tabs.TabLayoutMediator;
 import com.sosotaxi.R;
 import com.sosotaxi.ui.overlay.DrivingRouteOverlay;
 
+import java.util.ArrayList;
 import java.util.List;
 
-public class CallCarActivity extends Activity {
+public class CallCarActivity extends AppCompatActivity {
 
     private RoutePlanSearch mSearch;
 
@@ -46,12 +55,17 @@ public class CallCarActivity extends Activity {
     private TextView tv_start=null;
     private TextView tv_dest=null;
     private MapView mMapView =null;
+    private TabLayout mTabLayout;
+    private ViewPager2 mViewPager;
     private String myLocation=null;
     private String destination=null;
     private Double destLatitude=null;
     private Double destLongitude=null;
     private Double myLatitude=null;
     private Double myLongitude=null;
+
+    /** TabLayout调谐器 */
+    private TabLayoutMediator mMediator;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -82,6 +96,11 @@ public class CallCarActivity extends Activity {
     private void initView(){
 
         mMapView = (MapView)findViewById(R.id.bmapView);
+        mTabLayout=findViewById(R.id.tabLayoutCall);
+        mViewPager=findViewById(R.id.viewPagerCall);
+
+        // 初始化Tab
+        initTab();
 
         // 获取百度地图对象
         mBaiduMap = mMapView.getMap();
@@ -102,11 +121,59 @@ public class CallCarActivity extends Activity {
         });
 
     }
+
     private void initData(){
         myLongitude=getIntent().getDoubleExtra("mLongitude",1.0);
         myLatitude=getIntent().getDoubleExtra("mLatitude",1.0);
         destLongitude=getIntent().getDoubleExtra("dLongitude",1.0);
         destLatitude=getIntent().getDoubleExtra("dLatitude",1.0);
+    }
+
+    private void initTab(){
+        // Tab页列表
+        final List<Fragment> fragments=new ArrayList<>();
+        fragments.add(new CallEconomicTabFragment());
+        fragments.add(new CallComfortTabFragment());
+        fragments.add(new CallBothTabFragment());
+
+        // 标题列表
+        final List<String> titles=new ArrayList<>();
+        titles.add("经济型");
+        titles.add("舒适型");
+        titles.add("同时呼叫");
+
+        // 添加Tab页
+        mTabLayout.addTab(mTabLayout.newTab().setText(titles.get(0)),true);
+        mTabLayout.addTab(mTabLayout.newTab().setText(titles.get(1)),false);
+        mTabLayout.addTab(mTabLayout.newTab().setText(titles.get(2)),false);
+
+        // 禁用预加载
+        mViewPager.setOffscreenPageLimit(ViewPager2.OFFSCREEN_PAGE_LIMIT_DEFAULT);
+        // 设置适配器
+        mViewPager.setAdapter(new FragmentStateAdapter(getSupportFragmentManager(),getLifecycle()) {
+            @NonNull
+            @Override
+            public Fragment createFragment(int position) {
+                return fragments.get(position);
+            }
+
+            @Override
+            public int getItemCount() {
+                return fragments.size();
+            }
+        });
+
+        // 设置调谐器
+        mMediator=new TabLayoutMediator(mTabLayout, mViewPager, new TabLayoutMediator.TabConfigurationStrategy() {
+            @Override
+            public void onConfigureTab(@NonNull TabLayout.Tab tab, int position) {
+                // 设置Tab标题
+                tab.setText(titles.get(position));
+            }
+        });
+
+        // 链接
+        mMediator.attach();
     }
 
     /**

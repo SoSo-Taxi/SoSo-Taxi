@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+
+    <ImageView
+        android:id="@+id/imageViewCallEconomic"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/call_card_detail_horizontal_margin"
+        android:layout_marginTop="@dimen/call_card_detail_vertical_margin"
+        android:layout_marginEnd="@dimen/call_card_detail_car_title_spacing"
+        android:scaleX="2"
+        android:scaleY="2"
+        app:layout_constraintEnd_toStartOf="@+id/textViewCallEconomicTime"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@mipmap/ic_economic_foreground" />
+
+    <TextView
+        android:id="@+id/textViewCallEconomicEstimate"
+        style="@style/Call.DetailEstimate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/call_card_detail_vertical_margin"
+        android:text="预计"
+        app:layout_constraintStart_toStartOf="@+id/textViewCallEconomicDistance"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/textViewCallEconomicUnit"
+        style="@style/Call.DetailAmount"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="￥"
+        app:layout_constraintBottom_toBottomOf="@+id/textViewCallEconomicEstimate"
+        app:layout_constraintStart_toEndOf="@+id/textViewCallEconomicEstimate" />
+
+    <TextView
+        android:id="@+id/textViewCallEconomicAmount"
+        style="@style/Call.DetailAmount"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="34.2"
+        app:layout_constraintBottom_toBottomOf="@+id/textViewCallEconomicUnit"
+        app:layout_constraintStart_toEndOf="@+id/textViewCallEconomicUnit" />
+
+    <TextView
+        android:id="@+id/textViewCallEconomicDistance"
+        style="@style/Call.DetailHint"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/call_card_detail_title_distance_spacing"
+        android:text="全程39分钟"
+        app:layout_constraintStart_toStartOf="@+id/textViewCallEconomicTime"
+        app:layout_constraintTop_toBottomOf="@+id/textViewCallEconomicEstimate" />
+
+    <TextView
+        android:id="@+id/textViewCallEconomicTime"
+        style="@style/Call.DetailHint"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/call_card_detail_distance_time_spacing"
+        android:layout_marginEnd="@dimen/call_card_detail_horizontal_margin"
+        android:text="预计需要20分钟"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textViewCallEconomicDistance" />
+
+    <View
+        android:id="@+id/divider"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginTop="@dimen/call_card_detail_vertical_margin"
+        android:background="?android:attr/listDivider"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textViewCallEconomicTime" />
+
+    <TextView
+        android:id="@+id/textViewCallEconomicDepartTime"
+        style="@style/Call.Information"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/call_card_detail_information_horizontal_margin"
+        android:layout_marginTop="@dimen/call_card_detail_information_vertical_margin"
+        android:layout_marginBottom="@dimen/call_card_detail_information_vertical_margin"
+        android:text="时间：现在"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/divider" />
+
+    <TextView
+        android:id="@+id/textViewCallEconomicPassenger"
+        style="@style/Call.Information"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/call_card_detail_information_vertical_margin"
+        android:layout_marginEnd="@dimen/call_card_detail_information_horizontal_margin"
+        android:layout_marginBottom="@dimen/call_card_detail_information_vertical_margin"
+        android:text="乘客：本人"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/divider" />
+</androidx.constraintlayout.widget.ConstraintLayout>

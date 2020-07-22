@@ -80,4 +80,38 @@
         <item name="android:textColor">@color/colorAccent</item>
     </style>
 
+    <style name="Call">
+
+    </style>
+
+    <style name="Call.NavTitleActive">
+        <item name="android:textSize">16sp</item>
+        <item name="android:textColor">@color/colorLoginTitle</item>
+        <item name="android:textStyle">normal</item>
+    </style>
+    <style name="Call.NavTitleUnactive">
+        <item name="android:textSize">16sp</item>
+        <item name="android:textColor">@color/colorLoginHint</item>
+        <item name="android:textStyle">normal</item>
+    </style>
+    <style name="Call.DetailEstimate">
+        <item name="android:textSize">16sp</item>
+        <item name="android:textColor">@color/colorLoginTitle</item>
+        <item name="android:textStyle">normal</item>
+    </style>
+    <style name="Call.DetailAmount">
+        <item name="android:textSize">24sp</item>
+        <item name="android:textColor">@color/colorAccent</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+    <style name="Call.DetailHint">
+        <item name="android:textSize">16sp</item>
+        <item name="android:textColor">@color/colorLoginHint</item>
+        <item name="android:textStyle">normal</item>
+    </style>
+    <style name="Call.Information">
+        <item name="android:textSize">16sp</item>
+        <item name="android:textColor">@color/colorLoginHint</item>
+        <item name="android:textStyle">normal</item>
+    </style>
 </resources>
