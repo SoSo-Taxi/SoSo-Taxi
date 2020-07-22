@@ -394,6 +394,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
             @Override
             public void onTimeSelect(Date date, View v) {//选中事件回调
                 // 这里回调过来的v,就是show()方法里面所添加的 View 参数，如果show的时候没有添加参数，v则为null
+
                 TextView btn = (TextView) v;
                 btn.setText(getTimes(date));
             }
@@ -415,8 +416,16 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
     }
 
     private String getTimes(Date date) {//可根据需要自行截取数据显示
-        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
-        return format.format(date);
+//        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+        Calendar calSelected = Calendar.getInstance();
+        calSelected.setTime(date);
+        int month = calSelected.get(Calendar.MONTH)+1;
+        int minute = calSelected.get(Calendar.MINUTE);
+        int day = calSelected.get(Calendar.DAY_OF_MONTH);
+        int hour = calSelected.get(Calendar.HOUR);
+        String time = "预约时间："+month+"月"+day+"日"+" "+hour+":"+minute;
+
+        return time;
     }
 
     private void initView() {
