@@ -187,11 +187,12 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
                 }
                 poiAddress = reverseGeoCodeResult.getAddress();
                 city = reverseGeoCodeResult.getAddressDetail().city;
+                String cityDisplay =  "当前定位："+city;
+
+                tvTitle.setText(cityDisplay);
 
                 strAddress = reverseGeoCodeResult.getAddress();
-                String cityDisplay = new String();
-                cityDisplay ="当前定位："+city;
-                tvTitle.setText(cityDisplay);
+
             }
         });
         location = new LatLng(mLatitude, mLongitude);
@@ -219,7 +220,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
                 mBaiduMap.clear();
                 LatLng point = new LatLng(39.963175, 116.400244);
                 BitmapDescriptor bitmap = BitmapDescriptorFactory
-                        .fromResource(R.drawable.locate);
+                        .fromResource(R.drawable.ic_home_marker);
                 //构建MarkerOption，用于在地图上添加Marker
                 OverlayOptions option = new MarkerOptions()
                         .draggable(true)
@@ -241,7 +242,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
             public void onMapClick(LatLng arg0) {
                 mBaiduMap.clear();
                 BitmapDescriptor bitmap = BitmapDescriptorFactory
-                        .fromResource(R.drawable.locate);
+                        .fromResource(R.drawable.ic_home_marker);
                 //构建MarkerOption，用于在地图上添加Marker
                 OverlayOptions option = new MarkerOptions()
                         .position(arg0)
@@ -445,6 +446,8 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
 
 
 
+
+
                 }catch(MalformedURLException e){
                     e.printStackTrace();
                 }catch (IOException e){
@@ -510,10 +513,11 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
                 tv_info.setGravity(Gravity.CENTER);
 
                 tv_info.setPadding(10,10,10,10);
-                Drawable drawable = getResources().getDrawable(R.drawable.ic_locate2);
-                drawable.setBounds(0, 0, drawable.getMinimumWidth(), drawable.getMinimumHeight());
+                Drawable drawable = getResources().getDrawable(R.drawable.ic_locate6);
+                drawable.setBounds(10, 0, drawable.getMinimumWidth(), drawable.getMinimumHeight());
 
                 tv_info.setCompoundDrawables(drawable,null,null,null);
+                tv_location_address.setText(rName);
 
 
                 tv_info.setText("  "+rDistance+"m  "+rName+"  ");
@@ -522,6 +526,11 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
                 //point 描述的位置点
                 //-100 InfoWindow相对于point在y轴的偏移量
                 InfoWindow mInfoWindow = new InfoWindow(tv_info,rLocation, -100);
+
+                mSearch.reverseGeoCode(new ReverseGeoCodeOption().location(rLocation));
+
+
+
 
                 //使InfoWindow生效
                 mBaiduMap.showInfoWindow(mInfoWindow);
@@ -579,8 +588,8 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
         myListener = new MyLocationListener();
         //注册监听函数
         mLocationClient.registerLocationListener(myListener);
-        //初始化图标
-        mIconLocation = BitmapDescriptorFactory.fromResource(R.drawable.ic_home_location);
+
+
         initOrientation();
         //开始定位
         mLocationClient.start();
@@ -667,7 +676,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
                         .build();
                 mBaiduMap.setMapStatus(MapStatusUpdateFactory.newMapStatus(mMapStatus));
                 BitmapDescriptor bitmap = BitmapDescriptorFactory
-                        .fromResource(R.drawable.locate);
+                        .fromResource(R.drawable.ic_home_marker);
                 //构建MarkerOption，用于在地图上添加Marker
                 OverlayOptions option = new MarkerOptions()
                         .position(poiLocation)
