@@ -87,4 +87,14 @@
     <string name="route_title">行程中</string>
 
 
+    <string name="setting_label">设置</string>
+    <string name="usual_address_label">常用地址</string>
+    <string name="emergency_contact_label">紧急联系人</string>
+    <string name="phone_edit_text">手机号码</string>
+    <string name="name_edit_text">联系人姓名</string>
+    <string name="confirm_button">确认添加</string>
+    <string name="law_claim_label">平台规则与法律条款</string>
+    <string name="about_us_label">关于</string>
+    <string name="user_guide_label">用户指南</string>
+
 </resources>

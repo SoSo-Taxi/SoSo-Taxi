@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ui.userInformation.setting.userGuide.HowToCallCarActivity">
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/how_to_call_car_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="?attr/colorPrimary"
+        android:minHeight="?attr/actionBarSize"
+        android:theme="?attr/actionBarTheme"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/textView44"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="30dp"
+        android:layout_marginTop="30dp"
+        android:layout_marginEnd="30dp"
+        android:text="搜搜出行打开后，上面那里就可以选打哪一类车，比如你要打滴滴快车就选快车。
+然后下面可以选是现在或者是预约，要现在走就选现在，下面就是选择你方便上车的地点，一般会默认一个地点，如果正确你就不用管，如果不对你就点一下然后自己选上车点。
+下面就是你的目的地，点一下进去，设置你的目的地。
+下面出来的界面，是一个预估价格，然后你再选一下车型，点击呼叫快车就可以了，搜搜派单到司机，很快就会联系你的。你尽快到上车点等待就可以了。后面基本都是自动的，司机那边会操作接到乘客，到达目的地，自动扣款。"
+        android:textSize="18sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/how_to_call_car_toolbar" />
+</androidx.constraintlayout.widget.ConstraintLayout>
