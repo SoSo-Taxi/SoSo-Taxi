@@ -47,6 +47,7 @@ import com.baidu.mapapi.map.MarkerOptions;
 import com.baidu.mapapi.map.MyLocationConfiguration;
 import com.baidu.mapapi.map.MyLocationData;
 import com.baidu.mapapi.map.OverlayOptions;
+import com.baidu.mapapi.map.Text;
 import com.baidu.mapapi.model.LatLng;
 import com.baidu.mapapi.search.core.SearchResult;
 import com.baidu.mapapi.search.geocode.GeoCodeResult;
@@ -54,6 +55,7 @@ import com.baidu.mapapi.search.geocode.GeoCoder;
 import com.baidu.mapapi.search.geocode.OnGetGeoCoderResultListener;
 import com.baidu.mapapi.search.geocode.ReverseGeoCodeOption;
 import com.baidu.mapapi.search.geocode.ReverseGeoCodeResult;
+import com.bigkoo.pickerview.TimePickerView;
 import com.sosotaxi.R;
 
 
@@ -70,6 +72,9 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.security.NoSuchAlgorithmException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 
 import static android.app.Activity.RESULT_OK;
 
@@ -124,13 +129,17 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
 
     private boolean isFirstin = true;
 
+
+    //Textview
     private TextView tvTitle;
     private TextView tv_home_start;
     private TextView tv_location_address;
+    private TextView tv_book_car;
     private RelativeLayout rl_location_detail;
     private Button tvCall;
 
-
+    //TimePicker
+    TimePickerView pvTime;
 
     //url
     private static final String RECOMMEND_LOCAL_URL="http://api.map.baidu.com/parking/search?location=";
@@ -278,7 +287,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
         finally {
 
         }
-
+        book();
 
         mViewModel = ViewModelProviders.of(this).get(HomeViewModel.class);
         // TODO: Use the ViewModel
@@ -356,10 +365,58 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
             }
         });
 
+    }
+
+    //预约功能
+    private  void book(){
+        tv_book_car=(TextView)getActivity().findViewById(R.id.bookCar);
+        tv_book_car.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                pvTime.show(tv_book_car);
+            }
+        });
+
+        //控制时间范围(如果不设置范围，则使用默认时间1900-2100年，此段代码可注释)
+        //因为系统Calendar的月份是从0-11的,所以如果是调用Calendar的set方法来设置时间,月份的范围也要是从0-11
+        Calendar selectedDate = Calendar.getInstance();
+        Calendar startDate = Calendar.getInstance();
+        Calendar cal=Calendar.getInstance();
+        int month = cal.get(Calendar.MONTH);
+        int day = cal.get(Calendar.DATE);
+        int hour= cal.get(Calendar.HOUR);
+        int min= cal.get(Calendar.MINUTE);
+        startDate.set(2020, month,day,hour,min);
+        Calendar endDate = Calendar.getInstance();
+        endDate.set(2020, 12, 31,24,00);
+        //时间选择器
+        pvTime = new TimePickerView.Builder(getContext(), new TimePickerView.OnTimeSelectListener() {
+            @Override
+            public void onTimeSelect(Date date, View v) {//选中事件回调
+                // 这里回调过来的v,就是show()方法里面所添加的 View 参数，如果show的时候没有添加参数，v则为null
+                TextView btn = (TextView) v;
+                btn.setText(getTimes(date));
+            }
+        })
+                //年月日时分秒 的显示与否，不设置则默认全部显示
+                .setType(new boolean[]{false, true, true, true, true, false})
+                .setLabel("年", "月", "日", "时", "分", "")
+                .isCenterLabel(true)
+                .setDividerColor(Color.DKGRAY)
+                .setContentSize(21)
+                .setDate(selectedDate)
+                .setRangDate(startDate, endDate)
+                .setDecorView(null)
+                .build();
 
 
 
 
+    }
+
+    private String getTimes(Date date) {//可根据需要自行截取数据显示
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+        return format.format(date);
     }
 
     private void initView() {
@@ -514,7 +571,8 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
 
                 tv_info.setPadding(10,10,10,10);
                 Drawable drawable = getResources().getDrawable(R.drawable.ic_locate6);
-                drawable.setBounds(10, 0, drawable.getMinimumWidth(), drawable.getMinimumHeight());
+                drawable.setBounds(0, 0, drawable.getMinimumWidth(), drawable.getMinimumHeight());
+                tv_info.setPadding(40,10,40,10);
 
                 tv_info.setCompoundDrawables(drawable,null,null,null);
                 tv_location_address.setText(rName);
