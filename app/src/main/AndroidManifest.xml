@@ -1,15 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.sosotaxi">
-
     <!-- 访问网络，进行地图相关业务数据请求，包括地图数据，路线规划，POI检索等 -->
-    <uses-permission android:name="android.permission.INTERNET" />
-    <!-- 获取网络状态，根据网络状态切换进行数据请求网络转换 -->
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-    <!-- 这个权限用于进行网络定位 -->
-    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
-    <!-- 这个权限用于访问GPS定位 -->
+    <uses-permission android:name="android.permission.INTERNET" /> <!-- 获取网络状态，根据网络状态切换进行数据请求网络转换 -->
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" /> <!-- 这个权限用于进行网络定位 -->
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" /> <!-- 这个权限用于访问GPS定位 -->
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.READ_CONTACTS" />
+    <uses-permission android:name="android.permission.CALL_PHONE" />
 
     <application
         android:name=".application.MapApplication"
@@ -19,13 +17,45 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-
-        <activity android:name=".ui.userInformation.personData.IndustryChosenActivity"
+        <activity android:name=".ui.userInformation.setting.userGuide.UserGuideActivity"
+            android:label="@string/user_guide_label"
+            android:parentActivityName=".ui.userInformation.setting.SettingActivity"
+            android:theme="@style/AppTheme.NoActionBar"/>
+        <activity
+            android:name=".ui.userInformation.setting.AboutUs.AboutUsActivity"
+            android:label="@string/about_us_label"
+            android:parentActivityName=".ui.userInformation.setting.SettingActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".ui.userInformation.setting.ContactPhoneActivity"
+            android:label=""
+            android:parentActivityName=".ui.userInformation.setting.EmergencyContactActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".ui.userInformation.setting.EmergencyContactActivity"
+            android:label="@string/emergency_contact_label"
+            android:parentActivityName=".ui.userInformation.setting.SettingActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".ui.userInformation.setting.UsualAddressActivity"
+            android:label="@string/usual_address_label"
+            android:parentActivityName=".ui.userInformation.setting.SettingActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".ui.userInformation.setting.LawClaimActivity"
+            android:label="@string/law_claim_label"
+            android:parentActivityName=".ui.userInformation.setting.SettingActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".ui.userInformation.setting.SettingActivity"
+            android:label="@string/setting_label"
+            android:parentActivityName=".ui.main.MainActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".ui.userInformation.personData.IndustryChosenActivity"
             android:label="@string/industry_choice_label"
             android:parentActivityName=".ui.userInformation.personData.EditPersonalDataActivity"
-            android:theme="@style/AppTheme.NoActionBar"/>
-
-
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".ui.userInformation.personData.EditPersonalDataActivity"
             android:label="@string/edit_personal_data_label"
@@ -53,13 +83,10 @@
             android:label="@string/menu_order_label"
             android:parentActivityName=".ui.main.MainActivity"
             android:theme="@style/AppTheme.NoActionBar" />
-
         <activity
             android:name=".ui.main.MainActivity"
             android:label="@string/title_activity_main"
-            android:theme="@style/AppTheme.NoActionBar">
-
-        </activity>
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".ui.login.LoginActivity"
             android:label="@string/title_activity_login"
@@ -72,20 +99,22 @@
         </activity>
         <activity
             android:name=".ui.login.SelectAreaCodeActivity"
-            android:parentActivityName=".ui.login.LoginActivity"
             android:label="@string/title_select_area_code"
+            android:parentActivityName=".ui.login.LoginActivity"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".ui.home.ScheduleSearchCityPoiActivity" />
-        <activity android:name=".ui.home.ScheduleSelectCityActivity"/>
-        <activity android:name=".ui.home.CallCarActivity"/>
-        <activity android:name=".ui.home.WaitingActivity"/>
+        <activity android:name=".ui.home.ScheduleSelectCityActivity" />
+        <activity android:name=".ui.home.CallCarActivity" />
+        <activity android:name=".ui.home.WaitingActivity" />
 
         <meta-data
             android:name="com.baidu.lbsapi.API_KEY"
             android:value="RmmZVO6jFDooPymSqVdIeRUNpNgAMAza" />
-        <service android:name="com.baidu.location.f"
+
+        <service
+            android:name="com.baidu.location.f"
             android:enabled="true"
-            android:process=":remote"/>
+            android:process=":remote" />
     </application>
 
 </manifest>

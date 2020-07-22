@@ -56,9 +56,9 @@ android:orientation="vertical"
             android:layout_height="wrap_content"
             android:layout_marginLeft="15dp"
             android:layout_marginTop="15dp"
-            android:background="@drawable/shape_textview"
+
             android:padding="10dp"
-            android:drawableLeft="@drawable/ic_home_city"
+
             android:text="选择城市"
             android:textColor="@color/black"
             android:textSize="15sp" />
@@ -101,7 +101,7 @@ android:orientation="vertical"
                 android:layout_marginLeft="35dp"
                 android:layout_marginTop="20dp"
                 android:layout_marginRight="20dp"
-                android:drawableLeft="@drawable/dot_green"
+
                 android:singleLine="false"
                 android:text=" "
                 android:textColor="@color/black"
@@ -115,8 +115,7 @@ android:orientation="vertical"
                 android:layout_marginTop="70dp"
                 android:layout_marginRight="20dp"
 
-                android:background="@drawable/edittv_home_search"
-                android:drawableLeft="@drawable/ic_orange_dot"
+
                 android:hint="输入你的目的地"
                 android:paddingLeft="10dp"
                 android:paddingTop="5dp"

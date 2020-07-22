@@ -65,4 +65,29 @@
 
     <string name="industry_choice_label">行业</string>
     <string name="hint_verification_code_sent">验证码已发送</string>
+    <string name="title_activity_settings">SettingsActivity</string>
+
+    <!-- Preference Titles -->
+    <string name="messages_header">Messages</string>
+    <string name="sync_header">Sync</string>
+
+    <!-- Messages Preferences -->
+    <string name="signature_title">Your signature</string>
+    <string name="reply_title">Default reply action</string>
+
+    <!-- Sync Preferences -->
+    <string name="sync_title">Sync email periodically</string>
+    <string name="attachment_title">Download incoming attachments</string>
+    <string name="attachment_summary_on">Automatically download attachments for incoming emails
+    </string>
+    <string name="attachment_summary_off">Only download attachments when manually requested</string>
+    <string name="setting_label">设置</string>
+    <string name="usual_address_label">常用地址</string>
+    <string name="emergency_contact_label">紧急联系人</string>
+    <string name="phone_edit_text">手机号码</string>
+    <string name="name_edit_text">联系人姓名</string>
+    <string name="confirm_button">确认添加</string>
+    <string name="law_claim_label">平台规则与法律条款</string>
+    <string name="about_us_label">关于</string>
+    <string name="user_guide_label">用户指南</string>
 </resources>

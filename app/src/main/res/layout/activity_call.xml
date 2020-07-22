@@ -89,7 +89,8 @@
                     app:layout_constraintBottom_toTopOf="@+id/checkBox2"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
-                    android:src="@drawable/ic_eco_car" />
+
+                     />
 
                 <ImageView
                     android:id="@+id/imageView8"
@@ -101,7 +102,8 @@
                     app:layout_constraintBottom_toTopOf="@+id/checkBox3"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
-                    android:src="@drawable/ic_com_car" />
+
+                     />
             </androidx.constraintlayout.widget.ConstraintLayout>
 
         </androidx.cardview.widget.CardView>
@@ -128,7 +130,7 @@
             android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
             android:layout_marginEnd="8dp"
-            android:drawableStart="@drawable/dot_green"
+
             android:ellipsize="end"
             android:background="@color/colorBackground"
             android:maxWidth="@dimen/driver_order_detail_card_address_width"
@@ -146,7 +148,7 @@
             android:background="@color/colorBackground"
             android:layout_marginStart="8dp"
             android:layout_marginEnd="8dp"
-            android:drawableStart="@drawable/dot_red"
+
             android:ellipsize="end"
             android:maxWidth="@dimen/driver_order_detail_card_address_width"
             android:singleLine="true"

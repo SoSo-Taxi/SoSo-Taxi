@@ -35,7 +35,7 @@
                 android:layout_centerVertical="true"
                 android:padding="10dp"
 
-                android:src="@drawable/ic_back_arrow" />
+                />
 
             <LinearLayout
                 android:id="@+id/ll_select_city"
@@ -66,7 +66,7 @@
             android:id="@+id/pio_filter_edit"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:drawableLeft="@drawable/ic_orange_dot"
+
             android:hint="您要去哪里"
             android:singleLine="true"
             android:textSize="25dp"

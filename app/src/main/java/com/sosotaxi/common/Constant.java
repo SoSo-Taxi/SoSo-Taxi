@@ -54,4 +54,7 @@ public class Constant {
     public static final String USERNAME="com.sosotaxi.username";
 
     public static final String PASSWORD="com.sosotaxi.password";
+
+    public static final int PERMISSION_READ_CONTACTS_CODE = 200;
+    public static final int SETTING_RESULT_CODE = 201;
 }
