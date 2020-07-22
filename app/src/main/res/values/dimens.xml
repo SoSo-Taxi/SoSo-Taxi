@@ -33,4 +33,18 @@
     <dimen name="driver_order_detail_card_horizontal_spacing">12dp</dimen>
     <dimen name="driver_order_detail_card_vertical_spacing">12dp</dimen>
 
+    <!-- 选择车型 -->
+    <dimen name="call_card_nav_indicator_height">5dp</dimen>
+    <dimen name="call_card_nav_horizontal_margin">90dp</dimen>
+    <dimen name="call_card_nav_vertical_margin">18dp</dimen>
+    <dimen name="call_card_nav_item_spacing">50dp</dimen>
+    <dimen name="call_card_detail_vertical_margin">40dp</dimen>
+    <dimen name="call_card_detail_horizontal_margin">40dp</dimen>
+    <dimen name="call_card_detail_car_title_spacing">50dp</dimen>
+    <dimen name="call_card_detail_title_distance_spacing">14dp</dimen>
+    <dimen name="call_card_detail_distance_time_spacing">5dp</dimen>
+    <dimen name="call_card_detail_information_horizontal_margin">78dp</dimen>
+    <dimen name="call_card_detail_information_vertical_margin">14dp</dimen>
+    <dimen name="card_corner_radius">20dp</dimen>
+
 </resources>

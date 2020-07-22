@@ -26,6 +26,18 @@ public class User {
 
 
     public String getUserName() {
+        // 去除加号
+        if(userName.startsWith("+")){
+            userName=userName.substring(1);
+        }
+        // 去除空格
+        int index=userName.indexOf(" ");
+        if(index!=-1){
+            String code=userName.substring(0,index);
+            String phone=userName.substring(index+1);
+            userName=code+phone;
+        }
+        this.userName = userName;
         return userName;
     }
 

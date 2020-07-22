@@ -16,7 +16,7 @@
     <string name="xlistview_footer_hint_normal">查看更多</string>
     <string name="xlistview_footer_hint_ready">松开载入更多</string>
 
-<!--    HomeFragment-->
+    <!--    HomeFragment-->
     <string name="recommend">为您推荐的最佳上车地点</string>
     <string name="book">时间：</string>
     <string name="passenger">乘车人：</string>
