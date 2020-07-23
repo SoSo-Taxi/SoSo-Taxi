@@ -61,6 +61,7 @@ public class DemoWebSocketActivity extends AppCompatActivity {
         bindService();
         registerReceiver();
 
+
         //获取消息助手
         mMessageHelper=MessageHelper.getInstance();
     }

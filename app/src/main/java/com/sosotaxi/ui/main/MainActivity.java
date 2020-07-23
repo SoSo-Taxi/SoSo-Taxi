@@ -6,13 +6,19 @@
 
 package com.sosotaxi.ui.main;
 
+import android.content.ComponentName;
 import android.content.Intent;
+import android.content.IntentFilter;
+import android.content.ServiceConnection;
 import android.os.Bundle;
+import android.os.IBinder;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.Menu;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.baidu.mapapi.map.MapView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -20,10 +26,14 @@ import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.navigation.NavigationView;
 import com.sosotaxi.R;
 import com.sosotaxi.common.Constant;
+import com.sosotaxi.service.net.OrderClient;
+import com.sosotaxi.service.net.OrderMessageReceiver;
+import com.sosotaxi.service.net.OrderService;
 import com.sosotaxi.ui.userInformation.order.OrderActivity;
 import com.sosotaxi.ui.userInformation.personData.PersonalDataActivity;
 import com.sosotaxi.ui.userInformation.setting.SettingActivity;
 import com.sosotaxi.ui.userInformation.wallet.WalletActivity;
+import com.sosotaxi.utils.MessageHelper;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -38,7 +48,30 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
 public class MainActivity extends AppCompatActivity
+
         implements NavigationView.OnNavigationItemSelectedListener{
+
+    /**
+     * 连接器
+     */
+    private OrderClient mDriverOrderClient;
+
+    /**
+     * WebSocket服务
+     */
+    private OrderService mDriverOrderService;
+
+    /**
+     * 绑定
+     */
+    private OrderService.DriverOrderBinder mBinder;
+
+    /**
+     * 接收器
+     */
+    private OrderMessageReceiver mOrderMessageReceiver;
+
+    private MessageHelper mMessageHelper;
 
     private AppBarConfiguration mAppBarConfiguration;
 
@@ -52,6 +85,8 @@ public class MainActivity extends AppCompatActivity
     private TextView mUserOtherInfo;
 
     private boolean mIsLogin = true;
+
+    private String token = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -99,7 +134,18 @@ public class MainActivity extends AppCompatActivity
                 startActivityForResult(intent,200);
             }
         });
+        Bundle getBundle = this.getIntent().getExtras();
+
+        token = getBundle.getString(Constant.EXTRA_TOKEN);
+        // 初始化服务并绑定
+        startService();
+        bindService();
+        registerReceiver();
+
+        //获取消息助手
+        mMessageHelper=MessageHelper.getInstance();
     }
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -127,6 +173,62 @@ public class MainActivity extends AppCompatActivity
                 }
             }
         }
+    }
+    /**
+     * 开启WebSocket服务
+     */
+    private void startService(){
+        Intent intent=new Intent(getApplicationContext(),OrderService.class);
+        startService(intent);
+    }
+
+    /**
+     * 绑定服务
+     */
+    private void bindService(){
+        Intent intent = new Intent(getApplicationContext(), OrderService.class);
+        bindService(intent, serviceConnection, BIND_AUTO_CREATE);
+    }
+
+    /**
+     * 注册广播接收器
+     */
+    private void registerReceiver(){
+        mOrderMessageReceiver=new OrderMessageReceiver();
+        IntentFilter intentFilter=new IntentFilter(Constant.FILTER_CONTENT);
+        registerReceiver(mOrderMessageReceiver,intentFilter);
+    }
+    // 服务连接监听器
+    private ServiceConnection serviceConnection=new ServiceConnection() {
+        @Override
+        public void onServiceConnected(ComponentName name, IBinder service) {
+
+            Log.e("aaaaaaaaaaaa",token);
+            mBinder=(OrderService.DriverOrderBinder)service;
+
+            mDriverOrderService=mBinder.getService(token);
+            mDriverOrderClient=mDriverOrderService.getClient();
+            Toast.makeText(getApplicationContext(),"Service已连接",Toast.LENGTH_SHORT).show();
+        }
+
+        @Override
+        public void onServiceDisconnected(ComponentName name) {
+            Toast.makeText(getApplicationContext(),"Service已断开",Toast.LENGTH_SHORT).show();
+        }
+    };
+    public OrderClient getClient(){
+        return mDriverOrderClient;
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        // 断开连接
+        unbindService(serviceConnection);
+        if(mOrderMessageReceiver!=null){
+            unregisterReceiver(mOrderMessageReceiver);
+        }
+
     }
 
     @Override
