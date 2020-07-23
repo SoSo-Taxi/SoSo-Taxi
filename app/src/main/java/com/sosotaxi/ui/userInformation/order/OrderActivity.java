@@ -2,6 +2,8 @@ package com.sosotaxi.ui.userInformation.order;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
 import android.view.Menu;
@@ -13,7 +15,8 @@ import com.sosotaxi.R;
 public class OrderActivity extends AppCompatActivity {
 
     private Toolbar mOrderToolbar;
-    private ListView mOrderItemListView;
+
+    private RecyclerView mOrderItemRecyclerView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -24,8 +27,11 @@ public class OrderActivity extends AppCompatActivity {
         getSupportActionBar().setHomeButtonEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        mOrderItemListView = findViewById(R.id.orderItem_listView);
-        mOrderItemListView.setAdapter(new OrderItemListAdapter(getApplicationContext()));
+
+        mOrderItemRecyclerView = findViewById(R.id.orderitem_recycleview);
+        mOrderItemRecyclerView.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
+        mOrderItemRecyclerView.setAdapter(new OrderItemRecycleViewAdapter(getApplicationContext()));
+
     }
 
     @Override

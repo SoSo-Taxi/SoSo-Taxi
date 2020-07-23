@@ -15,4 +15,5 @@
     <color name="colorPreviewAddress">#6C6C6C</color>
     <color name="middleGreyBlue">#191970</color>
     <color name="colorPayHint">#999999</color>
+    <color name="colorScreenBackground">#EEEEEE</color>
 </resources>
