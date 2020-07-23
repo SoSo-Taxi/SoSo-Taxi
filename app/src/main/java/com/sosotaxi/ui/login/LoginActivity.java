@@ -33,7 +33,7 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
         // 设置启动屏
-        //setContentView(R.layout.splash_layout);
+        setContentView(R.layout.splash_layout);
 
         // 获取已登录用户信息
         SharedPreferences sharedPreferences=getSharedPreferences(Constant.SHARE_PREFERENCE_LOGIN, MODE_PRIVATE);
