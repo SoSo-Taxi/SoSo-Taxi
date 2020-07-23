@@ -97,4 +97,10 @@
     <string name="about_us_label">关于</string>
     <string name="user_guide_label">用户指南</string>
 
+    <string name="error_phone_content_empty">手机号或短信内容不能为空</string>
+    <string name="hint_send_successful">发送成功</string>
+    <string name="error_phone_empty">手机号不能为空</string>
+    <string name="hint_permission_send_message_restrict">请授予此权限用于与司机短信联系</string>
+    <string name="hint_permission_call_restrict">请授予此权限用于与司机电话联系</string>
+
 </resources>
