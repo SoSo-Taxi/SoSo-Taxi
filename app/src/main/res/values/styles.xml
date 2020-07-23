@@ -114,4 +114,22 @@
         <item name="android:textColor">@color/colorLoginHint</item>
         <item name="android:textStyle">normal</item>
     </style>
+
+    <style name="Pay">
+    </style>
+    <style name="Pay.BillAmount">
+        <item name="android:textSize">40sp</item>
+        <item name="android:textColor">@color/black</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+    <style name="Pay.BillUnit">
+        <item name="android:textSize">20sp</item>
+        <item name="android:textColor">@color/black</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+    <style name="Pay.BillHint">
+        <item name="android:textSize">18sp</item>
+        <item name="android:textColor">@color/colorPayHint</item>
+        <item name="android:textStyle">normal</item>
+    </style>
 </resources>

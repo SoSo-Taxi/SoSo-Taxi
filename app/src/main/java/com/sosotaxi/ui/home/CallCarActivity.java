@@ -239,7 +239,7 @@ public class CallCarActivity extends AppCompatActivity {
                 overlay.setData(drivingRouteResult.getRouteLines().get(0));
                 //在地图上绘制路线
                 overlay.addToMap(false);
-                overlay.zoomToSpanPaddingBounds(200, 200, 200, 200);
+                overlay.zoomToSpanPaddingBounds(200, 200, 200, 300);
             }
         }
 
