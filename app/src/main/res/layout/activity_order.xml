@@ -4,7 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.userInformation.order.OrderActivity">
+    tools:context=".ui.userInformation.order.OrderActivity"
+    android:background="#EEEEEE">
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/order_toolbar"
@@ -21,17 +22,18 @@
         android:id="@+id/order_done_textview"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="44dp"
+        android:layout_marginStart="20dp"
         android:layout_marginTop="23dp"
         android:text="已完成订单"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/order_toolbar" />
 
-    <ListView
-        android:id="@+id/orderItem_listView"
-        android:layout_width="409dp"
-        android:layout_height="631dp"
-        android:layout_marginTop="31dp"
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/orderitem_recycleview"
+        android:layout_width="405dp"
+        android:layout_height="610dp"
+        android:layout_marginTop="12dp"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/order_done_textview" />
 
