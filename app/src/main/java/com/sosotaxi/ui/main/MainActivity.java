@@ -6,8 +6,13 @@
 
 package com.sosotaxi.ui.main;
 
+import android.content.ComponentName;
 import android.content.Intent;
+import android.content.IntentFilter;
+import android.content.ServiceConnection;
 import android.os.Bundle;
+import android.os.IBinder;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.Menu;
@@ -21,12 +26,17 @@ import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.navigation.NavigationView;
 import com.sosotaxi.R;
 import com.sosotaxi.common.Constant;
+import com.sosotaxi.service.net.OrderClient;
+import com.sosotaxi.service.net.OrderMessageReceiver;
+import com.sosotaxi.service.net.OrderService;
+import com.sosotaxi.ui.home.HomeFragment;
 import com.sosotaxi.common.TelephoneEncryption;
 import com.sosotaxi.ui.userInformation.order.OrderActivity;
 import com.sosotaxi.ui.userInformation.personData.PersonalDataActivity;
 import com.sosotaxi.ui.userInformation.setting.SettingActivity;
 import com.sosotaxi.ui.userInformation.setting.emergencyContact.EmergencyContactActivity;
 import com.sosotaxi.ui.userInformation.wallet.WalletActivity;
+import com.sosotaxi.utils.MessageHelper;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -41,7 +51,9 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
 public class MainActivity extends AppCompatActivity
+
         implements NavigationView.OnNavigationItemSelectedListener{
+
 
     private AppBarConfiguration mAppBarConfiguration;
 
@@ -55,6 +67,8 @@ public class MainActivity extends AppCompatActivity
     private TextView mUserOtherInfo;
 
     private boolean mIsLogin = true;
+
+    private String token = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -104,7 +118,16 @@ public class MainActivity extends AppCompatActivity
                 startActivityForResult(intent,200);
             }
         });
+
+//        Bundle getBundle = this.getIntent().getExtras();
+//        token = getBundle.getString(Constant.EXTRA_TOKEN);
+//        getBundle.putString("token",token);
+//        Log.e("aaaaa",""+token);
+//        HomeFragment fragment = new HomeFragment();
+//        fragment.setArguments(getBundle);
+
     }
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -132,7 +155,11 @@ public class MainActivity extends AppCompatActivity
                 }
             }
         }
+
+
+
     }
+
 
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
