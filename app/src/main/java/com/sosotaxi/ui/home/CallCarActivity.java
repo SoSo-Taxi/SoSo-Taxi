@@ -7,8 +7,13 @@
 
 package com.sosotaxi.ui.home;
 
+import android.content.ComponentName;
 import android.content.Intent;
+import android.content.IntentFilter;
+import android.content.ServiceConnection;
 import android.os.Bundle;
+import android.os.IBinder;
+import android.util.Log;
 import android.view.View;
 
 import android.widget.Button;
@@ -39,7 +44,16 @@ import com.baidu.mapapi.search.route.WalkingRouteResult;
 import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
 import com.sosotaxi.R;
+import com.sosotaxi.common.Constant;
+import com.sosotaxi.model.LocationPoint;
+import com.sosotaxi.model.message.BaseMessage;
+import com.sosotaxi.model.message.MessageType;
+import com.sosotaxi.model.message.StartOrderBody;
+import com.sosotaxi.service.net.OrderClient;
+import com.sosotaxi.service.net.OrderMessageReceiver;
+import com.sosotaxi.service.net.OrderService;
 import com.sosotaxi.ui.overlay.DrivingRouteOverlay;
+import com.sosotaxi.utils.MessageHelper;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -52,8 +66,11 @@ public class CallCarActivity extends AppCompatActivity {
 
     private Button mcall = null;
 
+    //Textview
     private TextView tv_start=null;
     private TextView tv_dest=null;
+
+
     private MapView mMapView =null;
     private TabLayout mTabLayout;
     private ViewPager2 mViewPager;
@@ -63,6 +80,35 @@ public class CallCarActivity extends AppCompatActivity {
     private Double destLongitude=null;
     private Double myLatitude=null;
     private Double myLongitude=null;
+
+    private String cityName;
+
+    private String token;
+
+
+
+    /**
+     * 连接器
+     */
+    private OrderClient mDriverOrderClient;
+
+    /**
+     * WebSocket服务
+     */
+    private OrderService mDriverOrderService;
+
+    /**
+     * 绑定
+     */
+    private OrderService.DriverOrderBinder mBinder;
+
+    /**
+     * 接收器
+     */
+    private OrderMessageReceiver mOrderMessageReceiver;
+
+    private MessageHelper mMessageHelper;
+
 
     /** TabLayout调谐器 */
     private TabLayoutMediator mMediator;
@@ -75,6 +121,16 @@ public class CallCarActivity extends AppCompatActivity {
         initView();
         initData();
         initRoutePlan();
+
+        // 初始化服务并绑定
+        startService();
+        bindService();
+        registerReceiver();
+
+
+        //获取消息助手
+        mMessageHelper=MessageHelper.getInstance();
+
     }
     private void initTitle() {
 //        ImageView imgBack = (ImageView) findViewById(R.id.robin_title_left);
@@ -86,12 +142,15 @@ public class CallCarActivity extends AppCompatActivity {
 //            }
 //
 //        });
+
         myLocation=getIntent().getStringExtra("mlocation");
         destination=getIntent().getStringExtra("dlocation");
         tv_start = (TextView) findViewById(R.id.start);
         tv_start.setText(myLocation);
         tv_dest = (TextView)findViewById(R.id.dest);
         tv_dest.setText(destination);
+
+
     }
     private void initView(){
 
@@ -115,7 +174,13 @@ public class CallCarActivity extends AppCompatActivity {
         mcall.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                sendMessage();
+
                 Intent intent=new Intent(CallCarActivity.this,WaitingActivity.class);
+                intent.putExtra("startPoint",myLocation);
+                intent.putExtra("token",token);
+                intent.putExtra("myLatitude",myLatitude);
+                intent.putExtra("myLongitude",myLongitude);
                 startActivity(intent);
             }
         });
@@ -123,6 +188,8 @@ public class CallCarActivity extends AppCompatActivity {
     }
 
     private void initData(){
+        cityName=getIntent().getStringExtra("cityName");
+        token=getIntent().getStringExtra("token");
         myLongitude=getIntent().getDoubleExtra("mLongitude",1.0);
         myLatitude=getIntent().getDoubleExtra("mLatitude",1.0);
         destLongitude=getIntent().getDoubleExtra("dLongitude",1.0);
@@ -205,7 +272,95 @@ public class CallCarActivity extends AppCompatActivity {
         super.onDestroy();
         //在activity执行onDestroy时执行mMapView.onDestroy()，实现地图生命周期管理
         mMapView.onDestroy();
+        // 断开连接
+        unbindService(serviceConnection);
+        if(mOrderMessageReceiver!=null){
+            unregisterReceiver(mOrderMessageReceiver);
+        }
     }
+
+    /**
+     * 发送消息
+     */
+    private void sendMessage(){
+
+
+        LocationPoint departpoint = new LocationPoint(myLatitude,myLongitude);
+
+        LocationPoint destpoint= new LocationPoint(destLatitude,destLongitude);
+
+
+
+
+        Long passengerId = Long.valueOf(23);
+        //开始封装
+        StartOrderBody body = new StartOrderBody();
+        body.setUserToken(token);
+        body.setCity(cityName);
+        body.setPassengerId(passengerId);
+        body.setUserName("8613683333113");
+        body.setPhoneNumber("8613683333113");
+        body.setDepartPoint(departpoint);
+        body.setDestinationPoint(destpoint);
+        body.setServiceType((short) 1);
+        body.setPassengerNum((short)1);
+        body.setDepartName(myLocation);
+        body.setDestName(destination);
+        // 发送方式一
+        // 构造消息
+        mMessageHelper.setClient(getClient());
+        BaseMessage message=mMessageHelper.build(MessageType.START_ORDER_MESSAGE,body);
+        // 发送消息
+        mMessageHelper.send(message);
+
+    }
+    /**
+     * 开启WebSocket服务
+     */
+    private void startService(){
+        Intent intent=new Intent(getApplicationContext(), OrderService.class);
+        startService(intent);
+    }
+
+    /**
+     * 绑定服务
+     */
+    private void bindService(){
+        Intent intent = new Intent(getApplicationContext(), OrderService.class);
+        bindService(intent, serviceConnection, BIND_AUTO_CREATE);
+    }
+
+    /**
+     * 注册广播接收器
+     */
+    private void registerReceiver(){
+        mOrderMessageReceiver=new OrderMessageReceiver();
+        IntentFilter intentFilter=new IntentFilter(Constant.FILTER_CONTENT);
+        registerReceiver(mOrderMessageReceiver,intentFilter);
+    }
+    // 服务连接监听器
+    private ServiceConnection serviceConnection=new ServiceConnection() {
+        @Override
+        public void onServiceConnected(ComponentName name, IBinder service) {
+
+            Log.e("aaaaaaaaaaaa",token+"aaa");
+            mBinder=(OrderService.DriverOrderBinder)service;
+
+            mDriverOrderService=mBinder.getService(token);
+            mDriverOrderClient=mDriverOrderService.getClient();
+            Toast.makeText(getApplicationContext(),"Service已连接",Toast.LENGTH_SHORT).show();
+        }
+
+        @Override
+        public void onServiceDisconnected(ComponentName name) {
+            Toast.makeText(getApplicationContext(),"Service已断开",Toast.LENGTH_SHORT).show();
+        }
+    };
+    public OrderClient getClient(){
+        return mDriverOrderClient;
+    }
+
+
 
     /**
      * 路线规划结果返回监听类

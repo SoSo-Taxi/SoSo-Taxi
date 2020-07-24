@@ -1,35 +1,30 @@
-package com.sosotaxi;
+/**
+ * @Author 岳兵
+ * @CreateTime 2020/7/18
+ * @UpdateTime 2020/7/19
+ */
+package com.sosotaxi.ui.home;
 
+
+import android.app.Activity;
+import android.content.BroadcastReceiver;
 import android.content.ComponentName;
+import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.ServiceConnection;
-import android.location.Location;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.widget.Toast;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
-import androidx.lifecycle.ViewModelProvider;
-
+import com.sosotaxi.R;
 import com.sosotaxi.common.Constant;
-import com.sosotaxi.model.LocationPoint;
-import com.sosotaxi.model.message.BaseMessage;
-import com.sosotaxi.model.message.CheckBondedDriverGeoBody;
-import com.sosotaxi.model.message.MessageType;
 import com.sosotaxi.service.net.OrderClient;
 import com.sosotaxi.service.net.OrderMessageReceiver;
 import com.sosotaxi.service.net.OrderService;
 import com.sosotaxi.utils.MessageHelper;
 
-/**
- * @Author 范承祥
- * @CreateTime 2020/7/23
- * @UpdateTime 2020/7/23
- */
-public class DemoWebSocketActivity extends AppCompatActivity {
+public class PayActivity extends Activity {
     /**
      * 连接器
      */
@@ -52,9 +47,16 @@ public class DemoWebSocketActivity extends AppCompatActivity {
 
     private MessageHelper mMessageHelper;
 
+
+
+    //token
+    private String token;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_pay);
+        token=getIntent().getStringExtra("token");
 
         // 初始化服务并绑定
         startService();
@@ -64,8 +66,45 @@ public class DemoWebSocketActivity extends AppCompatActivity {
 
         //获取消息助手
         mMessageHelper=MessageHelper.getInstance();
+
+
+        initView();
+
     }
 
+    private void initView(){
+
+
+
+
+
+
+    }
+
+
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        //在activity执行onResume时执行mMapView. onResume ()，实现地图生命周期管理
+
+    }
+    @Override
+    protected void onPause() {
+        super.onPause();
+        //在activity执行onPause时执行mMapView. onPause ()，实现地图生命周期管理
+
+    }
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        //在activity执行onDestroy时执行mMapView.onDestroy()，实现地图生命周期管理
+        // 断开连接
+        unbindService(serviceConnection);
+        if(mOrderMessageReceiver!=null){
+            unregisterReceiver(mOrderMessageReceiver);
+        }
+    }
     /**
      * 开启WebSocket服务
      */
@@ -97,7 +136,7 @@ public class DemoWebSocketActivity extends AppCompatActivity {
         public void onServiceConnected(ComponentName name, IBinder service) {
 
             mBinder=(OrderService.DriverOrderBinder)service;
-            String token="";
+
             mDriverOrderService=mBinder.getService(token);
             mDriverOrderClient=mDriverOrderService.getClient();
             Toast.makeText(getApplicationContext(),"Service已连接",Toast.LENGTH_SHORT).show();
@@ -113,30 +152,7 @@ public class DemoWebSocketActivity extends AppCompatActivity {
         return mDriverOrderClient;
     }
 
-    /**
-     * 发送示例
-     */
-    public void sendDemo(){
 
-        mMessageHelper.setClient(getClient());
-
-        String token="";
-        LocationPoint point=new LocationPoint(23.0,120.0);
-
-        // 封装消息
-        CheckBondedDriverGeoBody body=new CheckBondedDriverGeoBody();
-        body.setUserToken(token);
-        body.setGeoPoint(point);
-
-        // 发送方式一
-        // 构造消息
-        BaseMessage message=mMessageHelper.build(MessageType.CHECK_BONDED_DRIVER_GEO_MESSAGE,body);
-        // 发送消息
-        mMessageHelper.send(message);
-
-        // 发送方式二
-        mMessageHelper.send(MessageType.CHECK_BONDED_DRIVER_GEO_MESSAGE,body);
-    }
 
 
 

@@ -40,7 +40,6 @@ import org.json.JSONObject;
 public class ScheduleSelectCityActivity extends Activity {
 
     private ListView sortListView;
-    private TextView tvCurrent;
     private SideBar sideBar;
     private CharacterParser characterParser;
     private String cityName="";
@@ -59,12 +58,11 @@ public class ScheduleSelectCityActivity extends Activity {
         initTitle();
         initData();
         initView();
-
-
-
-
     }
 
+    /**
+     * 初始化标题
+     */
     private void initTitle() {
         ImageView imgBack = (ImageView) findViewById(R.id.robin_title_left);
         imgBack.setOnClickListener(new OnClickListener() {
@@ -79,10 +77,11 @@ public class ScheduleSelectCityActivity extends Activity {
         TextView tvTitle = (TextView) findViewById(R.id.robin_title_center);
         tvTitle.setText("选择城市");
 
-        TextView tvRight = (TextView) findViewById(R.id.robin_title_right);
-        tvRight.setVisibility(View.GONE);
     }
 
+    /**
+     * 初始化视图
+     */
     private void initView() {
         View view = View.inflate(this, R.layout.schedule_select_city_item, null);
 
@@ -247,7 +246,6 @@ public class ScheduleSelectCityActivity extends Activity {
         }
         Collections.sort(filterDateList, pinyinComparator);
         adapter.updateListView(filterDateList);
-
     }
 
     @Override

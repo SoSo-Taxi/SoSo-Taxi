@@ -87,7 +87,6 @@ app/.idea/libraries/Gradle__org_jetbrains_kotlin_kotlin_stdlib_common_1_3_71_jar
 
 app/gradlew
 *.bat
-*.jar
 *.ser
 app/.idea/.name
 .DS_Store

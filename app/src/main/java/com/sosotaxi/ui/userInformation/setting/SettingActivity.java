@@ -16,6 +16,7 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
 import com.sosotaxi.R;
+import com.sosotaxi.common.TelephoneEncryption;
 import com.sosotaxi.ui.userInformation.setting.AboutUs.AboutUsActivity;
 import com.sosotaxi.ui.userInformation.setting.emergencyContact.EmergencyContactActivity;
 import com.sosotaxi.ui.userInformation.setting.lawClaim.LawClaimActivity;

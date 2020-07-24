@@ -6,10 +6,15 @@
 
 package com.sosotaxi.ui.main;
 
+import android.content.ComponentName;
 import android.content.Intent;
+import android.content.IntentFilter;
+import android.content.ServiceConnection;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.os.IBinder;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.Menu;
@@ -22,10 +27,17 @@ import com.sosotaxi.R;
 import com.sosotaxi.common.Constant;
 import com.sosotaxi.service.net.GetPersonalDataTask;
 import com.sosotaxi.ui.login.LoginActivity;
+import com.sosotaxi.service.net.OrderClient;
+import com.sosotaxi.service.net.OrderMessageReceiver;
+import com.sosotaxi.service.net.OrderService;
+import com.sosotaxi.ui.home.HomeFragment;
+import com.sosotaxi.common.TelephoneEncryption;
 import com.sosotaxi.ui.userInformation.order.OrderActivity;
 import com.sosotaxi.ui.userInformation.personData.PersonalDataActivity;
 import com.sosotaxi.ui.userInformation.setting.SettingActivity;
+import com.sosotaxi.ui.userInformation.setting.emergencyContact.EmergencyContactActivity;
 import com.sosotaxi.ui.userInformation.wallet.WalletActivity;
+import com.sosotaxi.utils.MessageHelper;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -40,7 +52,9 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
 public class MainActivity extends AppCompatActivity
+
         implements NavigationView.OnNavigationItemSelectedListener{
+
 
     private AppBarConfiguration mAppBarConfiguration;
 
@@ -58,7 +72,7 @@ public class MainActivity extends AppCompatActivity
 
     private Handler mFillTextHandler;
 
-
+    private String token = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -111,6 +125,9 @@ public class MainActivity extends AppCompatActivity
             mUsername = bundle.getString(Constant.EXTRA_PHONE);
             new Thread(new GetPersonalDataTask(mUsername,mFillTextHandler)).start();
         }
+        mUserName.setText(TelephoneEncryption.telephoneEncryption("13613616136"));
+
+        mUserOtherInfo.setText("白银会员");
 
         headImageView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -126,8 +143,15 @@ public class MainActivity extends AppCompatActivity
 
 
 
+//        Bundle getBundle = this.getIntent().getExtras();
+//        token = getBundle.getString(Constant.EXTRA_TOKEN);
+//        getBundle.putString("token",token);
+//        Log.e("aaaaa",""+token);
+//        HomeFragment fragment = new HomeFragment();
+//        fragment.setArguments(getBundle);
 
     }
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -158,7 +182,11 @@ public class MainActivity extends AppCompatActivity
                 mNicknameTextView.setText(data.getCharSequenceExtra("nickname"));
             }
         }
+
+
+
     }
+
 
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
@@ -171,13 +199,16 @@ public class MainActivity extends AppCompatActivity
                 startActivity(intent);
                 break;
             case R.id.nav_safety:
-
+                intent = new Intent(getApplicationContext(), EmergencyContactActivity.class);
+                startActivity(intent);
+                break;
             case R.id.nav_wallet:
                 intent = new Intent(getApplicationContext(), WalletActivity.class);
                 startActivity(intent);
                 break;
             case R.id.nav_service:
-
+                Toast.makeText(getApplicationContext(),"在线客服功能尚未开通，尽情期待！",Toast.LENGTH_LONG).show();
+                break;
             case R.id.nav_setting:
                 intent = new Intent(getApplicationContext(), SettingActivity.class);
                 startActivityForResult(intent, Constant.SETTING_RESULT_CODE);

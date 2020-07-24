@@ -64,6 +64,10 @@ public class StartOrderBody extends BaseBody {
      * 上车点名
      */
     private String departName;
+    /**
+     * 目的地点
+     */
+    private String destName;
 
     public Long getPassengerId() {
         return passengerId;
@@ -144,4 +148,12 @@ public class StartOrderBody extends BaseBody {
     public void setDepartName(String departName) {
         this.departName = departName;
     }
+
+    public String getDestName(){return destName;}
+
+    public void setDestName(String destName){
+        this.destName=destName;
+    }
+
+
 }
