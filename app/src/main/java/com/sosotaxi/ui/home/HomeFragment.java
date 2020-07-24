@@ -47,7 +47,6 @@ import com.baidu.mapapi.map.MarkerOptions;
 import com.baidu.mapapi.map.MyLocationConfiguration;
 import com.baidu.mapapi.map.MyLocationData;
 import com.baidu.mapapi.map.OverlayOptions;
-import com.baidu.mapapi.map.Text;
 import com.baidu.mapapi.model.LatLng;
 import com.baidu.mapapi.search.core.SearchResult;
 import com.baidu.mapapi.search.geocode.GeoCodeResult;
@@ -58,12 +57,6 @@ import com.baidu.mapapi.search.geocode.ReverseGeoCodeResult;
 import com.bigkoo.pickerview.TimePickerView;
 import com.sosotaxi.R;
 import com.sosotaxi.common.Constant;
-import com.sosotaxi.model.LocationPoint;
-import com.sosotaxi.model.User;
-import com.sosotaxi.model.message.BaseMessage;
-import com.sosotaxi.model.message.CheckBondedDriverGeoBody;
-import com.sosotaxi.model.message.MessageType;
-import com.sosotaxi.model.message.StartOrderBody;
 import com.sosotaxi.ui.main.MainActivity;
 import com.sosotaxi.utils.MessageHelper;
 
@@ -81,7 +74,6 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.security.NoSuchAlgorithmException;
-import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -97,14 +89,13 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
     GeoCoder mSearch = null;
     private EditText location_edit;
 
-    //String
+    //地点
     private String city;
     private String cityName = "";
-    private String strAddress;
     private String poiAddress;
-    private String myPoiPlace;
     private String poiName="";
     private String rName="";
+    private String searchPlace;
 
 
     private MapView mMapView = null;
@@ -128,7 +119,6 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
     private BitmapDescriptor mIconLocation;
     private LocationClient mLocationClient;
     public BDAbstractLocationListener myListener;
-    private OnGetGeoCoderResultListener myGGListener;
 
     //DISTANCE
     private double rDistance;
@@ -138,12 +128,16 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
 
     private boolean isFirstin = true;
 
+    //推荐上车点
+    private LatLng rLocation;
+
 
 
 
     //Textview
-    private TextView tvTitle;
+    private TextView tv_title;
     private TextView tv_home_start;
+    private TextView tv_recommend;
     private TextView tv_location_address;
     private TextView tv_book_car;
     private RelativeLayout rl_location_detail;
@@ -221,9 +215,9 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
                 city = reverseGeoCodeResult.getAddressDetail().city;
                 String cityDisplay =  "当前定位："+city;
 
-                tvTitle.setText(cityDisplay);
+                tv_title.setText(cityDisplay);
 
-                strAddress = reverseGeoCodeResult.getAddress();
+
 
             }
         });
@@ -263,6 +257,12 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
                 //在地图上添加Marker，并显示
                 mBaiduMap.addOverlay(option);
                 poiName = arg0.getName();
+                rName=poiName;
+                tv_home_start.setText("您将从"+rName+"上车");
+                Log.e("rnameaaa",rName);
+                tv_recommend.setText("点击定位为您推荐上车点");
+
+
                 mSearch.reverseGeoCode(new ReverseGeoCodeOption().location(arg0.getPosition()));
                 rl_location_detail.setVisibility(View.VISIBLE);
 
@@ -282,6 +282,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
                 //在地图上添加Marker，并显示
                 mBaiduMap.addOverlay(option);
                 mSearch.reverseGeoCode(new ReverseGeoCodeOption().location(arg0));
+
                 rl_location_detail.setVisibility(View.VISIBLE);
                 tv_location_address.setText(poiAddress);
             }
@@ -369,6 +370,18 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
         switch (v.getId()) {
             case R.id.but_Loc: {
                 centerToMyLocation(mLatitude, mLongitude);
+                try {
+                    tv_recommend.setText("为您推荐的最佳上车地点");
+                    getRecommend();
+                    displayRecommendPoint();
+                } catch (UnsupportedEncodingException e) {
+                    e.printStackTrace();
+                } catch (NoSuchAlgorithmException e) {
+                    e.printStackTrace();
+                }
+                finally {
+
+                }
                 break;
             }
         }
@@ -382,9 +395,9 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
 //            }
 //        });
 
-        tvTitle = (TextView) getActivity().findViewById(R.id.city_selected);
-        tvTitle.setText("位置");
-        tvTitle.setOnClickListener(new View.OnClickListener() {
+        tv_title = (TextView) getActivity().findViewById(R.id.city_selected);
+        tv_title.setText("位置");
+        tv_title.setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick(View v) {
@@ -460,6 +473,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
         location_edit = (EditText) getView().findViewById(R.id.location_edit);
         mMapView = (MapView) getView().findViewById(R.id.bmapView);
         tv_home_start = (TextView) getView().findViewById(R.id.tv_home_start);
+        tv_recommend=(TextView)getView().findViewById(R.id.recommend);
         tv_location_address = (TextView) getView().findViewById(R.id.tv_location_address);
         rl_location_detail = (RelativeLayout) getView().findViewById(R.id.rl_location_detail);
         tvCall = (Button)getView().findViewById(R.id.bt_finish) ;
@@ -481,9 +495,10 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
 //                }else {
 //                    name = "";
 //                }
+                Log.e("rname",rName);
                 i.putExtra("cityName",city);
                 i.putExtra("token",token);
-                i.putExtra("dlocation", poiName);
+                i.putExtra("dlocation",searchPlace);
                 i.putExtra("mlocation",rName);
                 i.putExtra("dLatitude",dLatitude);
                 i.putExtra("dLongitude",dLongtitude);
@@ -549,6 +564,8 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
 
 
 
+
+
                 }catch(MalformedURLException e){
                     e.printStackTrace();
                 }catch (IOException e){
@@ -559,6 +576,19 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
 
             }
         }).start();
+
+        //添加marker
+        LatLng rLocation = new LatLng(rLatitude,rLongitude);
+
+        //构建Marker图标
+        BitmapDescriptor bitmap = BitmapDescriptorFactory
+                .fromResource(R.drawable.ic_re_pin);
+        //构建MarkerOption，用于在地图上添加Marker
+        OverlayOptions option = new MarkerOptions()
+                .position(rLocation)
+                .icon(bitmap);
+        //在地图上添加Marker，并显示
+        mBaiduMap.addOverlay(option);
 
 
     }
@@ -592,9 +622,10 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
             if(rSimbol==0){
                 tv_home_start.setText("您将在"+rName+"上车");
                 Log.e("???",rName);
+                tv_recommend.setText("为您推荐的最佳上车地点");
 
                 //添加marker
-                LatLng rLocation = new LatLng(rLatitude,rLongitude);
+                rLocation = new LatLng(rLatitude,rLongitude);
 
                 //构建Marker图标
                 BitmapDescriptor bitmap = BitmapDescriptorFactory
@@ -606,41 +637,14 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
                 //在地图上添加Marker，并显示
                 mBaiduMap.addOverlay(option);
 
+                displayRecommendPoint();
 
 
-                TextView tv_info = new TextView(getContext());
-                tv_info.setBackgroundResource(R.drawable.marker5);
-
-                tv_info.setGravity(Gravity.CENTER);
-
-                tv_info.setPadding(10,10,10,10);
-                Drawable drawable = getResources().getDrawable(R.drawable.ic_locate6);
-                drawable.setBounds(0, 0, drawable.getMinimumWidth(), drawable.getMinimumHeight());
-                tv_info.setPadding(40,10,40,10);
-
-                tv_info.setCompoundDrawables(drawable,null,null,null);
-                tv_location_address.setText(rName);
-
-
-                tv_info.setText("  "+rDistance+"m  "+rName+"  ");
-
-                //构造InfoWindow
-                //point 描述的位置点
-                //-100 InfoWindow相对于point在y轴的偏移量
-                InfoWindow mInfoWindow = new InfoWindow(tv_info,rLocation, -100);
-
-                mSearch.reverseGeoCode(new ReverseGeoCodeOption().location(rLocation));
-
-
-
-
-                //使InfoWindow生效
-                mBaiduMap.showInfoWindow(mInfoWindow);
                 if(rName!=""){
                 rSimbol=1;
                 }
             }
-            myPoiPlace=location.getAddrStr();
+
 
 
             //设置起点
@@ -699,6 +703,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
 
     }
 
+
     /**
      * 回到定位中心
      * @param latitude
@@ -725,6 +730,43 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
         });
     }
 
+    /**
+     *显示信息窗
+     */
+    private void displayRecommendPoint(){
+        TextView tv_info = new TextView(getContext());
+        tv_info.setBackgroundResource(R.drawable.marker5);
+
+        tv_info.setGravity(Gravity.CENTER);
+
+        tv_info.setPadding(10,10,10,10);
+        Drawable drawable = getResources().getDrawable(R.drawable.ic_locate6);
+        drawable.setBounds(0, 0, drawable.getMinimumWidth(), drawable.getMinimumHeight());
+        tv_info.setPadding(40,10,40,10);
+
+        tv_info.setCompoundDrawables(drawable,null,null,null);
+
+        tv_home_start.setText("您将在"+rName+"上车");
+
+
+        tv_info.setText("  "+rDistance+"m  "+rName+"  ");
+
+        //构造InfoWindow
+        //point 描述的位置点
+        //-100 InfoWindow相对于point在y轴的偏移量
+        InfoWindow mInfoWindow = new InfoWindow(tv_info,rLocation, -100);
+
+        mSearch.reverseGeoCode(new ReverseGeoCodeOption().location(rLocation));
+
+
+
+
+        //使InfoWindow生效
+        mBaiduMap.showInfoWindow(mInfoWindow);
+
+
+    }
+
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -735,7 +777,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
             String cityDisplay = new String();
             cityDisplay = "当前定位："+cityName;
 
-            tvTitle.setText(cityDisplay);
+            tv_title.setText(cityDisplay);
 
             rl_location_detail.setVisibility(View.GONE);
             LatLng selectedCity = new LatLng(Double.valueOf(data.getStringExtra("lat")),Double.valueOf(data.getStringExtra("log")));
@@ -749,10 +791,10 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
             //搜索位置
             if (data != null) {
                 String searchPoiAddress = data.getStringExtra("address");
-                poiName = data.getStringExtra("name");
+                searchPlace = data.getStringExtra("name");
                 double latitude = data.getExtras().getDouble("latitude");
                 double longitude = data.getExtras().getDouble("longitude");
-                location_edit.setText(poiName);
+                location_edit.setText(searchPlace);
                 dLatitude = latitude;
                 dLongtitude = longitude;
                 LatLng poiLocation = new LatLng(latitude, longitude);

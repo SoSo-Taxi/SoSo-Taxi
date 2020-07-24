@@ -57,7 +57,7 @@
                 app:layout_constraintTop_toBottomOf="@+id/car_type_textView" />
 
             <TextView
-                android:id="@+id/textView16"
+                android:id="@+id/carInfo"
                 android:layout_width="10dp"
                 android:layout_height="10dp"
 
@@ -74,18 +74,18 @@
                 android:layout_marginStart="11dp"
                 android:layout_marginTop="18dp"
                 android:text="上车点"
-                app:layout_constraintStart_toEndOf="@+id/textView16"
+                app:layout_constraintStart_toEndOf="@+id/carInfo"
                 app:layout_constraintTop_toBottomOf="@+id/order_time_textView" />
 
             <TextView
-                android:id="@+id/textView20"
+                android:id="@+id/rate"
                 android:layout_width="10dp"
                 android:layout_height="10dp"
                 android:layout_marginStart="24dp"
                 android:layout_marginTop="23dp"
                 android:background="@drawable/orderitem_round_red_textview"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/textView16" />
+                app:layout_constraintTop_toBottomOf="@+id/carInfo" />
 
             <TextView
                 android:id="@+id/order_destination_textView"
@@ -94,7 +94,7 @@
                 android:layout_marginStart="11dp"
                 android:layout_marginTop="13dp"
                 android:text="目的地"
-                app:layout_constraintStart_toEndOf="@+id/textView20"
+                app:layout_constraintStart_toEndOf="@+id/rate"
                 app:layout_constraintTop_toBottomOf="@+id/order_startingPoint_textView" />
 
             <TextView

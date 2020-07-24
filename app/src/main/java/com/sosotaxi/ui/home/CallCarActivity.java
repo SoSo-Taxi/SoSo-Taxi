@@ -66,8 +66,11 @@ public class CallCarActivity extends AppCompatActivity {
 
     private Button mcall = null;
 
+    //Textview
     private TextView tv_start=null;
     private TextView tv_dest=null;
+
+
     private MapView mMapView =null;
     private TabLayout mTabLayout;
     private ViewPager2 mViewPager;
@@ -81,6 +84,8 @@ public class CallCarActivity extends AppCompatActivity {
     private String cityName;
 
     private String token;
+
+
 
     /**
      * 连接器
@@ -137,12 +142,15 @@ public class CallCarActivity extends AppCompatActivity {
 //            }
 //
 //        });
+
         myLocation=getIntent().getStringExtra("mlocation");
         destination=getIntent().getStringExtra("dlocation");
         tv_start = (TextView) findViewById(R.id.start);
         tv_start.setText(myLocation);
         tv_dest = (TextView)findViewById(R.id.dest);
         tv_dest.setText(destination);
+
+
     }
     private void initView(){
 
@@ -169,6 +177,7 @@ public class CallCarActivity extends AppCompatActivity {
                 sendMessage();
 
                 Intent intent=new Intent(CallCarActivity.this,WaitingActivity.class);
+                intent.putExtra("startPoint",myLocation);
                 intent.putExtra("token",token);
                 intent.putExtra("myLatitude",myLatitude);
                 intent.putExtra("myLongitude",myLongitude);

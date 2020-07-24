@@ -16,6 +16,7 @@ import android.graphics.Point;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.util.Log;
+import android.widget.TextView;
 import android.widget.Toast;
 
 
@@ -25,7 +26,6 @@ import com.sosotaxi.R;
 import com.sosotaxi.common.Constant;
 import com.sosotaxi.model.DriverCarInfo;
 import com.sosotaxi.model.LocationPoint;
-import com.sosotaxi.model.Order;
 import com.sosotaxi.model.message.BaseMessage;
 import com.sosotaxi.model.message.CheckBondedDriverGeoBody;
 import com.sosotaxi.model.message.CheckBondedDriverGeoResponseBody;
@@ -68,10 +68,29 @@ public class WaitingActivity extends Activity {
     private Double myLatitude;
     private Double myLongitude;
     private LocationPoint myLocation;
-
+    //textview
+    private TextView tv_getCarPlace;
+    private TextView license;
+    private TextView carInfo;
+    private TextView driverInfo;
+    private TextView tv_rate;
 
     //token
     private String token;
+
+    //startPlace
+    private String startPlace;
+
+    //licensePlate
+    private String licensePlate;
+
+    //carinfo
+    private String carBrand;
+    private String carColor;
+
+    //driver
+    private String driverName;
+    private double rate;
 
     //driver location
     private Point driverLocation;
@@ -107,6 +126,17 @@ public class WaitingActivity extends Activity {
     private void initView(){
 
         mMapView = (MapView)findViewById(R.id.bmapView);
+        tv_getCarPlace=(TextView)findViewById(R.id.getCarPlace);
+        startPlace=getIntent().getStringExtra("startPoint");
+        tv_getCarPlace.setText("请前往"+startPlace+"上车。若您改变行程，可在10分钟内免费取消。近期车辆较少，请尽量不取消，戴好口罩。");
+        license=(TextView)findViewById(R.id.license);
+        carInfo=(TextView)findViewById(R.id.carInfo);
+        driverInfo=(TextView)findViewById(R.id.driverInfo);
+        tv_rate=(TextView)findViewById(R.id.rate);
+
+
+
+
 
 
 
@@ -171,12 +201,25 @@ public class WaitingActivity extends Activity {
                 if(message.getType()== MessageType.ORDER_RESULT_MESSAGE){
                     OrderResultBody body =(OrderResultBody) message.getBody();
                     DriverCarInfo driverCarInfo = body.getDriverCarInfo();
+                    licensePlate = driverCarInfo.getLicensePlate();
+                    license.setText(licensePlate);
+                    carBrand=driverCarInfo.getCarBrand();
+                    carColor =driverCarInfo.getCarColor();
+                    carInfo.setText(carBrand+"·"+ carColor);
+                    driverName=driverCarInfo.getDriverName();
+                    driverInfo.setText(driverName);
+                    rate=driverCarInfo.getRate();
+                    String st_rate=""+rate;
+                    tv_rate.setText(st_rate);
+
+
                     initView();
                 }
                 else if(message.getType()==MessageType.CHECK_BONDED_DRIVER_GEO_RESPONSE){
                     CheckBondedDriverGeoResponseBody body = (CheckBondedDriverGeoResponseBody) message.getBody();
                     driverLocation=body.getPoint();
                     driverDistance=body.getDistance();
+
                 }
                 else if(message.getType()==MessageType.ARRIVE_DEPART_POINT_TO_PASSENGER){
 
