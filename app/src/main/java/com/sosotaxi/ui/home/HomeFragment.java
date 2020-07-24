@@ -138,6 +138,9 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
 
     private boolean isFirstin = true;
 
+    //推荐上车点
+    private LatLng rLocation;
+
 
 
 
@@ -369,6 +372,17 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
         switch (v.getId()) {
             case R.id.but_Loc: {
                 centerToMyLocation(mLatitude, mLongitude);
+                try {
+                    getRecommend();
+                    displayRecommendPoint();
+                } catch (UnsupportedEncodingException e) {
+                    e.printStackTrace();
+                } catch (NoSuchAlgorithmException e) {
+                    e.printStackTrace();
+                }
+                finally {
+
+                }
                 break;
             }
         }
@@ -560,6 +574,19 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
             }
         }).start();
 
+        //添加marker
+        LatLng rLocation = new LatLng(rLatitude,rLongitude);
+
+        //构建Marker图标
+        BitmapDescriptor bitmap = BitmapDescriptorFactory
+                .fromResource(R.drawable.ic_re_pin);
+        //构建MarkerOption，用于在地图上添加Marker
+        OverlayOptions option = new MarkerOptions()
+                .position(rLocation)
+                .icon(bitmap);
+        //在地图上添加Marker，并显示
+        mBaiduMap.addOverlay(option);
+
 
     }
 
@@ -594,7 +621,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
                 Log.e("???",rName);
 
                 //添加marker
-                LatLng rLocation = new LatLng(rLatitude,rLongitude);
+                rLocation = new LatLng(rLatitude,rLongitude);
 
                 //构建Marker图标
                 BitmapDescriptor bitmap = BitmapDescriptorFactory
@@ -606,36 +633,9 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
                 //在地图上添加Marker，并显示
                 mBaiduMap.addOverlay(option);
 
+                displayRecommendPoint();
 
 
-                TextView tv_info = new TextView(getContext());
-                tv_info.setBackgroundResource(R.drawable.marker5);
-
-                tv_info.setGravity(Gravity.CENTER);
-
-                tv_info.setPadding(10,10,10,10);
-                Drawable drawable = getResources().getDrawable(R.drawable.ic_locate6);
-                drawable.setBounds(0, 0, drawable.getMinimumWidth(), drawable.getMinimumHeight());
-                tv_info.setPadding(40,10,40,10);
-
-                tv_info.setCompoundDrawables(drawable,null,null,null);
-                tv_location_address.setText(rName);
-
-
-                tv_info.setText("  "+rDistance+"m  "+rName+"  ");
-
-                //构造InfoWindow
-                //point 描述的位置点
-                //-100 InfoWindow相对于point在y轴的偏移量
-                InfoWindow mInfoWindow = new InfoWindow(tv_info,rLocation, -100);
-
-                mSearch.reverseGeoCode(new ReverseGeoCodeOption().location(rLocation));
-
-
-
-
-                //使InfoWindow生效
-                mBaiduMap.showInfoWindow(mInfoWindow);
                 if(rName!=""){
                 rSimbol=1;
                 }
@@ -699,6 +699,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
 
     }
 
+
     /**
      * 回到定位中心
      * @param latitude
@@ -723,6 +724,41 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
                 mCurrentX = x;
             }
         });
+    }
+
+    /**
+     *显示信息窗
+     */
+    private void displayRecommendPoint(){
+        TextView tv_info = new TextView(getContext());
+        tv_info.setBackgroundResource(R.drawable.marker5);
+
+        tv_info.setGravity(Gravity.CENTER);
+
+        tv_info.setPadding(10,10,10,10);
+        Drawable drawable = getResources().getDrawable(R.drawable.ic_locate6);
+        drawable.setBounds(0, 0, drawable.getMinimumWidth(), drawable.getMinimumHeight());
+        tv_info.setPadding(40,10,40,10);
+
+        tv_info.setCompoundDrawables(drawable,null,null,null);
+        tv_location_address.setText(rName);
+
+
+        tv_info.setText("  "+rDistance+"m  "+rName+"  ");
+
+        //构造InfoWindow
+        //point 描述的位置点
+        //-100 InfoWindow相对于point在y轴的偏移量
+        InfoWindow mInfoWindow = new InfoWindow(tv_info,rLocation, -100);
+
+        mSearch.reverseGeoCode(new ReverseGeoCodeOption().location(rLocation));
+
+
+
+
+        //使InfoWindow生效
+        mBaiduMap.showInfoWindow(mInfoWindow);
+
     }
 
 
