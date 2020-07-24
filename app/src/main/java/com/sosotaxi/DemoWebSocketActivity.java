@@ -118,6 +118,8 @@ public class DemoWebSocketActivity extends AppCompatActivity {
      */
     public void sendDemo(){
 
+        mMessageHelper.setClient(getClient());
+
         String token="";
         LocationPoint point=new LocationPoint(23.0,120.0);
 

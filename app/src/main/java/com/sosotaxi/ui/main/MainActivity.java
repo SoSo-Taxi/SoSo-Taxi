@@ -29,6 +29,7 @@ import com.sosotaxi.common.Constant;
 import com.sosotaxi.service.net.OrderClient;
 import com.sosotaxi.service.net.OrderMessageReceiver;
 import com.sosotaxi.service.net.OrderService;
+import com.sosotaxi.ui.home.HomeFragment;
 import com.sosotaxi.ui.userInformation.order.OrderActivity;
 import com.sosotaxi.ui.userInformation.personData.PersonalDataActivity;
 import com.sosotaxi.ui.userInformation.setting.SettingActivity;
@@ -51,27 +52,6 @@ public class MainActivity extends AppCompatActivity
 
         implements NavigationView.OnNavigationItemSelectedListener{
 
-    /**
-     * 连接器
-     */
-    private OrderClient mDriverOrderClient;
-
-    /**
-     * WebSocket服务
-     */
-    private OrderService mDriverOrderService;
-
-    /**
-     * 绑定
-     */
-    private OrderService.DriverOrderBinder mBinder;
-
-    /**
-     * 接收器
-     */
-    private OrderMessageReceiver mOrderMessageReceiver;
-
-    private MessageHelper mMessageHelper;
 
     private AppBarConfiguration mAppBarConfiguration;
 
@@ -134,16 +114,14 @@ public class MainActivity extends AppCompatActivity
                 startActivityForResult(intent,200);
             }
         });
-        Bundle getBundle = this.getIntent().getExtras();
 
-        token = getBundle.getString(Constant.EXTRA_TOKEN);
-        // 初始化服务并绑定
-        startService();
-        bindService();
-        registerReceiver();
+//        Bundle getBundle = this.getIntent().getExtras();
+//        token = getBundle.getString(Constant.EXTRA_TOKEN);
+//        getBundle.putString("token",token);
+//        Log.e("aaaaa",""+token);
+//        HomeFragment fragment = new HomeFragment();
+//        fragment.setArguments(getBundle);
 
-        //获取消息助手
-        mMessageHelper=MessageHelper.getInstance();
     }
 
 
@@ -173,63 +151,11 @@ public class MainActivity extends AppCompatActivity
                 }
             }
         }
-    }
-    /**
-     * 开启WebSocket服务
-     */
-    private void startService(){
-        Intent intent=new Intent(getApplicationContext(),OrderService.class);
-        startService(intent);
-    }
 
-    /**
-     * 绑定服务
-     */
-    private void bindService(){
-        Intent intent = new Intent(getApplicationContext(), OrderService.class);
-        bindService(intent, serviceConnection, BIND_AUTO_CREATE);
-    }
 
-    /**
-     * 注册广播接收器
-     */
-    private void registerReceiver(){
-        mOrderMessageReceiver=new OrderMessageReceiver();
-        IntentFilter intentFilter=new IntentFilter(Constant.FILTER_CONTENT);
-        registerReceiver(mOrderMessageReceiver,intentFilter);
-    }
-    // 服务连接监听器
-    private ServiceConnection serviceConnection=new ServiceConnection() {
-        @Override
-        public void onServiceConnected(ComponentName name, IBinder service) {
-
-            Log.e("aaaaaaaaaaaa",token);
-            mBinder=(OrderService.DriverOrderBinder)service;
-
-            mDriverOrderService=mBinder.getService(token);
-            mDriverOrderClient=mDriverOrderService.getClient();
-            Toast.makeText(getApplicationContext(),"Service已连接",Toast.LENGTH_SHORT).show();
-        }
-
-        @Override
-        public void onServiceDisconnected(ComponentName name) {
-            Toast.makeText(getApplicationContext(),"Service已断开",Toast.LENGTH_SHORT).show();
-        }
-    };
-    public OrderClient getClient(){
-        return mDriverOrderClient;
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        // 断开连接
-        unbindService(serviceConnection);
-        if(mOrderMessageReceiver!=null){
-            unregisterReceiver(mOrderMessageReceiver);
-        }
 
     }
+
 
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {

@@ -57,6 +57,15 @@ import com.baidu.mapapi.search.geocode.ReverseGeoCodeOption;
 import com.baidu.mapapi.search.geocode.ReverseGeoCodeResult;
 import com.bigkoo.pickerview.TimePickerView;
 import com.sosotaxi.R;
+import com.sosotaxi.common.Constant;
+import com.sosotaxi.model.LocationPoint;
+import com.sosotaxi.model.User;
+import com.sosotaxi.model.message.BaseMessage;
+import com.sosotaxi.model.message.CheckBondedDriverGeoBody;
+import com.sosotaxi.model.message.MessageType;
+import com.sosotaxi.model.message.StartOrderBody;
+import com.sosotaxi.ui.main.MainActivity;
+import com.sosotaxi.utils.MessageHelper;
 
 
 import org.json.JSONArray;
@@ -130,6 +139,8 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
     private boolean isFirstin = true;
 
 
+
+
     //Textview
     private TextView tvTitle;
     private TextView tv_home_start;
@@ -147,6 +158,12 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
     private static final String AK="RmmZVO6jFDooPymSqVdIeRUNpNgAMAza";
     private String SN = "";
 
+    //WebSocket
+    private MessageHelper mMessageHelper;
+
+    //token
+    private String token;
+
     public static HomeFragment newInstance() {
         return new HomeFragment();
     }
@@ -160,6 +177,10 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
         mMapView = (MapView)root.findViewById(R.id.bmapView);
         mBaiduMap = mMapView.getMap();
         initMyLocation();
+        Bundle getBundle = getActivity().getIntent().getExtras();
+        token = getBundle.getString(Constant.EXTRA_TOKEN);
+
+
         return root;
     }
 
@@ -168,6 +189,8 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
         super.onActivityCreated(savedInstanceState);
         SDKInitializer.initialize(getContext());
         SDKInitializer.setCoordType(CoordType.BD09LL);
+
+
 
         this.context = this;
 
@@ -287,7 +310,10 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
         finally {
 
         }
+        //预约时间
         book();
+
+
 
         mViewModel = ViewModelProviders.of(this).get(HomeViewModel.class);
         // TODO: Use the ViewModel
@@ -301,6 +327,8 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
             mLocationClient.start();
         //开启方向传感器
         mMyOrientationListener.start();
+        MainActivity activity = (MainActivity)getActivity();
+
     }
     @Override
     public void onStop() {
@@ -439,6 +467,11 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
 
             @Override
             public void onClick(View v) {
+
+
+
+
+
                 Intent i = new Intent(getActivity(), CallCarActivity.class);
 //                String address = tv_location_address.getText().toString().trim();
 //                String name;
@@ -448,6 +481,8 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
 //                }else {
 //                    name = "";
 //                }
+                i.putExtra("cityName",city);
+                i.putExtra("token",token);
                 i.putExtra("dlocation", poiName);
                 i.putExtra("mlocation",rName);
                 i.putExtra("dLatitude",dLatitude);
