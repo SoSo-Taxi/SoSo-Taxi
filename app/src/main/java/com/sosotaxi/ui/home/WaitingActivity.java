@@ -178,7 +178,7 @@ public class WaitingActivity extends Activity {
                     driverLocation=body.getPoint();
                     driverDistance=body.getDistance();
                 }
-                else if(message.getType()==MessageType.ARRIVE_DEPART_POINT_TO_MESSAGE){
+                else if(message.getType()==MessageType.ARRIVE_DEPART_POINT_TO_PASSENGER){
 
                 }
                 else if(message.getType()==MessageType.PICK_UP_PASSENGER_MESSAGE_TO_PASSENGER){
