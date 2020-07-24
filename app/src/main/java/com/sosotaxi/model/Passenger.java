@@ -12,6 +12,11 @@ public class Passenger {
     /** 用户id */
     private long userId;
 
+    private String username;
+
+    private short birthYear;
+
+    private String gender;
     /** 昵称 */
     private String nickname;
 
@@ -33,6 +38,14 @@ public class Passenger {
     /** 乘车偏好 */
     private JSONArray preference;
 
+    public String getGender() {
+        return gender;
+    }
+
+    public void setGender(String gender) {
+        this.gender = gender;
+    }
+
     public long getUserId() {
         return userId;
     }
@@ -41,12 +54,28 @@ public class Passenger {
         this.userId = userId;
     }
 
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
     public String getNickname() {
         return nickname;
     }
 
     public void setNickname(String nickname) {
         this.nickname = nickname;
+    }
+
+    public short getBirthYear() {
+        return birthYear;
+    }
+
+    public void setBirthYear(short birthYear) {
+        this.birthYear = birthYear;
     }
 
     public Short getIndustry() {
@@ -95,5 +124,20 @@ public class Passenger {
 
     public void setPreference(JSONArray preference) {
         this.preference = preference;
+    }
+
+    @Override
+    public String toString() {
+        return "Passenger{" +
+                "userId=" + userId +
+                ", username='" + username + '\'' +
+                ", nickname='" + nickname + '\'' +
+                ", industry=" + industry +
+                ", company='" + company + '\'' +
+                ", occupation='" + occupation + '\'' +
+                ", urgentContact=" + urgentContact +
+                ", commonAddress=" + commonAddress +
+                ", preference=" + preference +
+                '}';
     }
 }

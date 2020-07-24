@@ -1,7 +1,7 @@
 /**
  * @Author 屠天宇
  * @CreateTime 2020/7/8
- * @UpdateTime 2020/7/11
+ * @UpdateTime 2020/7/24
  */
 
 
@@ -14,16 +14,20 @@ import androidx.appcompat.widget.Toolbar;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.sosotaxi.R;
+import com.sosotaxi.service.net.GetPersonalDataTask;
 
 public class PersonalDataActivity extends AppCompatActivity {
 
-    private TextView mUserNameTextView;
+    private TextView mNicknameTextView;
+    private String mUsername;
     private TextView mIndustryTextView;
     private TextView mCorporationTextView;
     private TextView mJobTextView;
@@ -33,6 +37,8 @@ public class PersonalDataActivity extends AppCompatActivity {
     private boolean mHasCorporationTextView = false;
     private boolean mHasJobTextView = false;
     private boolean mHasIntroTextView = false;
+
+    private Handler mFillInfoHandler;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -50,13 +56,26 @@ public class PersonalDataActivity extends AppCompatActivity {
             Bitmap bitmap = (Bitmap)getIntent().getParcelableExtra("image");
             personalDataImageView.setImageBitmap(bitmap);
         }
-        mUserNameTextView = findViewById(R.id.personal_data_username_textView);
-        mUserNameTextView.setText(intent.getCharSequenceExtra("phone"));
-
+        mNicknameTextView = findViewById(R.id.personal_data_username_textView);
+        mNicknameTextView.setText(intent.getCharSequenceExtra("nickname"));
+        mUsername = intent.getStringExtra("phone");
         mIndustryTextView = findViewById(R.id.industry_textView);
+
         mCorporationTextView = findViewById(R.id.corporation_textView);
         mJobTextView = findViewById(R.id.job_textView);
         mIntroTextView = findViewById(R.id.intro_textView);
+
+        mFillInfoHandler = new Handler(new Handler.Callback(){
+            @Override
+            public boolean handleMessage(Message msg) {
+                Bundle bundle = msg.getData();
+                mIndustryTextView.setText(bundle.getString("industry","行业"));
+                mCorporationTextView.setText(bundle.getString("company","公司"));
+                mJobTextView.setText(bundle.getString("job","职业"));
+                return true;
+            }
+        });
+        new Thread(new GetPersonalDataTask(mUsername,mFillInfoHandler)).start();
     }
 
     @Override
@@ -70,7 +89,7 @@ public class PersonalDataActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == RESULT_OK){
             if(requestCode == 201){
-                mUserNameTextView.setText(data.getCharSequenceExtra("username"));
+                mNicknameTextView.setText(data.getCharSequenceExtra("username"));
 
                 mHasIndustryTextView = data.getBooleanExtra("industry_changed",false);
                 mIndustryTextView.setText(data.getCharSequenceExtra("industry"));
@@ -92,26 +111,27 @@ public class PersonalDataActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == android.R.id.home){
             Intent intent = new Intent();
-            intent.putExtra("phone",mUserNameTextView.getText());
+            intent.putExtra("nickname", mNicknameTextView.getText());
             setResult(RESULT_OK,intent);
             finish();
             return true;
         }
         if (item.getItemId() == R.id.edit_personal_data){
             Intent intent = new Intent(getApplicationContext(),EditPersonalDataActivity.class);
-            intent.putExtra("phone",mUserNameTextView.getText());
-            if(mHasIndustryTextView){
+            intent.putExtra("nickname", mNicknameTextView.getText());
+            intent.putExtra("phone",mUsername);
+            if(mHasIndustryTextView || mIndustryTextView.getText() != "行业"){
                 intent.putExtra("industry",mIndustryTextView.getText());
             }else {
                 intent.putExtra("industry","添加您的行业");
             }
-            if(mHasCorporationTextView){
+            if(mHasCorporationTextView || mCorporationTextView.getText() != "公司"){
                 intent.putExtra("corporation",mCorporationTextView.getText());
             }
             else {
                 intent.putExtra("corporation","");
             }
-            if(mHasJobTextView){
+            if(mHasJobTextView || mJobTextView.getText() != "职业"){
                 intent.putExtra("job",mJobTextView.getText());
             }else {
                 intent.putExtra("job","");

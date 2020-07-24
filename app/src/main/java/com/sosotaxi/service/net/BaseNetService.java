@@ -44,4 +44,37 @@ public class BaseNetService {
             return new Pair<>(response,data);
         }
     }
+
+    protected static Pair<Response,String> get(String url) throws IOException {
+        OkHttpClient client = new OkHttpClient();
+
+        Request request = new Request.Builder()
+                .url(url)
+                .build();
+        try (Response response = client.newCall(request).execute()) {
+            String data=new String();
+            if(response.code()==200){
+                data=response.body().string();
+            }
+            return new Pair<>(response,data);
+        }
+    }
+
+    protected static Pair<Response,String> put(String url, String json) throws IOException {
+        OkHttpClient client = new OkHttpClient();
+        RequestBody body = RequestBody.create(json, Constant.JSON);
+
+        Request request = new Request.Builder()
+                .url(url)
+                .put(body)
+                .build();
+        try (Response response = client.newCall(request).execute()) {
+            String data=new String();
+            if(response.code()==200){
+                data=response.body().string();
+            }
+            return new Pair<>(response,data);
+        }
+    }
+
 }

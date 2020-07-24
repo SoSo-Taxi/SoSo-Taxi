@@ -1,7 +1,7 @@
 /**
  * @Author 屠天宇
  * @CreateTime 2020/7/12
- * @UpdateTime 2020/7/12
+ * @UpdateTime 2020/7/24
  */
 
 package com.sosotaxi.ui.userInformation.personData;
@@ -38,9 +38,10 @@ public class IndustryChosenActivity extends AppCompatActivity {
         this.mRecycleViewAdapter = new IndustryChosenRecycleViewAdapter(getApplicationContext());
         this.mRecycleViewAdapter.setGetChoice(new GetChoice() {
             @Override
-            public void onItemClick(String choice) {
+            public void onItemClick(String choice,short index) {
                 Intent intent = new Intent();
                 intent.putExtra("industry",choice);
+                intent.putExtra("industryIndex",index);
                 setResult(RESULT_OK,intent);
                 finish();
             }
