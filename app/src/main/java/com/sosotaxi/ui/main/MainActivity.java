@@ -1,7 +1,7 @@
 /**
  * @Author 屠天宇
  * @CreateTime 2020/7/10
- * @UpdateTime 2020/7/22
+ * @UpdateTime 2020/7/23
  */
 
 package com.sosotaxi.ui.main;
@@ -13,6 +13,7 @@ import android.view.View;
 import android.view.Menu;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.baidu.mapapi.map.MapView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -20,9 +21,11 @@ import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.navigation.NavigationView;
 import com.sosotaxi.R;
 import com.sosotaxi.common.Constant;
+import com.sosotaxi.common.TelephoneEncryption;
 import com.sosotaxi.ui.userInformation.order.OrderActivity;
 import com.sosotaxi.ui.userInformation.personData.PersonalDataActivity;
 import com.sosotaxi.ui.userInformation.setting.SettingActivity;
+import com.sosotaxi.ui.userInformation.setting.emergencyContact.EmergencyContactActivity;
 import com.sosotaxi.ui.userInformation.wallet.WalletActivity;
 
 import androidx.annotation.NonNull;
@@ -87,8 +90,10 @@ public class MainActivity extends AppCompatActivity
         mUserOtherInfo = headerView.findViewById(R.id.user_otherInfo);
         final ImageView headImageView = headerView.findViewById(R.id.head_imageView);
 
-        mUserName.setText("13613616136");
-        mUserOtherInfo.setText("会员状态");
+        mUserName.setText(TelephoneEncryption.telephoneEncryption("13613616136"));
+
+        mUserOtherInfo.setText("白银会员");
+
         headImageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -139,13 +144,16 @@ public class MainActivity extends AppCompatActivity
                 startActivity(intent);
                 break;
             case R.id.nav_safety:
-
+                intent = new Intent(getApplicationContext(), EmergencyContactActivity.class);
+                startActivity(intent);
+                break;
             case R.id.nav_wallet:
                 intent = new Intent(getApplicationContext(), WalletActivity.class);
                 startActivity(intent);
                 break;
             case R.id.nav_service:
-
+                Toast.makeText(getApplicationContext(),"在线客服功能尚未开通，尽情期待！",Toast.LENGTH_LONG).show();
+                break;
             case R.id.nav_setting:
                 intent = new Intent(getApplicationContext(), SettingActivity.class);
                 startActivityForResult(intent, Constant.SETTING_RESULT_CODE);
