@@ -37,7 +37,7 @@
                 android:background="@drawable/setting_constraint_layout">
 
                 <TextView
-                    android:id="@+id/textView22"
+                    android:id="@+id/experirence"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="25dp"
@@ -135,7 +135,7 @@
                     app:layout_constraintTop_toTopOf="parent" />
 
                 <TextView
-                    android:id="@+id/textView12"
+                    android:id="@+id/getCarPlace"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="25dp"
