@@ -19,12 +19,14 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/constraintLayout"
-        android:layout_width="343dp"
+        android:layout_width="0dp"
         android:layout_height="160dp"
         android:layout_marginStart="30dp"
         android:layout_marginTop="23dp"
         android:layout_marginEnd="30dp"
+        android:layout_marginBottom="40dp"
         android:background="@drawable/shape_corner"
+        app:layout_constraintBottom_toTopOf="@+id/constraintLayout14"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/wallet_toolbar">
@@ -44,8 +46,8 @@
 
         <TextView
             android:id="@+id/assert_textView"
-            android:layout_width="71dp"
-            android:layout_height="36dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_marginStart="19dp"
             android:layout_marginTop="13dp"
             android:gravity="center"
@@ -59,20 +61,23 @@
         <Button
             android:id="@+id/payment_btn"
             android:layout_width="99dp"
-            android:layout_height="39dp"
-            android:layout_marginTop="61dp"
+            android:layout_height="0dp"
+            android:layout_marginTop="60dp"
             android:layout_marginEnd="16dp"
+            android:layout_marginBottom="60dp"
             android:background="@drawable/payment_btn_corner"
             android:text="@string/payment_btn_label"
             android:textColor="#1A94E6"
             android:textSize="14sp"
             android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:layout_width="331dp"
+        android:id="@+id/constraintLayout14"
+        android:layout_width="0dp"
         android:layout_height="157dp"
         android:layout_marginStart="30dp"
         android:layout_marginTop="40dp"
