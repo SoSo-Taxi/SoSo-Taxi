@@ -92,9 +92,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
     //地点
     private String city;
     private String cityName = "";
-    private String strAddress;
     private String poiAddress;
-    private String myPoiPlace;
     private String poiName="";
     private String rName="";
     private String searchPlace;
@@ -121,7 +119,6 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
     private BitmapDescriptor mIconLocation;
     private LocationClient mLocationClient;
     public BDAbstractLocationListener myListener;
-    private OnGetGeoCoderResultListener myGGListener;
 
     //DISTANCE
     private double rDistance;
@@ -220,7 +217,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
 
                 tv_title.setText(cityDisplay);
 
-                strAddress = reverseGeoCodeResult.getAddress();
+
 
             }
         });
@@ -647,7 +644,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
                 rSimbol=1;
                 }
             }
-            myPoiPlace=location.getAddrStr();
+
 
 
             //设置起点
