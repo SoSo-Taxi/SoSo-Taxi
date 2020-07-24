@@ -141,4 +141,8 @@ public class Constant {
 
     public static final int PERMISSION_READ_CONTACTS_CODE = 200;
     public static final int SETTING_RESULT_CODE = 201;
+
+    public static final String GET_PERSONAL_DATA_BY_USERNAME_URL = "http://122.51.162.119:8001/passenger/getByName?userName=";
+
+    public static final String UPDATE_PERSONAL_DATA_BY_USERNAME_URL = "http://122.51.162.119:8001/passenger/updatePassenger";
 }

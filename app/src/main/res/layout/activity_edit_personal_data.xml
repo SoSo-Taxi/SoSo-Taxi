@@ -76,15 +76,21 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <TextView
-            android:id="@+id/gender_textView"
+
+        <EditText
+            android:id="@+id/edit_gender_EditText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/edit_done_marginStart"
-            android:text="TextView"
+            android:layout_marginStart="47dp"
+            android:background="@color/colorPrimary"
+            android:hint="男或女"
+            android:inputType="text"
+            android:text="男"
+            android:textCursorDrawable="@drawable/cursor"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toEndOf="@+id/textView6"
             app:layout_constraintTop_toTopOf="parent" />
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <androidx.constraintlayout.widget.ConstraintLayout

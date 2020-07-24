@@ -1,7 +1,7 @@
 /**
  * @Author 屠天宇
  * @CreateTime 2020/7/12
- * @UpdateTime 2020/7/12
+ * @UpdateTime 2020/7/24
  */
 
 package com.sosotaxi.ui.userInformation.personData;
@@ -55,7 +55,7 @@ public class IndustryChosenRecycleViewAdapter extends
             @Override
             public void onClick(View v) {
 
-                mGetChoice.onItemClick(mChoices[position]);
+                mGetChoice.onItemClick(mChoices[position],(short)position);
 
             }
         });

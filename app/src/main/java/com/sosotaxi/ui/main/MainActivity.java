@@ -1,25 +1,27 @@
 /**
  * @Author 屠天宇
  * @CreateTime 2020/7/10
- * @UpdateTime 2020/7/22
+ * @UpdateTime 2020/7/24
  */
 
 package com.sosotaxi.ui.main;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.Menu;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
-import com.baidu.mapapi.map.MapView;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.navigation.NavigationView;
 import com.sosotaxi.R;
 import com.sosotaxi.common.Constant;
+import com.sosotaxi.service.net.GetPersonalDataTask;
+import com.sosotaxi.ui.login.LoginActivity;
 import com.sosotaxi.ui.userInformation.order.OrderActivity;
 import com.sosotaxi.ui.userInformation.personData.PersonalDataActivity;
 import com.sosotaxi.ui.userInformation.setting.SettingActivity;
@@ -48,10 +50,15 @@ public class MainActivity extends AppCompatActivity
      * 侧边栏用户姓名和
      * 用户其他信息（确定填写内容后更改）
      */
-    private TextView mUserName;
+    private TextView mNicknameTextView;
+    private String mUsername;
     private TextView mUserOtherInfo;
 
     private boolean mIsLogin = true;
+
+    private Handler mFillTextHandler;
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -81,24 +88,45 @@ public class MainActivity extends AppCompatActivity
 
         toolbar.setNavigationIcon(R.drawable.ic_default_head_photo_v2);
 
+
+
         //与登录界面对接后修改
         final View headerView = navigationView.getHeaderView(0);
-        mUserName = headerView.findViewById(R.id.username);
+        mNicknameTextView = headerView.findViewById(R.id.username);
         mUserOtherInfo = headerView.findViewById(R.id.user_otherInfo);
+        mUserOtherInfo.setText("会员状态");
         final ImageView headImageView = headerView.findViewById(R.id.head_imageView);
 
-        mUserName.setText("13613616136");
-        mUserOtherInfo.setText("会员状态");
+        mFillTextHandler = new Handler(new Handler.Callback() {
+            @Override
+            public boolean handleMessage(Message msg) {
+                Bundle bundle1 = msg.getData();
+                mNicknameTextView.setText(bundle1.getString("nickname"));
+                return true;
+            }
+        });
+         Bundle bundle = this.getIntent().getExtras();
+
+        if (bundle != null){
+            mUsername = bundle.getString(Constant.EXTRA_PHONE);
+            new Thread(new GetPersonalDataTask(mUsername,mFillTextHandler)).start();
+        }
+
         headImageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getApplicationContext(), PersonalDataActivity.class);
                 headImageView.setDrawingCacheEnabled(true);
                 intent.putExtra("image",headImageView.getDrawingCache());
-                intent.putExtra("phone",mUserName.getText());
+                intent.putExtra("phone",mUsername);
+                intent.putExtra("nickname", mNicknameTextView.getText());
                 startActivityForResult(intent,200);
             }
         });
+
+
+
+
     }
 
     @Override
@@ -121,10 +149,13 @@ public class MainActivity extends AppCompatActivity
         if (resultCode == RESULT_OK){
             if (requestCode == Constant.SETTING_RESULT_CODE){
                 if (data.getBooleanExtra("isQuit",false)){
-                    mUserName.setText("请登录");
+                    mNicknameTextView.setText("请登录");
                     mUserOtherInfo.setText("");
                     mIsLogin = !data.getBooleanExtra("isQuit",false);
                 }
+            }
+            if (requestCode == 200){
+                mNicknameTextView.setText(data.getCharSequenceExtra("nickname"));
             }
         }
     }
@@ -133,6 +164,7 @@ public class MainActivity extends AppCompatActivity
     public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
 
         Intent intent = null;
+
         switch (menuItem.getItemId()){
             case R.id.nav_order:
                 intent = new Intent(getApplicationContext(), OrderActivity.class);
