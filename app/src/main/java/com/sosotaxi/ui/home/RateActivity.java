@@ -31,7 +31,7 @@ public class RateActivity extends Activity {
         setContentView(R.layout.activity_rate);
         initView();
 
-        tv_back=(TextView)findViewById(R.id.backbut);
+        tv_back=(TextView)findViewById(R.id.tv_back);
         tv_back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

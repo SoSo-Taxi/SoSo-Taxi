@@ -133,7 +133,7 @@ public class RouteActivity extends Activity {
         initRoutePlan();
 
         // 查询司机实时位置
-//        queryDriverLatestPoint();
+        queryDriverLatestPoint();
     }
 
     private void initView(){
@@ -268,7 +268,7 @@ public class RouteActivity extends Activity {
         // 封装消息
         CheckBondedDriverGeoBody body = new CheckBondedDriverGeoBody();
         body.setUserToken(token);
-        body.setGeoPoint(driverLocation);
+        body.setPoint(driverLocation);
 
         // 构造消息
         BaseMessage message = mMessageHelper.build(MessageType.CHECK_BONDED_DRIVER_GEO_MESSAGE, body);
