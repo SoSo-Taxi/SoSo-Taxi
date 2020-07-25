@@ -12,13 +12,15 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.ServiceConnection;
-import android.graphics.Point;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.util.Log;
+import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
+
+import androidx.constraintlayout.widget.ConstraintLayout;
 
 import com.baidu.mapapi.map.BaiduMap;
 import com.baidu.mapapi.map.MapView;
@@ -97,6 +99,7 @@ public class WaitingActivity extends Activity {
     private TextView carInfo;
     private TextView driverInfo;
     private TextView tv_rate;
+    private TextView waitingState;
 
     //token
     private String token;
@@ -126,6 +129,8 @@ public class WaitingActivity extends Activity {
 
     private DriverCarInfo mDriver;
 
+    ConstraintLayout barrierBlank;
+
     private QueryLatestPointTask mQueryLatestPointTask;
 
     @Override
@@ -137,6 +142,7 @@ public class WaitingActivity extends Activity {
         myLatitude = getIntent().getDoubleExtra("myLatitude", 1.0);
         myLongitude = getIntent().getDoubleExtra("myLongitude", 1.0);
         mOrder = getIntent().getParcelableExtra(Constant.EXTRA_ORDER);
+
 
         // 初始化服务并绑定
         startService();
@@ -153,14 +159,17 @@ public class WaitingActivity extends Activity {
     private void initView() {
 
         mMapView = (MapView) findViewById(R.id.bmapView);
+        barrierBlank=(ConstraintLayout)findViewById(R.id.barrierblank);
         tv_getCarPlace = (TextView) findViewById(R.id.getCarPlace);
         startPlace = getIntent().getStringExtra("startPoint");
         tv_getCarPlace.setText("请前往" + startPlace + "上车。若您改变行程，可在10分钟内免费取消。近期车辆较少，请尽量不取消，戴好口罩。");
-        license = (TextView) findViewById(R.id.license);
+        license = (TextView) findViewById(R.id.license_waiting);
         carInfo = (TextView) findViewById(R.id.carInfo);
         driverInfo = (TextView) findViewById(R.id.driverInfo);
         tv_rate = (TextView) findViewById(R.id.rate);
         mBaiduMap = mMapView.getMap();
+        waitingState=(TextView)findViewById(R.id.waitingstate);
+        waitingState.setText("正在为您搜索附近的车辆");
 
         // 获取路径规划对象
         mSearch = RoutePlanSearch.newInstance();
@@ -244,10 +253,13 @@ public class WaitingActivity extends Activity {
                         carColor = mDriver.getCarColor();
                         carInfo.setText(carBrand + "·" + carColor);
                         driverName = mDriver.getDriverName();
-                        driverInfo.setText(driverName);
+                        driverInfo.setText("陈师傅");
                         rate = mDriver.getRate();
                         String st_rate = "" + rate;
                         tv_rate.setText(st_rate);
+                        waitingState.setText("快车司机正努力赶来，请避开人群等候");
+                        barrierBlank.setVisibility(View.INVISIBLE);
+
                         // 查询司机最新位置
                         queryDriverLatestPoint();
                     } catch (JSONException e) {

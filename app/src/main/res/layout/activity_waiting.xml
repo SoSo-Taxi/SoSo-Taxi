@@ -6,6 +6,19 @@
     android:layout_height="match_parent">
 
 
+    <com.baidu.mapapi.map.MapView
+        android:id="@+id/bmapView"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginBottom="32dp"
+        android:clickable="true"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0" />
+
     <androidx.cardview.widget.CardView
         android:id="@+id/waitingCardView"
         android:layout_width="match_parent"
@@ -20,7 +33,7 @@
             android:layout_height="match_parent">
 
             <ImageView
-                android:id="@+id/imageView9"
+                android:id="@+id/waitingcar"
                 android:layout_width="148dp"
                 android:layout_height="102dp"
                 android:layout_marginTop="12dp"
@@ -54,12 +67,11 @@
                 app:layout_constraintTop_toBottomOf="@id/experirence" />
 
             <TextView
-                android:id="@+id/textView10"
+                android:id="@+id/waitingstate"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="32dp"
                 android:layout_marginTop="16dp"
-                android:text="快车司机正努力赶来，请避开人群等候"
                 android:textColor="@color/black"
                 android:textSize="18dp"
                 android:textStyle="bold"
@@ -77,78 +89,10 @@
                 android:textSize="12dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/textView10" />
-
-            <LinearLayout
-                android:layout_width="367dp"
-                android:layout_height="0dp"
-                android:layout_marginTop="10dp"
-                android:layout_marginBottom="10dp"
-                android:orientation="horizontal"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/divider2">
-
-                <TextView
-                    android:id="@+id/warning"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_weight="1"
-                    android:drawableTop="@drawable/ic_warning"
-                    android:gravity="center"
-                    android:text="@string/warning"
-                    android:textColor="@color/black"
-                    android:textSize="11sp" />
-
-                <TextView
-                    android:id="@+id/failgetting"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_weight="1"
-                    android:drawableTop="@drawable/ic_failgetting"
-                    android:gravity="center"
-                    android:text="@string/fail_get_on_car"
-                    android:textColor="@color/black"
-                    android:textSize="11sp" />
-
-                <TextView
-                    android:id="@+id/changedest"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_weight="1"
-                    android:drawableTop="@drawable/ic_changedest"
-                    android:gravity="center"
-                    android:text="@string/change_destination"
-                    android:textColor="@color/black"
-                    android:textSize="11sp" />
-
-                <TextView
-                    android:id="@+id/share"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_weight="1"
-                    android:drawableTop="@drawable/ic_share"
-                    android:gravity="center"
-                    android:text="@string/share"
-                    android:textColor="@color/black"
-                    android:textSize="11sp" />
-
-                <ImageView
-                    android:id="@+id/imageView10"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_weight="1"
-                    android:src="@drawable/ic_more" />
-            </LinearLayout>
+                app:layout_constraintTop_toBottomOf="@+id/waitingstate" />
 
             <TextView
-                android:id="@+id/license"
+                android:id="@+id/license_waiting"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="32dp"
@@ -170,7 +114,7 @@
                 android:textColor="@color/black"
                 android:textSize="16sp"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/license" />
+                app:layout_constraintTop_toBottomOf="@+id/license_waiting" />
 
             <TextView
                 android:id="@+id/driverInfo"
@@ -205,21 +149,107 @@
                 android:textSize="12sp"
                 app:layout_constraintStart_toEndOf="@+id/rate"
                 app:layout_constraintTop_toBottomOf="@+id/carInfo" />
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginEnd="16dp"
+                android:layout_marginBottom="10dp"
+                android:orientation="horizontal"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/divider2">
+
+                <TextView
+                    android:id="@+id/messagedriver"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_weight="1"
+                    android:drawableTop="@drawable/ic_waiting_message"
+                    android:gravity="center"
+                    android:text="发送消息"
+                    android:textColor="@color/black"
+                    android:textSize="11sp" />
+
+                <TextView
+                    android:id="@+id/waitingcontact"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_weight="1"
+                    android:drawableTop="@drawable/ic_waiting_contact"
+                    android:gravity="center"
+                    android:text="联系司机"
+                    android:textSize="11sp"
+                    tools:textColor="@color/black" />
+
+                <TextView
+                    android:id="@+id/waitingchange"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_weight="1"
+                    android:drawableTop="@drawable/ic_changedest"
+                    android:gravity="center"
+                    android:text="修改终点"
+                    android:textColor="@color/black"
+                    android:textSize="11sp" />
+
+                <TextView
+                    android:id="@+id/waitingshare"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_weight="1"
+                    android:drawableTop="@drawable/ic_share"
+                    android:gravity="center"
+                    android:text="分享行程"
+                    android:textColor="@color/black"
+                    android:textSize="11sp" />
+
+                <ImageView
+                    android:id="@+id/waitingmore"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_weight="1"
+                   android:src="@drawable/ic_more" />
+
+            </LinearLayout>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/barrierblank"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginBottom="5dp"
+                android:background="@color/colorBackground"
+                app:layout_constraintBottom_toTopOf="@id/divider2"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/divider">
+
+                <TextView
+                    android:id="@+id/loadingtext"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="加载中 . . ."
+                    android:textColor="@color/black"
+                    android:textSize="20sp"
+                    android:textStyle="bold"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.cardview.widget.CardView>
 
-
-    <com.baidu.mapapi.map.MapView
-        android:id="@+id/bmapView"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:layout_marginBottom="32dp"
-        android:clickable="true"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.0" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -154,7 +154,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
     //url
     private static final String RECOMMEND_LOCAL_URL="http://api.map.baidu.com/parking/search?location=";
     private static final String RECOMMEND_AK_URL="&coordtype=bd09ll&ak=";
-    private static final String AK="RmmZVO6jFDooPymSqVdIeRUNpNgAMAza";
+    private static final String AK="TKLcNqbT9yHju7mYPWD0TMVoDGPgPCUs";
     private String SN = "";
 
     //WebSocket
@@ -380,6 +380,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
             case R.id.but_Loc: {
                 centerToMyLocation(mLatitude, mLongitude);
                 try {
+
                     tv_recommend.setText("为您推荐的最佳上车地点");
                     getRecommend();
                     displayRecommendPoint();
