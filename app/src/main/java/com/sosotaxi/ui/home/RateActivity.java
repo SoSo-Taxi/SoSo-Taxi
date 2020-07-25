@@ -8,12 +8,17 @@ package com.sosotaxi.ui.home;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.view.View;
 import android.widget.RatingBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.baidu.mapapi.map.InfoWindow;
 import com.sosotaxi.R;
+import com.sosotaxi.common.Constant;
+import com.sosotaxi.service.net.RateForDriverTask;
 import com.sosotaxi.ui.main.MainActivity;
 
 
@@ -47,6 +52,10 @@ public class RateActivity extends Activity {
             @Override
             public void onRatingChanged(RatingBar ratingBar, float rating, boolean fromUser) {
                 ratingForDriver=(double)rating;
+                //TODO: 获取订单ID
+                long orderId=0;
+                // 评价司机
+                new Thread(new RateForDriverTask(orderId,ratingForDriver,handler)).start();
             }
         });
 
@@ -70,4 +79,32 @@ public class RateActivity extends Activity {
         super.onDestroy();
         //在activity执行onDestroy时执行mMapView.onDestroy()，实现地图生命周期管理
     }
+
+    /**
+     * UI线程更新处理器
+     */
+    private Handler handler=new Handler(new Handler.Callback() {
+        @Override
+        public boolean handleMessage(Message msg) {
+            Bundle bundle = msg.getData();
+
+            // 提示异常信息
+            if(bundle.getString(Constant.EXTRA_ERROR)!=null){
+                Toast.makeText(getApplicationContext(), bundle.getString(Constant.EXTRA_ERROR), Toast.LENGTH_SHORT).show();
+                return false;
+            }
+
+            boolean isSuccessful = bundle.getBoolean(Constant.EXTRA_IS_SUCCESSFUL);
+            String message=bundle.getString(Constant.EXTRA_RESPONSE_MESSAGE);
+
+            if(isSuccessful){
+                // TODO: 评分成功UI操作
+                Toast.makeText(getApplicationContext(), "评价成功", Toast.LENGTH_SHORT).show();
+            }else{
+                // TODO: 评分失败UI操作
+                Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
+            }
+            return true;
+        }
+    });
 }
