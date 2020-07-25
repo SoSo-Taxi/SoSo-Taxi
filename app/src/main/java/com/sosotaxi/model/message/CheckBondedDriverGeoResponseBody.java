@@ -8,6 +8,7 @@ package com.sosotaxi.model.message;
 import android.graphics.Point;
 
 import com.google.gson.annotations.SerializedName;
+import com.sosotaxi.model.LocationPoint;
 
 /**
  * 查询司机与乘客距离响应主体
@@ -27,7 +28,7 @@ public class CheckBondedDriverGeoResponseBody extends BaseBody{
     /**
      * 司机位置
      */
-    private Point point;
+    private LocationPoint point;
 
     /**
      * 距离（以米为单位）
@@ -50,11 +51,11 @@ public class CheckBondedDriverGeoResponseBody extends BaseBody{
         this.message = message;
     }
 
-    public Point getPoint() {
+    public LocationPoint getPoint() {
         return point;
     }
 
-    public void setPoint(Point point) {
+    public void setPoint(LocationPoint point) {
         this.point = point;
     }
 
