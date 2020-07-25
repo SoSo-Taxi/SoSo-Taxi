@@ -1,7 +1,7 @@
 /**
  * @Author 岳兵
  * @CreateTime 2020/7/18
- * @UpdateTime 2020/7/19
+ * @UpdateTime 2020/7/23
  */
 package com.sosotaxi.ui.home;
 
@@ -15,6 +15,8 @@ import android.content.IntentFilter;
 import android.content.ServiceConnection;
 import android.os.Bundle;
 import android.os.IBinder;
+import android.view.View;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.sosotaxi.R;
@@ -47,6 +49,8 @@ public class PayActivity extends Activity {
 
     private MessageHelper mMessageHelper;
 
+    private TextView tv_pay;
+
 
 
     //token
@@ -57,6 +61,14 @@ public class PayActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_pay);
         token=getIntent().getStringExtra("token");
+        tv_pay=(TextView)findViewById(R.id.tv_pay);
+        tv_pay.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent= new Intent(PayActivity.this,RateActivity.class);
+                startActivity(intent);
+            }
+        });
 
         // 初始化服务并绑定
         startService();
@@ -73,11 +85,6 @@ public class PayActivity extends Activity {
     }
 
     private void initView(){
-
-
-
-
-
 
     }
 

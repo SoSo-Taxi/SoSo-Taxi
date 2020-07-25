@@ -6,31 +6,28 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <RelativeLayout
-        android:id="@+id/title"
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/constraintLayout15"
         android:layout_width="match_parent"
-        android:layout_height="53dp"
+        android:layout_height="50dp"
         app:layout_constraintBottom_toTopOf="@+id/bmapView"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
-
-            <TextView
-                android:id="@+id/textView38"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:text="@string/route_title"
-                android:textColor="@color/black"
-                android:textSize="18sp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-        </androidx.constraintlayout.widget.ConstraintLayout>
-    </RelativeLayout>
+        <TextView
+            android:id="@+id/textView38"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="@string/route_title"
+            android:textColor="@color/black"
+            android:textSize="18sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
     <com.baidu.mapapi.map.MapView
         android:id="@+id/bmapView"
@@ -41,12 +38,12 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/title">
+        app:layout_constraintTop_toBottomOf="@+id/constraintLayout15">
 
     </com.baidu.mapapi.map.MapView>
 
     <androidx.cardview.widget.CardView
-        android:id="@+id/cardView"
+        android:id="@+id/routecardview"
         android:layout_width="0dp"
         android:layout_height="320dp"
         app:cardCornerRadius="20dp"
@@ -57,6 +54,16 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent">
+
+            <ImageView
+                android:id="@+id/carroute"
+                android:layout_width="143dp"
+                android:layout_height="108dp"
+                android:layout_marginTop="13dp"
+                android:layout_marginEnd="38dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/routedivider1"
+                android:src="@drawable/crv" />
 
             <View
                 android:id="@+id/routedivider1"
@@ -105,7 +112,7 @@
                 app:layout_constraintTop_toBottomOf="@+id/goingtodest" />
 
             <TextView
-                android:id="@+id/license"
+                android:id="@+id/license_route"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="32dp"
@@ -127,7 +134,7 @@
                 android:textColor="@color/black"
                 android:textSize="16sp"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/license" />
+                app:layout_constraintTop_toBottomOf="@+id/license_route" />
 
             <TextView
                 android:id="@+id/destination_ex"
@@ -139,7 +146,7 @@
                 android:textColor="@color/black"
                 android:textSize="16sp"
                 app:layout_constraintStart_toEndOf="@+id/destination"
-                app:layout_constraintTop_toBottomOf="@+id/license" />
+                app:layout_constraintTop_toBottomOf="@+id/license_route" />
 
             <TextView
                 android:id="@+id/driver"
@@ -226,7 +233,7 @@
                     android:textSize="11sp" />
 
                 <ImageView
-                    android:id="@+id/imageView10"
+                    android:id="@+id/routemore"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
@@ -235,15 +242,6 @@
 
             </LinearLayout>
 
-            <ImageView
-                android:id="@+id/imageView11"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:layout_marginEnd="28dp"
-                android:src="@drawable/ic_user"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/routedivider1" />
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.cardview.widget.CardView>
 </androidx.constraintlayout.widget.ConstraintLayout>

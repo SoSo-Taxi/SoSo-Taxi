@@ -1,7 +1,7 @@
 /**
  * @Author 岳兵
  * @CreateTime 2020/7/18
- * @UpdateTime 2020/7/19
+ * @UpdateTime 2020/7/23
  */
 package com.sosotaxi.ui.home;
 
@@ -15,6 +15,7 @@ import android.content.ServiceConnection;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.util.Log;
+import android.widget.TextView;
 import android.widget.Toast;
 
 
@@ -39,6 +40,7 @@ import com.sosotaxi.model.DriverCarInfo;
 import com.sosotaxi.model.LocationPoint;
 import com.sosotaxi.model.Order;
 import com.sosotaxi.model.message.ArriveDepartPointToPassengerBody;
+import com.sosotaxi.model.message.ArriveDestPointMessageToPassengerBody;
 import com.sosotaxi.model.message.BaseMessage;
 import com.sosotaxi.model.message.CheckBondedDriverGeoBody;
 import com.sosotaxi.model.message.CheckBondedDriverGeoResponseBody;
@@ -88,6 +90,9 @@ public class RouteActivity extends Activity {
 
     private RoutePlanSearch mSearch;
 
+    private TextView tv_license;
+    private String license;
+
     //token
     private String token;
 
@@ -107,6 +112,10 @@ public class RouteActivity extends Activity {
         token=getIntent().getStringExtra("token");
         mOrder=getIntent().getParcelableExtra(Constant.EXTRA_ORDER);
         mDriver=getIntent().getParcelableExtra(Constant.EXTRA_DRIVER);
+        tv_license=(TextView)findViewById(R.id.license_route);
+        license=getIntent().getStringExtra("lisencePlate");
+        tv_license.setText(license);
+
 
         // 初始化服务并绑定
         startService();
@@ -124,7 +133,7 @@ public class RouteActivity extends Activity {
         initRoutePlan();
 
         // 查询司机实时位置
-        queryDriverLatestPoint();
+//        queryDriverLatestPoint();
     }
 
     private void initView(){
@@ -197,16 +206,17 @@ public class RouteActivity extends Activity {
                 Gson gson=new Gson();
                 BaseMessage message=gson.fromJson(json,BaseMessage.class);
                 Log.d("MESSAGE",json);
-                if(message.getType()==MessageType.ARRIVE_DEPART_POINT_TO_PASSENGER){
+                if(message.getType()==MessageType.ARRIVE_DEST_POINT_MESSAGE_TO_PASSENGER){
                     try {
                         JSONObject object=new JSONObject(json);
                         String bodyString=object.getString("body");
-                        ArriveDepartPointToPassengerBody body=gson.fromJson(bodyString,ArriveDepartPointToPassengerBody.class);
+                        ArriveDestPointMessageToPassengerBody body=gson.fromJson(bodyString,ArriveDestPointMessageToPassengerBody.class);
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
 
                     Intent orderIntent = new Intent(RouteActivity.this, PayActivity.class);
+//                    intent.putExtra()
                     intent.putExtra(Constant.EXTRA_ORDER,mOrder);
                     intent.putExtra(Constant.EXTRA_DRIVER,mDriver);
                     startActivity(orderIntent);

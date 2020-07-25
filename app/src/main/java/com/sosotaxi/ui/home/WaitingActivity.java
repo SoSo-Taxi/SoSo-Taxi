@@ -1,7 +1,7 @@
 /**
  * @Author 岳兵
  * @CreateTime 2020/7/18
- * @UpdateTime 2020/7/19
+ * @UpdateTime 2020/7/24
  */
 package com.sosotaxi.ui.home;
 
@@ -12,13 +12,15 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.ServiceConnection;
-import android.graphics.Point;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.util.Log;
+import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
+
+import androidx.constraintlayout.widget.ConstraintLayout;
 
 import com.baidu.mapapi.map.BaiduMap;
 import com.baidu.mapapi.map.MapView;
@@ -97,6 +99,7 @@ public class WaitingActivity extends Activity {
     private TextView carInfo;
     private TextView driverInfo;
     private TextView tv_rate;
+    private TextView waitingState;
 
     //token
     private String token;
@@ -126,6 +129,8 @@ public class WaitingActivity extends Activity {
 
     private DriverCarInfo mDriver;
 
+    ConstraintLayout barrierBlank;
+
     private QueryLatestPointTask mQueryLatestPointTask;
 
     @Override
@@ -138,8 +143,9 @@ public class WaitingActivity extends Activity {
         myLongitude = getIntent().getDoubleExtra("myLongitude", 1.0);
         mOrder = getIntent().getParcelableExtra(Constant.EXTRA_ORDER);
 
+
         // 初始化服务并绑定
-        startService();
+//        startService();
         bindService();
         registerReceiver();
 
@@ -153,14 +159,17 @@ public class WaitingActivity extends Activity {
     private void initView() {
 
         mMapView = (MapView) findViewById(R.id.bmapView);
+        barrierBlank=(ConstraintLayout)findViewById(R.id.barrierblank);
         tv_getCarPlace = (TextView) findViewById(R.id.getCarPlace);
         startPlace = getIntent().getStringExtra("startPoint");
         tv_getCarPlace.setText("请前往" + startPlace + "上车。若您改变行程，可在10分钟内免费取消。近期车辆较少，请尽量不取消，戴好口罩。");
-        license = (TextView) findViewById(R.id.license);
+        license = (TextView) findViewById(R.id.license_waiting);
         carInfo = (TextView) findViewById(R.id.carInfo);
         driverInfo = (TextView) findViewById(R.id.driverInfo);
         tv_rate = (TextView) findViewById(R.id.rate);
         mBaiduMap = mMapView.getMap();
+        waitingState=(TextView)findViewById(R.id.waitingstate);
+        waitingState.setText("正在为您搜索附近的车辆");
 
         // 获取路径规划对象
         mSearch = RoutePlanSearch.newInstance();
@@ -243,13 +252,15 @@ public class WaitingActivity extends Activity {
                         carBrand = mDriver.getCarBrand();
                         carColor = mDriver.getCarColor();
                         carInfo.setText(carBrand + "·" + carColor);
-                        driverName = mDriver.getDriverName();
-                        driverInfo.setText(driverName);
+                        driverInfo.setText("陈师傅");
                         rate = mDriver.getRate();
-                        String st_rate = "" + rate;
-                        tv_rate.setText(st_rate);
+                        waitingState.setText("快车司机正努力赶来，请避开人群等候");
+                        barrierBlank.setVisibility(View.INVISIBLE);
+
                         // 查询司机最新位置
-                        queryDriverLatestPoint();
+//                        queryDriverLatestPoint();
+
+
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
@@ -266,10 +277,13 @@ public class WaitingActivity extends Activity {
                         e.printStackTrace();
                     }
                 } else if (message.getType() == MessageType.ARRIVE_DEPART_POINT_TO_PASSENGER) {
+                    waitingState.setText("快车司机已经到达上车点");
 
                 } else if (message.getType() == MessageType.PICK_UP_PASSENGER_MESSAGE_TO_PASSENGER) {
                     Intent routeIntent = new Intent(WaitingActivity.this, RouteActivity.class);
                     routeIntent.putExtra("token", token);
+                    routeIntent.putExtra("licensePlate",licensePlate);
+
                     routeIntent.putExtra(Constant.EXTRA_ORDER,mOrder);
                     routeIntent.putExtra(Constant.EXTRA_DRIVER,mDriver);
                     startActivity(routeIntent);
@@ -321,8 +335,13 @@ public class WaitingActivity extends Activity {
         // 初始化查询位置任务
         mQueryLatestPointTask=new QueryLatestPointTask(Constant.TIME_INTERVAL,mMessageHelper,message);
 
+        mMessageHelper.send(message);
+
         // 开始任务
-        new Thread(mQueryLatestPointTask).start();
+//        new Thread(mQueryLatestPointTask).start();
+
+
+        Log.e("stop","stop");
     }
 
 
