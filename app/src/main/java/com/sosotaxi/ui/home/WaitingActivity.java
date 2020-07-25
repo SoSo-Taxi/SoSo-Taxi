@@ -145,7 +145,7 @@ public class WaitingActivity extends Activity {
 
 
         // 初始化服务并绑定
-//        startService();
+        startService();
         bindService();
         registerReceiver();
 
@@ -258,7 +258,7 @@ public class WaitingActivity extends Activity {
                         barrierBlank.setVisibility(View.INVISIBLE);
 
                         // 查询司机最新位置
-//                        queryDriverLatestPoint();
+                        queryDriverLatestPoint();
 
 
                     } catch (JSONException e) {
@@ -327,7 +327,7 @@ public class WaitingActivity extends Activity {
         // 封装消息
         CheckBondedDriverGeoBody body = new CheckBondedDriverGeoBody();
         body.setUserToken(token);
-        body.setGeoPoint(myLocation);
+        body.setPoint(myLocation);
 
         // 构造消息
         BaseMessage message = mMessageHelper.build(MessageType.CHECK_BONDED_DRIVER_GEO_MESSAGE, body);
