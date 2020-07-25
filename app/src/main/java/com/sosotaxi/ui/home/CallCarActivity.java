@@ -288,7 +288,8 @@ public class CallCarActivity extends AppCompatActivity {
         LocationPoint departpoint = new LocationPoint(myLatitude,myLongitude);
 
         LocationPoint destpoint= new LocationPoint(destLatitude,destLongitude);
-
+        Short chosen =(short)mTabLayout.getSelectedTabPosition();
+        Log.e("chosentab",""+chosen);
 
 
 
@@ -302,7 +303,7 @@ public class CallCarActivity extends AppCompatActivity {
         body.setPhoneNumber("8613683333113");
         body.setDepartPoint(departpoint);
         body.setDestinationPoint(destpoint);
-        body.setServiceType((short) 1);
+        body.setServiceType(chosen);
         body.setPassengerNum((short)1);
         body.setDepartName(myLocation);
         body.setDestName(destination);

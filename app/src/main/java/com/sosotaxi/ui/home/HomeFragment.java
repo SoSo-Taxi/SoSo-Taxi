@@ -108,6 +108,8 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
     private double dLongtitude;
     private double rLatitude;
     private double rLongitude;
+    private double pLatitude;
+    private double pLongitude;
     String myLocation= new String();
     private LatLng location;
     private LatLng mLastLocationData;
@@ -130,6 +132,9 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
 
     //推荐上车点
     private LatLng rLocation;
+
+    //poilocation
+    private LatLng poichosenLocation;
 
 
 
@@ -257,6 +262,10 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
                 //在地图上添加Marker，并显示
                 mBaiduMap.addOverlay(option);
                 poiName = arg0.getName();
+                poichosenLocation=arg0.getPosition();
+                pLatitude=poichosenLocation.latitude;
+                pLongitude=poichosenLocation.longitude;
+
                 rName=poiName;
                 tv_home_start.setText("您将从"+rName+"上车");
                 Log.e("rnameaaa",rName);
@@ -483,7 +492,12 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
             public void onClick(View v) {
 
 
-
+        if(rLongitude==0.0){
+            rLongitude=pLongitude;
+        }
+        if(rLatitude==0.0){
+            rLatitude=pLatitude;
+        }
 
 
                 Intent i = new Intent(getActivity(), CallCarActivity.class);
