@@ -107,6 +107,7 @@ android:orientation="vertical"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/divider3" />
 
+
                 <View
                     android:id="@+id/divider3"
                     android:layout_width="409dp"

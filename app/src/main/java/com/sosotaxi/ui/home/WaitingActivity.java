@@ -117,7 +117,7 @@ public class WaitingActivity extends Activity {
 
         //获取消息助手
         mMessageHelper=MessageHelper.getInstance();
-        sendMessage();
+
         initView();
 
 
@@ -199,26 +199,27 @@ public class WaitingActivity extends Activity {
                 BaseMessage message=gson.fromJson(json,BaseMessage.class);
                 Log.d("MESSAGE",json);
                 if(message.getType()== MessageType.ORDER_RESULT_MESSAGE){
-                    OrderResultBody body =(OrderResultBody) message.getBody();
-                    DriverCarInfo driverCarInfo = body.getDriverCarInfo();
-                    licensePlate = driverCarInfo.getLicensePlate();
-                    license.setText(licensePlate);
-                    carBrand=driverCarInfo.getCarBrand();
-                    carColor =driverCarInfo.getCarColor();
-                    carInfo.setText(carBrand+"·"+ carColor);
-                    driverName=driverCarInfo.getDriverName();
-                    driverInfo.setText(driverName);
-                    rate=driverCarInfo.getRate();
-                    String st_rate=""+rate;
-                    tv_rate.setText(st_rate);
+//                    OrderResultBody body =(OrderResultBody) message.getBody();
+//                    DriverCarInfo driverCarInfo = body.getDriverCarInfo();
+//                    licensePlate = driverCarInfo.getLicensePlate();
+//                    license.setText(licensePlate);
+//                    carBrand=driverCarInfo.getCarBrand();
+//                    carColor =driverCarInfo.getCarColor();
+//                    carInfo.setText(carBrand+"·"+ carColor);
+//                    driverName=driverCarInfo.getDriverName();
+//                    driverInfo.setText(driverName);
+//                    rate=driverCarInfo.getRate();
+//                    String st_rate=""+rate;
+//                    tv_rate.setText(st_rate);
+//
+                    sendMessage();
 
-
-                    initView();
                 }
                 else if(message.getType()==MessageType.CHECK_BONDED_DRIVER_GEO_RESPONSE){
                     CheckBondedDriverGeoResponseBody body = (CheckBondedDriverGeoResponseBody) message.getBody();
                     driverLocation=body.getPoint();
                     driverDistance=body.getDistance();
+
 
                 }
                 else if(message.getType()==MessageType.ARRIVE_DEPART_POINT_TO_PASSENGER){
@@ -264,7 +265,7 @@ public class WaitingActivity extends Activity {
         mMessageHelper.setClient(getClient());
 
         myLocation=new LocationPoint(myLatitude,myLongitude);
-        LocationPoint point=new LocationPoint(23.0,120.0);
+
 
         // 封装消息
         CheckBondedDriverGeoBody body=new CheckBondedDriverGeoBody();

@@ -19,7 +19,7 @@
 
         <com.baidu.mapapi.map.MapView
             android:id="@+id/bmapView"
-            android:layout_width="fill_parent"
+            android:layout_width="0dp"
             android:layout_height="0dp"
             android:clickable="true"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -65,6 +65,15 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/start" />
+
+        <View
+            android:id="@+id/divider6"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="?android:attr/listDivider"
+            app:layout_constraintBottom_toTopOf="@+id/dest"
+            app:layout_constraintEnd_toEndOf="@+id/start"
+            app:layout_constraintStart_toStartOf="@+id/start" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
