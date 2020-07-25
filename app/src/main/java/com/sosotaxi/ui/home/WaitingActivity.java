@@ -1,7 +1,7 @@
 /**
  * @Author 岳兵
  * @CreateTime 2020/7/18
- * @UpdateTime 2020/7/19
+ * @UpdateTime 2020/7/24
  */
 package com.sosotaxi.ui.home;
 
@@ -145,7 +145,7 @@ public class WaitingActivity extends Activity {
 
 
         // 初始化服务并绑定
-        startService();
+//        startService();
         bindService();
         registerReceiver();
 
@@ -252,16 +252,15 @@ public class WaitingActivity extends Activity {
                         carBrand = mDriver.getCarBrand();
                         carColor = mDriver.getCarColor();
                         carInfo.setText(carBrand + "·" + carColor);
-                        driverName = mDriver.getDriverName();
                         driverInfo.setText("陈师傅");
                         rate = mDriver.getRate();
-                        String st_rate = "" + rate;
-                        tv_rate.setText(st_rate);
                         waitingState.setText("快车司机正努力赶来，请避开人群等候");
                         barrierBlank.setVisibility(View.INVISIBLE);
 
                         // 查询司机最新位置
-                        queryDriverLatestPoint();
+//                        queryDriverLatestPoint();
+
+
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
@@ -278,10 +277,13 @@ public class WaitingActivity extends Activity {
                         e.printStackTrace();
                     }
                 } else if (message.getType() == MessageType.ARRIVE_DEPART_POINT_TO_PASSENGER) {
+                    waitingState.setText("快车司机已经到达上车点");
 
                 } else if (message.getType() == MessageType.PICK_UP_PASSENGER_MESSAGE_TO_PASSENGER) {
                     Intent routeIntent = new Intent(WaitingActivity.this, RouteActivity.class);
                     routeIntent.putExtra("token", token);
+                    routeIntent.putExtra("licensePlate",licensePlate);
+
                     routeIntent.putExtra(Constant.EXTRA_ORDER,mOrder);
                     routeIntent.putExtra(Constant.EXTRA_DRIVER,mDriver);
                     startActivity(routeIntent);
@@ -333,8 +335,13 @@ public class WaitingActivity extends Activity {
         // 初始化查询位置任务
         mQueryLatestPointTask=new QueryLatestPointTask(Constant.TIME_INTERVAL,mMessageHelper,message);
 
+        mMessageHelper.send(message);
+
         // 开始任务
-        new Thread(mQueryLatestPointTask).start();
+//        new Thread(mQueryLatestPointTask).start();
+
+
+        Log.e("stop","stop");
     }
 
 

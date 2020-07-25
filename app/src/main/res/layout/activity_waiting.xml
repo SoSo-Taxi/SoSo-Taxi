@@ -32,16 +32,6 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
-            <ImageView
-                android:id="@+id/waitingcar"
-                android:layout_width="148dp"
-                android:layout_height="102dp"
-                android:layout_marginTop="12dp"
-                android:layout_marginEnd="28dp"
-                android:src="@drawable/car"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/divider" />
-
             <View
                 android:id="@+id/divider"
                 android:layout_width="370dp"
@@ -150,6 +140,16 @@
                 app:layout_constraintStart_toEndOf="@+id/rate"
                 app:layout_constraintTop_toBottomOf="@+id/carInfo" />
 
+            <ImageView
+                android:id="@+id/crvwaiting"
+                android:layout_width="143dp"
+                android:layout_height="108dp"
+                android:layout_marginTop="13dp"
+                android:layout_marginEnd="38dp"
+                app:layout_constraintEnd_toEndOf="@+id/barrierblank"
+                app:layout_constraintTop_toBottomOf="@id/divider"
+                android:src="@drawable/crv" />
+
             <LinearLayout
                 android:layout_width="0dp"
                 android:layout_height="0dp"
@@ -238,7 +238,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:gravity="center"
-                    android:text="加载中 . . ."
+                    android:text="搜索中 . . ."
                     android:textColor="@color/black"
                     android:textSize="20sp"
                     android:textStyle="bold"
@@ -246,6 +246,7 @@
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
+
             </androidx.constraintlayout.widget.ConstraintLayout>
 
         </androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,16 +1,28 @@
+/**
+ * @Author 岳兵
+ * @CreateTime 2020/7/20
+ * @UpdateTime 2020/7/23
+ */
 package com.sosotaxi.ui.home;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.RatingBar;
+import android.widget.TextView;
 
+import com.baidu.mapapi.map.InfoWindow;
 import com.sosotaxi.R;
+import com.sosotaxi.ui.main.MainActivity;
 
 
 public class RateActivity extends Activity {
 
     private RatingBar ratingBar;
     private double ratingForDriver;
+
+    private TextView tv_back;
 
 
     @Override
@@ -19,7 +31,14 @@ public class RateActivity extends Activity {
         setContentView(R.layout.activity_rate);
         initView();
 
-
+        tv_back=(TextView)findViewById(R.id.backbut);
+        tv_back.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent=new Intent(RateActivity.this, MainActivity.class);
+                startActivity(intent);
+            }
+        });
     }
 
     private void initView(){
