@@ -87,22 +87,22 @@ public class Constant {
     /**
      * 查询是否已注册URL
      */
-    public static final String IS_REGISTERED_URL="http://122.51.162.119:8001/user/isRegistered";
+    public static final String IS_REGISTERED_URL="http://122.51.70.242:8001/user/isRegistered";
 
     /**
      * 注册URL
      */
-    public static final String REGISTER_URL="http://122.51.162.119:8001/user/registry";
+    public static final String REGISTER_URL="http://122.51.70.242:8001/user/registry";
 
     /**
      * 登陆URL
      */
-    public static final String LOGIN_URL="http://122.51.162.119:8001/auth/login";
+    public static final String LOGIN_URL="http://122.51.70.242:8001/auth/login";
 
     /**
      * WebSocket地址
      */
-    public static final String WEB_SOCKET_URI="ws://122.51.162.119:8001/webSocket?accessToken=";
+    public static final String WEB_SOCKET_URI="ws://122.51.70.242:8001/webSocket?accessToken=";
 
     /**
      * BODY类型

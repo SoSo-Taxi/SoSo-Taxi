@@ -5,6 +5,8 @@
  */
 package com.sosotaxi.utils;
 
+import android.util.Log;
+
 import com.google.gson.Gson;
 import com.sosotaxi.model.message.BaseBody;
 import com.sosotaxi.model.message.BaseMessage;
@@ -88,6 +90,7 @@ public class MessageHelper {
     public void send(BaseMessage message){
         //mSendMessageQueue.add(message);
         String json=gson.toJson(message);
+        Log.e("message",json);
         if(mClient!=null){
             mClient.send(json);
         }
