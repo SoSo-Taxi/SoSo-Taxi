@@ -123,6 +123,7 @@
         <activity android:name=".ui.home.WaitingActivity" />
         <activity android:name=".ui.home.RouteActivity"/>
         <activity android:name=".ui.home.PayActivity"/>
+        <activity android:name=".ui.home.RateActivity"/>
 
         <meta-data
             android:name="com.baidu.lbsapi.API_KEY"
