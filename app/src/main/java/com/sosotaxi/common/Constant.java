@@ -110,6 +110,11 @@ public class Constant {
     public static final String LOGIN_URL="http://122.51.70.242:8001/auth/login";
 
     /**
+     * 评价乘客URL
+     */
+    public static final String RATE_FOR_DRIVER_URL ="http://122.51.70.242:8001/passenger/rateForDriver?orderId=";
+
+    /**
      * WebSocket地址
      */
     public static final String WEB_SOCKET_URI="ws://122.51.70.242:8001/webSocket?accessToken=";
