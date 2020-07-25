@@ -18,11 +18,14 @@ import android.widget.Toast;
 import com.baidu.mapapi.map.InfoWindow;
 import com.sosotaxi.R;
 import com.sosotaxi.common.Constant;
+import com.sosotaxi.model.Order;
 import com.sosotaxi.service.net.RateForDriverTask;
 import com.sosotaxi.ui.main.MainActivity;
 
 
 public class RateActivity extends Activity {
+
+    private Order mOrder;
 
     private RatingBar ratingBar;
     private double ratingForDriver;
@@ -36,12 +39,16 @@ public class RateActivity extends Activity {
         setContentView(R.layout.activity_rate);
         initView();
 
+        mOrder=getIntent().getParcelableExtra(Constant.EXTRA_ORDER);
+
         tv_back=(TextView)findViewById(R.id.tv_back);
         tv_back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent=new Intent(RateActivity.this, MainActivity.class);
-                startActivity(intent);
+                // 获取订单ID
+                long orderId=mOrder.getOrderId();
+                // 评价司机
+                new Thread(new RateForDriverTask(orderId,ratingForDriver,handler)).start();
             }
         });
     }
@@ -52,10 +59,6 @@ public class RateActivity extends Activity {
             @Override
             public void onRatingChanged(RatingBar ratingBar, float rating, boolean fromUser) {
                 ratingForDriver=(double)rating;
-                //TODO: 获取订单ID
-                long orderId=0;
-                // 评价司机
-                new Thread(new RateForDriverTask(orderId,ratingForDriver,handler)).start();
             }
         });
 
@@ -98,10 +101,14 @@ public class RateActivity extends Activity {
             String message=bundle.getString(Constant.EXTRA_RESPONSE_MESSAGE);
 
             if(isSuccessful){
-                // TODO: 评分成功UI操作
+                // 提示评分成功
                 Toast.makeText(getApplicationContext(), "评价成功", Toast.LENGTH_SHORT).show();
+
+                // 跳转首页
+                Intent intent=new Intent(RateActivity.this, MainActivity.class);
+                startActivity(intent);
             }else{
-                // TODO: 评分失败UI操作
+                // 提示评分失败并显示原因
                 Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
             }
             return true;

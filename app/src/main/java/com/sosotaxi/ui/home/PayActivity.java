@@ -21,6 +21,7 @@ import android.widget.Toast;
 
 import com.sosotaxi.R;
 import com.sosotaxi.common.Constant;
+import com.sosotaxi.model.Order;
 import com.sosotaxi.service.net.OrderClient;
 import com.sosotaxi.service.net.OrderMessageReceiver;
 import com.sosotaxi.service.net.OrderService;
@@ -47,6 +48,8 @@ public class PayActivity extends Activity {
      */
     private OrderMessageReceiver mOrderMessageReceiver;
 
+    private Order mOrder;
+
     private MessageHelper mMessageHelper;
 
     private TextView tv_pay;
@@ -60,12 +63,16 @@ public class PayActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_pay);
+        mOrder=getIntent().getParcelableExtra(Constant.EXTRA_ORDER);
+
         token=getIntent().getStringExtra("token");
         tv_pay=(TextView)findViewById(R.id.tv_pay);
         tv_pay.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                // 跳转评价页面
                 Intent intent= new Intent(PayActivity.this,RateActivity.class);
+                intent.putExtra(Constant.EXTRA_ORDER,mOrder);
                 startActivity(intent);
             }
         });
