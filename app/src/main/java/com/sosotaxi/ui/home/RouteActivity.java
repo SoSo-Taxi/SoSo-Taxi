@@ -18,19 +18,44 @@ import android.util.Log;
 import android.widget.Toast;
 
 
+import com.baidu.mapapi.map.BaiduMap;
 import com.baidu.mapapi.map.MapView;
+import com.baidu.mapapi.model.LatLng;
+import com.baidu.mapapi.search.route.BikingRouteResult;
+import com.baidu.mapapi.search.route.DrivingRouteLine;
+import com.baidu.mapapi.search.route.DrivingRoutePlanOption;
+import com.baidu.mapapi.search.route.DrivingRouteResult;
+import com.baidu.mapapi.search.route.IndoorRouteResult;
+import com.baidu.mapapi.search.route.MassTransitRouteResult;
+import com.baidu.mapapi.search.route.OnGetRoutePlanResultListener;
+import com.baidu.mapapi.search.route.PlanNode;
+import com.baidu.mapapi.search.route.RoutePlanSearch;
+import com.baidu.mapapi.search.route.TransitRouteResult;
+import com.baidu.mapapi.search.route.WalkingRouteResult;
 import com.google.gson.Gson;
 import com.sosotaxi.R;
 import com.sosotaxi.common.Constant;
+import com.sosotaxi.model.DriverCarInfo;
 import com.sosotaxi.model.LocationPoint;
+import com.sosotaxi.model.Order;
+import com.sosotaxi.model.message.ArriveDepartPointToPassengerBody;
 import com.sosotaxi.model.message.BaseMessage;
 import com.sosotaxi.model.message.CheckBondedDriverGeoBody;
+import com.sosotaxi.model.message.CheckBondedDriverGeoResponseBody;
 import com.sosotaxi.model.message.MessageType;
+import com.sosotaxi.model.message.OrderResultBody;
 import com.sosotaxi.service.net.OrderClient;
 import com.sosotaxi.service.net.OrderMessageReceiver;
 import com.sosotaxi.service.net.OrderService;
+import com.sosotaxi.service.net.QueryLatestPointTask;
+import com.sosotaxi.ui.overlay.DrivingRouteOverlay;
 import com.sosotaxi.ui.userInformation.wallet.PaymentSettingActivity;
 import com.sosotaxi.utils.MessageHelper;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.List;
 
 
 public class RouteActivity extends Activity {
@@ -59,14 +84,29 @@ public class RouteActivity extends Activity {
 
     private MapView mMapView =null;
 
+    private BaiduMap mBaiduMap;
+
+    private RoutePlanSearch mSearch;
+
     //token
     private String token;
+
+    //driver location
+    private LocationPoint driverLocation;
+
+    private Order mOrder;
+
+    private DriverCarInfo mDriver;
+
+    private QueryLatestPointTask mQueryLatestPointTask;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_route);
         token=getIntent().getStringExtra("token");
+        mOrder=getIntent().getParcelableExtra(Constant.EXTRA_ORDER);
+        mDriver=getIntent().getParcelableExtra(Constant.EXTRA_DRIVER);
 
         // 初始化服务并绑定
         startService();
@@ -80,18 +120,24 @@ public class RouteActivity extends Activity {
 
         initView();
 
+        //路径规划
+        initRoutePlan();
+
+        // 查询司机实时位置
+        queryDriverLatestPoint();
     }
 
     private void initView(){
 
         mMapView = (MapView)findViewById(R.id.bmapView);
+        mBaiduMap=mMapView.getMap();
 
+        // 获取路径规划对象
+        mSearch = RoutePlanSearch.newInstance();
 
-
-
+        // 设置路径规划结果监听器
+        mSearch.setOnGetRoutePlanResultListener(onGetRoutePlanResultListener);
     }
-
-
 
     @Override
     protected void onResume() {
@@ -110,10 +156,16 @@ public class RouteActivity extends Activity {
         super.onDestroy();
         //在activity执行onDestroy时执行mMapView.onDestroy()，实现地图生命周期管理
         mMapView.onDestroy();
-        // 断开连接
-        unbindService(serviceConnection);
-        if(mOrderMessageReceiver!=null){
+        try{
+            // 断开连接
+            unbindService(serviceConnection);
             unregisterReceiver(mOrderMessageReceiver);
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        if(mQueryLatestPointTask.isExit()==false){
+            // 停止查询司机位置
+            mQueryLatestPointTask.setIsExit(true);
         }
     }
     /**
@@ -146,8 +198,29 @@ public class RouteActivity extends Activity {
                 BaseMessage message=gson.fromJson(json,BaseMessage.class);
                 Log.d("MESSAGE",json);
                 if(message.getType()==MessageType.ARRIVE_DEPART_POINT_TO_PASSENGER){
+                    try {
+                        JSONObject object=new JSONObject(json);
+                        String bodyString=object.getString("body");
+                        ArriveDepartPointToPassengerBody body=gson.fromJson(bodyString,ArriveDepartPointToPassengerBody.class);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+
                     Intent orderIntent = new Intent(RouteActivity.this, PayActivity.class);
+                    intent.putExtra(Constant.EXTRA_ORDER,mOrder);
+                    intent.putExtra(Constant.EXTRA_DRIVER,mDriver);
                     startActivity(orderIntent);
+                }else if(message.getType() == MessageType.CHECK_BONDED_DRIVER_GEO_RESPONSE){
+                    try {
+                        JSONObject object = new JSONObject(json);
+                        String bodyString = object.getString("body");
+                        CheckBondedDriverGeoResponseBody body = gson.fromJson(bodyString,CheckBondedDriverGeoResponseBody.class);
+                        driverLocation = body.getPoint();
+                        // 路径规划
+                        initRoutePlan();
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
                 }
             }
         }, intentFilter);
@@ -176,32 +249,85 @@ public class RouteActivity extends Activity {
     }
 
     /**
-     * 发送示例
+     * 查询司机位置
      */
-    public void sendDemo(){
+    public void queryDriverLatestPoint() {
 
         mMessageHelper.setClient(getClient());
 
-        String token="";
-        LocationPoint point=new LocationPoint(23.0,120.0);
-
         // 封装消息
-        CheckBondedDriverGeoBody body=new CheckBondedDriverGeoBody();
+        CheckBondedDriverGeoBody body = new CheckBondedDriverGeoBody();
         body.setUserToken(token);
-        body.setGeoPoint(point);
+        body.setGeoPoint(driverLocation);
 
-        // 发送方式一
         // 构造消息
-        BaseMessage message=mMessageHelper.build(MessageType.CHECK_BONDED_DRIVER_GEO_MESSAGE,body);
-        // 发送消息
-        mMessageHelper.send(message);
+        BaseMessage message = mMessageHelper.build(MessageType.CHECK_BONDED_DRIVER_GEO_MESSAGE, body);
 
-        // 发送方式二
-        mMessageHelper.send(MessageType.CHECK_BONDED_DRIVER_GEO_MESSAGE,body);
+        // 初始化查询位置任务
+        mQueryLatestPointTask=new QueryLatestPointTask(Constant.TIME_INTERVAL,mMessageHelper,message);
+
+        // 开始任务
+        new Thread(mQueryLatestPointTask).start();
     }
 
+    /**
+     * 路线规划结果返回监听类
+     */
+    OnGetRoutePlanResultListener onGetRoutePlanResultListener = new OnGetRoutePlanResultListener() {
+        @Override
+        public void onGetWalkingRouteResult(WalkingRouteResult walkingRouteResult) {
 
+        }
 
+        @Override
+        public void onGetTransitRouteResult(TransitRouteResult transitRouteResult) {
 
+        }
+
+        @Override
+        public void onGetMassTransitRouteResult(MassTransitRouteResult massTransitRouteResult) {
+
+        }
+
+        @Override
+        public void onGetDrivingRouteResult(DrivingRouteResult drivingRouteResult) {
+            //创建DrivingRouteOverlay实例
+            DrivingRouteOverlay overlay = new DrivingRouteOverlay(mBaiduMap);
+            // 清除原有路线
+            overlay.removeFromMap();
+            List<DrivingRouteLine> routes = drivingRouteResult.getRouteLines();
+            if (routes != null && routes.size() > 0) {
+                //获取路径规划数据
+                //为DrivingRouteOverlay实例设置数据
+                overlay.setData(drivingRouteResult.getRouteLines().get(0));
+                //在地图上绘制路线
+                overlay.addToMap(false);
+                overlay.zoomToSpanPaddingBounds(200, 200, 200, 300);
+            }
+        }
+
+        @Override
+        public void onGetIndoorRouteResult(IndoorRouteResult indoorRouteResult) {
+
+        }
+
+        @Override
+        public void onGetBikingRouteResult(BikingRouteResult bikingRouteResult) {
+
+        }
+    };
+
+    /**
+     * 初始化路径规划
+     */
+    private void initRoutePlan() {
+        Toast.makeText(getApplicationContext(), "开始路径规划", Toast.LENGTH_SHORT).show();
+
+        PlanNode startNode = PlanNode.withLocation(new LatLng(mOrder.getDepartPoint().getLatitude(),mOrder.getDepartPoint().getLongitude()));
+        PlanNode endNode = PlanNode.withLocation(new LatLng(mOrder.getDestinationPoint().getLatitude(),mOrder.getDestinationPoint().getLongitude()));
+        mSearch.drivingSearch((new DrivingRoutePlanOption())
+                .from(startNode)
+                .to(endNode));
+    }
 
 }

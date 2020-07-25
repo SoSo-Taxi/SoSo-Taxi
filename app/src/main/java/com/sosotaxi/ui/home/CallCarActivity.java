@@ -46,6 +46,7 @@ import com.google.android.material.tabs.TabLayoutMediator;
 import com.sosotaxi.R;
 import com.sosotaxi.common.Constant;
 import com.sosotaxi.model.LocationPoint;
+import com.sosotaxi.model.Order;
 import com.sosotaxi.model.message.BaseMessage;
 import com.sosotaxi.model.message.MessageType;
 import com.sosotaxi.model.message.StartOrderBody;
@@ -109,6 +110,8 @@ public class CallCarActivity extends AppCompatActivity {
 
     private MessageHelper mMessageHelper;
 
+    private Order mOrder;
+
 
     /** TabLayout调谐器 */
     private TabLayoutMediator mMediator;
@@ -120,6 +123,8 @@ public class CallCarActivity extends AppCompatActivity {
         initTitle();
         initView();
         initData();
+
+        // 路径规划
         initRoutePlan();
 
         // 初始化服务并绑定
@@ -181,10 +186,10 @@ public class CallCarActivity extends AppCompatActivity {
                 intent.putExtra("token",token);
                 intent.putExtra("myLatitude",myLatitude);
                 intent.putExtra("myLongitude",myLongitude);
+                intent.putExtra(Constant.EXTRA_ORDER,mOrder);
                 startActivity(intent);
             }
         });
-
     }
 
     private void initData(){
@@ -273,9 +278,12 @@ public class CallCarActivity extends AppCompatActivity {
         //在activity执行onDestroy时执行mMapView.onDestroy()，实现地图生命周期管理
         mMapView.onDestroy();
         // 断开连接
-        unbindService(serviceConnection);
-        if(mOrderMessageReceiver!=null){
+        try{
+            // 断开连接
+            unbindService(serviceConnection);
             unregisterReceiver(mOrderMessageReceiver);
+        }catch (Exception e){
+            e.printStackTrace();
         }
     }
 
@@ -283,8 +291,6 @@ public class CallCarActivity extends AppCompatActivity {
      * 发送消息
      */
     private void sendMessage(){
-
-
         LocationPoint departpoint = new LocationPoint(myLatitude,myLongitude);
 
         LocationPoint destpoint= new LocationPoint(destLatitude,destLongitude);
@@ -307,6 +313,14 @@ public class CallCarActivity extends AppCompatActivity {
         body.setPassengerNum((short)1);
         body.setDepartName(myLocation);
         body.setDestName(destination);
+
+        // 创建订单
+        mOrder=new Order();
+        mOrder.setDepartPoint(departpoint);
+        mOrder.setDestinationPoint(destpoint);
+        mOrder.setDepartName(myLocation);
+        mOrder.setDestinationName(destination);
+
         // 发送方式一
         // 构造消息
         mMessageHelper.setClient(getClient());

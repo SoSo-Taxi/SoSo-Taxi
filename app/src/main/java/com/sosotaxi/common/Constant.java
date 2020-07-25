@@ -85,6 +85,16 @@ public class Constant {
     public static final String EXTRA_ERROR="com.sosotaxi.ui.login.EXTRA_ERROR";
 
     /**
+     * 司机EXTRA
+     */
+    public static final String EXTRA_DRIVER="com.sosotaxi.home.EXTRA_DRIVER";
+
+    /**
+     * 订单EXTRA
+     */
+    public static final String EXTRA_ORDER="com.sosotaxi.home.EXTRA_ORDER";
+
+    /**
      * 查询是否已注册URL
      */
     public static final String IS_REGISTERED_URL="http://122.51.70.242:8001/user/isRegistered";
@@ -138,6 +148,11 @@ public class Constant {
      * 广播过滤器
      */
     public static final String FILTER_CONTENT="com.sosotaxi.driver.service.callback.content";
+
+    /**
+     * 查询时间间隔
+     */
+    public static final long TIME_INTERVAL=5000;
 
     public static final int PERMISSION_READ_CONTACTS_CODE = 200;
     public static final int SETTING_RESULT_CODE = 201;

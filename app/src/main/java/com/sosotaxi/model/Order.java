@@ -1,7 +1,11 @@
 package com.sosotaxi.model;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import com.google.gson.annotations.SerializedName;
 
+import java.io.Serializable;
 import java.util.Date;
 
 /**
@@ -9,7 +13,7 @@ import java.util.Date;
  * @CreateTime 2020/7/21
  * @UpdateTime 2020/7/21
  */
-public class Order {
+public class Order implements Parcelable {
 
     /** 订单Id */
     private Long orderId;
@@ -21,7 +25,8 @@ public class Order {
     private LocationPoint departPoint;
 
     /** 目的地 */
-    private LocationPoint destPoint;
+    @SerializedName("destPoint")
+    private LocationPoint destinationPoint;
 
     /** 订单创建时间 */
     private Date createTime;
@@ -72,6 +77,110 @@ public class Order {
     /** 乘客Id */
     private Long passengerId;
 
+    /**
+     * 乘客手机号
+     */
+    private transient String passengerPhoneNumber;
+
+    public Order(){}
+
+    protected Order(Parcel in) {
+        if (in.readByte() == 0) {
+            orderId = null;
+        } else {
+            orderId = in.readLong();
+        }
+        city = in.readString();
+        departPoint = in.readParcelable(LocationPoint.class.getClassLoader());
+        destinationPoint = in.readParcelable(LocationPoint.class.getClassLoader());
+        if(in.readByte()==0){
+            createTime=null;
+        }else{
+            createTime=new Date(in.readLong());
+        }
+        if(in.readByte()==0){
+            appointedTime=null;
+        }else{
+            appointedTime=new Date(in.readLong());
+        }
+        if(in.readByte()==0){
+            departTime=null;
+        }else{
+            departTime=new Date(in.readLong());
+        }
+        if(in.readByte()==0){
+            arriveTime=null;
+        }else{
+            arriveTime=new Date(in.readLong());
+        }
+        departName = in.readString();
+        destinationName = in.readString();
+        int tmpServiceType = in.readInt();
+        serviceType = tmpServiceType != Integer.MAX_VALUE ? (short) tmpServiceType : null;
+        if (in.readByte() == 0) {
+            cost = null;
+        } else {
+            cost = in.readDouble();
+        }
+        if (in.readByte() == 0) {
+            pointDiscount = null;
+        } else {
+            pointDiscount = in.readDouble();
+        }
+        if (in.readByte() == 0) {
+            couponDiscount = null;
+        } else {
+            couponDiscount = in.readDouble();
+        }
+        status = in.readInt();
+        if (in.readByte() == 0) {
+            driverRate = null;
+        } else {
+            driverRate = in.readDouble();
+        }
+        if (in.readByte() == 0) {
+            passengerRate = null;
+        } else {
+            passengerRate = in.readDouble();
+        }
+        if (in.readByte() == 0) {
+            distance = null;
+        } else {
+            distance = in.readDouble();
+        }
+        if (in.readByte() == 0) {
+            driverId = null;
+        } else {
+            driverId = in.readLong();
+        }
+        if (in.readByte() == 0) {
+            passengerId = null;
+        } else {
+            passengerId = in.readLong();
+        }
+        passengerPhoneNumber = in.readString();
+    }
+
+    public static final Creator<Order> CREATOR = new Creator<Order>() {
+        @Override
+        public Order createFromParcel(Parcel in) {
+            return new Order(in);
+        }
+
+        @Override
+        public Order[] newArray(int size) {
+            return new Order[size];
+        }
+    };
+
+    public String getPassengerPhoneNumber() {
+        return passengerPhoneNumber;
+    }
+
+    public void setPassengerPhoneNumber(String passengerPhoneNumber) {
+        this.passengerPhoneNumber = passengerPhoneNumber;
+    }
+
     public Long getOrderId() {
         return orderId;
     }
@@ -96,12 +205,12 @@ public class Order {
         this.departPoint = departPoint;
     }
 
-    public LocationPoint getDestPoint() {
-        return destPoint;
+    public LocationPoint getDestinationPoint() {
+        return destinationPoint;
     }
 
-    public void setDestPoint(LocationPoint destPoint) {
-        this.destPoint = destPoint;
+    public void setDestinationPoint(LocationPoint destPoint) {
+        this.destinationPoint = destPoint;
     }
 
     public Date getCreateTime() {
@@ -230,5 +339,102 @@ public class Order {
 
     public void setPassengerId(Long passengerId) {
         this.passengerId = passengerId;
+    }
+
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        if (orderId == null) {
+            dest.writeByte((byte) 0);
+        } else {
+            dest.writeByte((byte) 1);
+            dest.writeLong(orderId);
+        }
+        dest.writeString(city);
+        dest.writeParcelable(departPoint, flags);
+        dest.writeParcelable(destinationPoint, flags);
+        if(createTime==null){
+            dest.writeByte((byte) 0);
+        }else{
+            dest.writeByte((byte) 1);
+            dest.writeLong(createTime.getTime());
+        }
+        if(appointedTime==null){
+            dest.writeByte((byte) 0);
+        }else{
+            dest.writeByte((byte) 1);
+            dest.writeLong(appointedTime.getTime());
+        }
+        if(departTime==null){
+            dest.writeByte((byte) 0);
+        }else{
+            dest.writeByte((byte) 1);
+            dest.writeLong(departTime.getTime());
+        }
+        if(arriveTime==null){
+            dest.writeByte((byte) 0);
+        }else{
+            dest.writeByte((byte) 1);
+            dest.writeLong(arriveTime.getTime());
+        }
+        dest.writeString(departName);
+        dest.writeString(destinationName);
+        dest.writeInt(serviceType != null ? (int) serviceType : Integer.MAX_VALUE);
+        if (cost == null) {
+            dest.writeByte((byte) 0);
+        } else {
+            dest.writeByte((byte) 1);
+            dest.writeDouble(cost);
+        }
+        if (pointDiscount == null) {
+            dest.writeByte((byte) 0);
+        } else {
+            dest.writeByte((byte) 1);
+            dest.writeDouble(pointDiscount);
+        }
+        if (couponDiscount == null) {
+            dest.writeByte((byte) 0);
+        } else {
+            dest.writeByte((byte) 1);
+            dest.writeDouble(couponDiscount);
+        }
+        dest.writeInt(status);
+        if (driverRate == null) {
+            dest.writeByte((byte) 0);
+        } else {
+            dest.writeByte((byte) 1);
+            dest.writeDouble(driverRate);
+        }
+        if (passengerRate == null) {
+            dest.writeByte((byte) 0);
+        } else {
+            dest.writeByte((byte) 1);
+            dest.writeDouble(passengerRate);
+        }
+        if (distance == null) {
+            dest.writeByte((byte) 0);
+        } else {
+            dest.writeByte((byte) 1);
+            dest.writeDouble(distance);
+        }
+        if (driverId == null) {
+            dest.writeByte((byte) 0);
+        } else {
+            dest.writeByte((byte) 1);
+            dest.writeLong(driverId);
+        }
+        if (passengerId == null) {
+            dest.writeByte((byte) 0);
+        } else {
+            dest.writeByte((byte) 1);
+            dest.writeLong(passengerId);
+        }
+        dest.writeString(passengerPhoneNumber);
+
     }
 }

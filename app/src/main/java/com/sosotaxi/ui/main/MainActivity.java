@@ -125,7 +125,6 @@ public class MainActivity extends AppCompatActivity
             mUsername = bundle.getString(Constant.EXTRA_PHONE);
             new Thread(new GetPersonalDataTask(mUsername,mFillTextHandler)).start();
         }
-        mUserName.setText(TelephoneEncryption.telephoneEncryption("13613616136"));
 
         mUserOtherInfo.setText("白银会员");
 

@@ -1,6 +1,9 @@
 package com.sosotaxi.model;
 
-public class DriverCarInfo {
+import android.os.Parcel;
+import android.os.Parcelable;
+
+public class DriverCarInfo implements Parcelable {
 
 
     /** 司机id */
@@ -38,6 +41,33 @@ public class DriverCarInfo {
     /* orderNum */
     private long orderNum;
 
+    public DriverCarInfo(){}
+
+    protected DriverCarInfo(Parcel in) {
+        driverId = in.readLong();
+        driverName = in.readString();
+        phoneNumber = in.readString();
+        avatarpath = in.readString();
+        carBrand = in.readString();
+        carModel = in.readString();
+        carColor = in.readString();
+        licensePlate = in.readString();
+        serviceType = (short) in.readInt();
+        rate = in.readDouble();
+        orderNum = in.readLong();
+    }
+
+    public static final Creator<DriverCarInfo> CREATOR = new Creator<DriverCarInfo>() {
+        @Override
+        public DriverCarInfo createFromParcel(Parcel in) {
+            return new DriverCarInfo(in);
+        }
+
+        @Override
+        public DriverCarInfo[] newArray(int size) {
+            return new DriverCarInfo[size];
+        }
+    };
 
     public long getDriverId() {
         return driverId;
@@ -125,5 +155,25 @@ public class DriverCarInfo {
 
     public void setOrderNum(long orderNum) {
         this.orderNum = orderNum;
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeLong(driverId);
+        dest.writeString(driverName);
+        dest.writeString(phoneNumber);
+        dest.writeString(avatarpath);
+        dest.writeString(carBrand);
+        dest.writeString(carModel);
+        dest.writeString(carColor);
+        dest.writeString(licensePlate);
+        dest.writeInt((int) serviceType);
+        dest.writeDouble(rate);
+        dest.writeLong(orderNum);
     }
 }
