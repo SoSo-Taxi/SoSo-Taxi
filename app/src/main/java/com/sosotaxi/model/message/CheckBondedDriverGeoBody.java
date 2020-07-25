@@ -19,7 +19,7 @@ public class CheckBondedDriverGeoBody extends BaseBody{
     /**
      * 乘客位置
      */
-    private LocationPoint geoPoint;
+    private LocationPoint point;
 
     public String getUserToken() {
         return userToken;
@@ -29,11 +29,11 @@ public class CheckBondedDriverGeoBody extends BaseBody{
         this.userToken = userToken;
     }
 
-    public LocationPoint getGeoPoint() {
-        return geoPoint;
+    public LocationPoint getPoint() {
+        return point;
     }
 
-    public void setGeoPoint(LocationPoint geoPoint) {
-        this.geoPoint = geoPoint;
+    public void setPoint(LocationPoint geoPoint) {
+        this.point = geoPoint;
     }
 }
