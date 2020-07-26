@@ -38,7 +38,7 @@
                 android:layout_marginTop="24dp"
                 android:drawableLeft="@drawable/ic_rate_driver"
                 android:drawablePadding="5dp"
-                android:text="陈师傅"
+                android:text="王师傅"
                 android:textColor="@color/black"
                 android:textSize="20sp"
                 app:layout_constraintStart_toStartOf="parent"

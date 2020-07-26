@@ -113,7 +113,7 @@ public class RouteActivity extends Activity {
         mOrder=getIntent().getParcelableExtra(Constant.EXTRA_ORDER);
         mDriver=getIntent().getParcelableExtra(Constant.EXTRA_DRIVER);
         tv_license=(TextView)findViewById(R.id.license_route);
-        license=getIntent().getStringExtra("lisencePlate");
+        license=getIntent().getStringExtra("licensePlate");
         tv_license.setText(license);
 
 
@@ -312,7 +312,8 @@ public class RouteActivity extends Activity {
                 overlay.setData(drivingRouteResult.getRouteLines().get(0));
                 //在地图上绘制路线
                 overlay.addToMap(false);
-                overlay.zoomToSpanPaddingBounds(200, 200, 200, 300);
+                overlay.zoomToSpanPaddingBounds(100, 300, 100, 300);
+
             }
         }
 

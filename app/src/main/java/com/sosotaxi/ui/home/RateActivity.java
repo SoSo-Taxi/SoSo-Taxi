@@ -108,6 +108,8 @@ public class RateActivity extends Activity {
                 Intent intent=new Intent(RateActivity.this, MainActivity.class);
                 startActivity(intent);
             }else{
+                // TODO: 评分失败UI操作
+                Toast.makeText(getApplicationContext(), "评价成功", Toast.LENGTH_SHORT).show();
                 // 提示评分失败并显示原因
                 Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
             }
