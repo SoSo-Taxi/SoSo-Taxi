@@ -152,7 +152,7 @@ public class Constant {
     /**
      * 广播过滤器
      */
-    public static final String FILTER_CONTENT="com.sosotaxi.driver.service.callback.content";
+    public static final String FILTER_CONTENT="com.sosotaxi.service.callback.content";
 
     /**
      * 查询时间间隔
