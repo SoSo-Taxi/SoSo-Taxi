@@ -125,6 +125,8 @@ public class WaitingActivity extends Activity {
     //driver distance
     private double driverDistance;
 
+    private String aaa;
+
     private Order mOrder;
 
     private DriverCarInfo mDriver;
@@ -251,10 +253,11 @@ public class WaitingActivity extends Activity {
                         license.setText(licensePlate);
                         carBrand = mDriver.getCarBrand();
                         carColor = mDriver.getCarColor();
-                        carInfo.setText(carBrand + "·" + carColor);
-                        driverInfo.setText("陈师傅");
+                        carInfo.setText(carBrand+"CRV"+ "·" + carColor+"色");
+
                         rate = mDriver.getRate();
-                        waitingState.setText("快车司机正努力赶来，请避开人群等候");
+                        aaa="快车司机正努力赶来，请避开人群等候";
+                        waitingState.setText(aaa);
                         barrierBlank.setVisibility(View.INVISIBLE);
 
                         // 查询司机最新位置
@@ -277,7 +280,9 @@ public class WaitingActivity extends Activity {
                         e.printStackTrace();
                     }
                 } else if (message.getType() == MessageType.ARRIVE_DEPART_POINT_TO_PASSENGER) {
-                    waitingState.setText("快车司机已经到达上车点");
+                    aaa="快车司机已经到达上车点";
+                    waitingState.setText(aaa);
+
 
                 } else if (message.getType() == MessageType.PICK_UP_PASSENGER_MESSAGE_TO_PASSENGER) {
                     Intent routeIntent = new Intent(WaitingActivity.this, RouteActivity.class);

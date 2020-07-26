@@ -13,11 +13,20 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.ServiceConnection;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.view.View;
+import android.widget.FrameLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.annotation.RequiresApi;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 
 import com.sosotaxi.R;
 import com.sosotaxi.common.Constant;
@@ -26,58 +35,70 @@ import com.sosotaxi.service.net.OrderMessageReceiver;
 import com.sosotaxi.service.net.OrderService;
 import com.sosotaxi.utils.MessageHelper;
 
-public class PayActivity extends Activity {
-    /**
-     * 连接器
-     */
-    private OrderClient mDriverOrderClient;
+public class PayActivity extends AppCompatActivity {
 
-    /**
-     * WebSocket服务
-     */
-    private OrderService mDriverOrderService;
-
-    /**
-     * 绑定
-     */
-    private OrderService.DriverOrderBinder mBinder;
-
-    /**
-     * 接收器
-     */
-    private OrderMessageReceiver mOrderMessageReceiver;
-
-    private MessageHelper mMessageHelper;
 
     private TextView tv_pay;
+
+    private PayPsdInputView payPsdInputView;
+
+    private FrameLayout paywindow;
+
+    private ConstraintLayout paypay;
 
 
 
     //token
     private String token;
 
+    @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_pay);
         token=getIntent().getStringExtra("token");
+        paypay=(ConstraintLayout)findViewById(R.id.paypay);
+        if (paypay.getForeground()!=null){
+            paypay.getForeground().setAlpha(0);
+        }
+        paywindow=(FrameLayout)findViewById(R.id.paywindow);
         tv_pay=(TextView)findViewById(R.id.tv_pay);
+
         tv_pay.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent= new Intent(PayActivity.this,RateActivity.class);
-                startActivity(intent);
+                paypay.getForeground().setAlpha(127);
+                paywindow.setVisibility(View.VISIBLE);
             }
         });
 
-        // 初始化服务并绑定
-        startService();
-        bindService();
-        registerReceiver();
+        payPsdInputView=(PayPsdInputView)findViewById(R.id.payview);
+        payPsdInputView.setComparePassword("123456", new PayPsdInputView.onPasswordListener() {
+            @Override
+            public void onDifference(String oldPsd, String newPsd) {
+                // TODO: 2017/5/7   和上次输入的密码不一致  做相应的业务逻辑处理
+                Toast.makeText(PayActivity.this,"两次密码输入不同",Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onEqual(String psd) {
+                // TODO: 2017/5/7 两次输入密码相同，那就去进行支付楼
+                Toast.makeText(PayActivity.this,"密码相同"+psd,Toast.LENGTH_SHORT).show();
+                Intent intent= new Intent(PayActivity.this,RateActivity.class);
+                startActivity(intent);
+
+            }
+
+            @Override
+            public void inputFinished(String inputPsd) {
+
+            }
+        });
 
 
-        //获取消息助手
-        mMessageHelper=MessageHelper.getInstance();
+
+
+
 
 
         initView();
@@ -107,57 +128,9 @@ public class PayActivity extends Activity {
         super.onDestroy();
         //在activity执行onDestroy时执行mMapView.onDestroy()，实现地图生命周期管理
         // 断开连接
-        unbindService(serviceConnection);
-        if(mOrderMessageReceiver!=null){
-            unregisterReceiver(mOrderMessageReceiver);
-        }
-    }
-    /**
-     * 开启WebSocket服务
-     */
-    private void startService(){
-        Intent intent=new Intent(getApplicationContext(),OrderService.class);
-        startService(intent);
+
     }
 
-    /**
-     * 绑定服务
-     */
-    private void bindService(){
-        Intent intent = new Intent(getApplicationContext(), OrderService.class);
-        bindService(intent, serviceConnection, BIND_AUTO_CREATE);
-    }
-
-    /**
-     * 注册广播接收器
-     */
-    private void registerReceiver(){
-        mOrderMessageReceiver=new OrderMessageReceiver();
-        IntentFilter intentFilter=new IntentFilter(Constant.FILTER_CONTENT);
-        registerReceiver(mOrderMessageReceiver,intentFilter);
-    }
-
-    // 服务连接监听器
-    private ServiceConnection serviceConnection=new ServiceConnection() {
-        @Override
-        public void onServiceConnected(ComponentName name, IBinder service) {
-
-            mBinder=(OrderService.DriverOrderBinder)service;
-
-            mDriverOrderService=mBinder.getService(token);
-            mDriverOrderClient=mDriverOrderService.getClient();
-            Toast.makeText(getApplicationContext(),"Service已连接",Toast.LENGTH_SHORT).show();
-        }
-
-        @Override
-        public void onServiceDisconnected(ComponentName name) {
-            Toast.makeText(getApplicationContext(),"Service已断开",Toast.LENGTH_SHORT).show();
-        }
-    };
-
-    public OrderClient getClient(){
-        return mDriverOrderClient;
-    }
 
 
 

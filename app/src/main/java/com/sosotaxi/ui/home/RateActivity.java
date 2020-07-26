@@ -102,7 +102,7 @@ public class RateActivity extends Activity {
                 Toast.makeText(getApplicationContext(), "评价成功", Toast.LENGTH_SHORT).show();
             }else{
                 // TODO: 评分失败UI操作
-                Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(), "评价成功", Toast.LENGTH_SHORT).show();
             }
             return true;
         }

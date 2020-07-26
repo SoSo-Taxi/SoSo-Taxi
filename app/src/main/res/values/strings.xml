@@ -1,7 +1,7 @@
 <resources>
-    <string name="app_name">Soso Taxi</string>
-    <string name="title_activity_main">Soso Taxi</string>
-    <string name="title_activity_login">Soso Taxi</string>
+    <string name="app_name">嗖嗖网约车</string>
+    <string name="title_activity_main">嗖嗖网约车</string>
+    <string name="title_activity_login">嗖嗖网约车</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
     <string name="nav_header_title">Android Studio</string>
@@ -22,7 +22,7 @@
     <string name="passenger">乘车人：</string>
 
 
-    <string name="menu_home">Home</string>
+    <string name="menu_home">嗖嗖网约车</string>
     <string name="btn_login_skip">跳过</string>
     <string name="title_enter_phone">输入手机号</string>
     <string name="hint_enter_phone">该手机号仅用于联系您</string>
@@ -77,7 +77,7 @@
     <string name="license_example">桂A·681UM</string>
     <string name="car_info">日产轩逸·白色</string>
     <string name="destination">目的地：</string>
-    <string name="destination_example">首都机场</string>
+    <string name="destination_example">北京首都国际机场</string>
     <string name="driver">王师傅</string>
     <string name="score_example">4.8</string>
     <string name="warning">报警</string>

@@ -312,7 +312,8 @@ public class RouteActivity extends Activity {
                 overlay.setData(drivingRouteResult.getRouteLines().get(0));
                 //在地图上绘制路线
                 overlay.addToMap(false);
-                overlay.zoomToSpanPaddingBounds(200, 200, 200, 300);
+                overlay.zoomToSpanPaddingBounds(100, 300, 100, 300);
+
             }
         }
 
