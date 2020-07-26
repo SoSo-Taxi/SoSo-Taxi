@@ -30,6 +30,7 @@ import androidx.fragment.app.FragmentTransaction;
 
 import com.sosotaxi.R;
 import com.sosotaxi.common.Constant;
+import com.sosotaxi.model.Order;
 import com.sosotaxi.service.net.OrderClient;
 import com.sosotaxi.service.net.OrderMessageReceiver;
 import com.sosotaxi.service.net.OrderService;
@@ -43,6 +44,9 @@ public class PayActivity extends AppCompatActivity {
     private PayPsdInputView payPsdInputView;
 
     private FrameLayout paywindow;
+    private Order mOrder;
+
+    private MessageHelper mMessageHelper;
 
     private ConstraintLayout paypay;
 
@@ -56,6 +60,8 @@ public class PayActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_pay);
+        mOrder=getIntent().getParcelableExtra(Constant.EXTRA_ORDER);
+
         token=getIntent().getStringExtra("token");
         paypay=(ConstraintLayout)findViewById(R.id.paypay);
         if (paypay.getForeground()!=null){
@@ -84,7 +90,9 @@ public class PayActivity extends AppCompatActivity {
             public void onEqual(String psd) {
                 // TODO: 2017/5/7 两次输入密码相同，那就去进行支付楼
                 Toast.makeText(PayActivity.this,"密码相同"+psd,Toast.LENGTH_SHORT).show();
+                // 跳转评价页面
                 Intent intent= new Intent(PayActivity.this,RateActivity.class);
+                intent.putExtra(Constant.EXTRA_ORDER,mOrder);
                 startActivity(intent);
 
             }

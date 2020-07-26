@@ -47,6 +47,7 @@ import com.sosotaxi.model.message.CheckBondedDriverGeoBody;
 import com.sosotaxi.model.message.CheckBondedDriverGeoResponseBody;
 import com.sosotaxi.model.message.MessageType;
 import com.sosotaxi.model.message.OrderResultBody;
+import com.sosotaxi.model.message.StartOrderResponseBody;
 import com.sosotaxi.service.net.OrderClient;
 import com.sosotaxi.service.net.OrderMessageReceiver;
 import com.sosotaxi.service.net.OrderService;
@@ -292,6 +293,18 @@ public class WaitingActivity extends Activity {
                     routeIntent.putExtra(Constant.EXTRA_ORDER,mOrder);
                     routeIntent.putExtra(Constant.EXTRA_DRIVER,mDriver);
                     startActivity(routeIntent);
+                } else if(message.getType()== MessageType.START_ORDER_RESPONSE){
+                    try {
+                        // 获取订单ID
+                        JSONObject object = new JSONObject(json);
+                        String bodyString = object.getString("body");
+                        StartOrderResponseBody body=gson.fromJson(bodyString,StartOrderResponseBody.class);
+                        mOrder.setOrderId(body.getOrderId());
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+
+
                 }
 
             }
