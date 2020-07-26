@@ -7,7 +7,9 @@
 
 package com.sosotaxi.ui.home;
 
+import android.content.BroadcastReceiver;
 import android.content.ComponentName;
+import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.ServiceConnection;
@@ -23,7 +25,6 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
 import androidx.viewpager2.adapter.FragmentStateAdapter;
 import androidx.viewpager2.widget.ViewPager2;
 
@@ -43,6 +44,7 @@ import com.baidu.mapapi.search.route.TransitRouteResult;
 import com.baidu.mapapi.search.route.WalkingRouteResult;
 import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
+import com.google.gson.Gson;
 import com.sosotaxi.R;
 import com.sosotaxi.common.Constant;
 import com.sosotaxi.model.LocationPoint;
@@ -50,11 +52,14 @@ import com.sosotaxi.model.Order;
 import com.sosotaxi.model.message.BaseMessage;
 import com.sosotaxi.model.message.MessageType;
 import com.sosotaxi.model.message.StartOrderBody;
+import com.sosotaxi.model.message.StartOrderResponseBody;
 import com.sosotaxi.service.net.OrderClient;
-import com.sosotaxi.service.net.OrderMessageReceiver;
 import com.sosotaxi.service.net.OrderService;
 import com.sosotaxi.ui.overlay.DrivingRouteOverlay;
 import com.sosotaxi.utils.MessageHelper;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -106,7 +111,7 @@ public class CallCarActivity extends AppCompatActivity {
     /**
      * 接收器
      */
-    private OrderMessageReceiver mOrderMessageReceiver;
+    private BroadcastReceiver mBroadcastReceiver;
 
     private MessageHelper mMessageHelper;
 
@@ -180,14 +185,6 @@ public class CallCarActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 sendMessage();
-
-                Intent intent=new Intent(CallCarActivity.this,WaitingActivity.class);
-                intent.putExtra("startPoint",myLocation);
-                intent.putExtra("token",token);
-                intent.putExtra("myLatitude",myLatitude);
-                intent.putExtra("myLongitude",myLongitude);
-                intent.putExtra(Constant.EXTRA_ORDER,mOrder);
-                startActivity(intent);
             }
         });
     }
@@ -281,7 +278,7 @@ public class CallCarActivity extends AppCompatActivity {
         try{
             // 断开连接
             unbindService(serviceConnection);
-            unregisterReceiver(mOrderMessageReceiver);
+            unregisterReceiver(mBroadcastReceiver);
         }catch (Exception e){
             e.printStackTrace();
         }
@@ -349,9 +346,40 @@ public class CallCarActivity extends AppCompatActivity {
      * 注册广播接收器
      */
     private void registerReceiver(){
-        mOrderMessageReceiver=new OrderMessageReceiver();
+        mBroadcastReceiver =new BroadcastReceiver(){
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                //解析消息
+                String json = intent.getStringExtra(Constant.EXTRA_RESPONSE_MESSAGE);
+                Gson gson = new Gson();
+                BaseMessage message = gson.fromJson(json, BaseMessage.class);
+                Log.d("MESSAGE", json);
+                if(message.getType()== MessageType.START_ORDER_RESPONSE){
+                    try {
+                        // 获取订单ID
+                        JSONObject object = new JSONObject(json);
+                        String bodyString = object.getString("body");
+                        StartOrderResponseBody body=gson.fromJson(bodyString,StartOrderResponseBody.class);
+                        mOrder.setOrderId(body.getOrderId());
+
+                        // 跳转等待界面
+                        Intent waitingIntent=new Intent(CallCarActivity.this,WaitingActivity.class);
+                        waitingIntent.putExtra("startPoint",myLocation);
+                        waitingIntent.putExtra("token",token);
+                        waitingIntent.putExtra("myLatitude",myLatitude);
+                        waitingIntent.putExtra("myLongitude",myLongitude);
+                        waitingIntent.putExtra(Constant.EXTRA_ORDER,mOrder);
+                        startActivity(waitingIntent);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+
+
+                }
+            }
+        };
         IntentFilter intentFilter=new IntentFilter(Constant.FILTER_CONTENT);
-        registerReceiver(mOrderMessageReceiver,intentFilter);
+        registerReceiver(mBroadcastReceiver,intentFilter);
     }
     // 服务连接监听器
     private ServiceConnection serviceConnection=new ServiceConnection() {

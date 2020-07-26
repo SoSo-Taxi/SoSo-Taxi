@@ -97,7 +97,7 @@ public enum MessageType {
     /**
      * 司机已到达上车点乘客响应
      */
-    ARRIVE_DEPART_POINT_TO_PASSENGER("ARRIVE_DEPART_POINT_TO_PASSENGER"),
+    ARRIVE_DEPART_POINT_TO_MESSAGE("ARRIVE_DEPART_POINT_TO_MESSAGE"),
 
     /**
      * 司机接到乘客

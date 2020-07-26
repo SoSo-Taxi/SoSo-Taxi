@@ -280,9 +280,8 @@ public class WaitingActivity extends Activity {
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
-                } else if (message.getType() == MessageType.ARRIVE_DEPART_POINT_TO_PASSENGER) {
-                    aaa="快车司机已经到达上车点";
-                    waitingState.setText(aaa);
+                } else if (message.getType() == MessageType.ARRIVE_DEPART_POINT_TO_MESSAGE) {
+                    waitingState.setText("快车司机已经到达上车点");
 
 
                 } else if (message.getType() == MessageType.PICK_UP_PASSENGER_MESSAGE_TO_PASSENGER) {
@@ -293,20 +292,9 @@ public class WaitingActivity extends Activity {
                     routeIntent.putExtra(Constant.EXTRA_ORDER,mOrder);
                     routeIntent.putExtra(Constant.EXTRA_DRIVER,mDriver);
                     startActivity(routeIntent);
-                } else if(message.getType()== MessageType.START_ORDER_RESPONSE){
-                    try {
-                        // 获取订单ID
-                        JSONObject object = new JSONObject(json);
-                        String bodyString = object.getString("body");
-                        StartOrderResponseBody body=gson.fromJson(bodyString,StartOrderResponseBody.class);
-                        mOrder.setOrderId(body.getOrderId());
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-
+                }else{
 
                 }
-
             }
         }, intentFilter);
     }
